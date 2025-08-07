@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3204938762614599"
+     crossorigin="anonymous"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Kreuzworträtsel</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+  #confetti-container {
+    pointer-events: none;
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 9999;
+    overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute;
+    width: 12px;
+    height: 18px;
+    border-radius: 3px;
+    opacity: 0.85;
+    will-change: transform;
+    pointer-events: none;
+    animation: confetti-fall 1.5s linear forwards;
+  }
+  @keyframes confetti-fall {
+    0% {
+      transform: translateY(-20vh) rotate(0deg);
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(110vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+  </style>
+</head>
+<body>
+  <div class="back-to-menu" style="position:fixed;top:10px;left:10px;z-index:10000;">
+    <button onclick="window.location.href='index.html'">← Hauptmenü</button>
+  </div>
+  <div class="card">
+  <h1>Kreuzworträtsel</h1>
+
+  <!-- Prev/Next + Hinweis -->
+  <div class="navigation">
+    <button id="prevWord" title="Vorheriges Wort">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 16 16" fill="currentColor">
+        <path fill-rule="evenodd" d="M11.354 1.146a.5.5 0 0 1 0 .708L5.707 7.5l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+      </svg>
+    </button>
+    <span id="wordHint"></span>
+    <button id="nextWord" title="Nächstes Wort">
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 16 16" fill="currentColor">
+        <path fill-rule="evenodd" d="M4.646 1.146a.5.5 0 0 0 0 .708L10.293 8l-5.647 5.646a.5.5 0 0 0 .708.708l6-6a.5.5 0 0 0 0-.708l-6-6a.5.5 0 0 0-.708 0z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Grid mit Inline-Hinweisen -->
+  <div class="grid" id="grid"></div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="control check" onclick="checkSolution()">Lösung prüfen</button>
+    <button class="control hint" id="revealBtn">Hinweis (3)</button>
+    <button class="control reset" id="resetBtn">Neu starten</button>
+    <button class="control new" onclick="window.removeEventListener('beforeunload', saveState); localStorage.removeItem(RAEETSEL_STORAGE_KEY); window.location.reload();">Neues Rätsel generieren</button>
+  </div>
+
+  </div>
+  <script>
+    function showConfetti() {
+      const container = document.getElementById('confetti-container');
+      const colors = ["#ffc107", "#28a745", "#007bff", "#dc3545", "#ff69b4", "#00bcd4", "#fff", "#fd7e14"];
+      for (let i = 0; i < 50; i++) {
+        const div = document.createElement("div");
+        div.className = "confetti-piece";
+        div.style.background = colors[Math.floor(Math.random() * colors.length)];
+        div.style.left = Math.random() * 100 + "vw";
+        div.style.top = (Math.random() * 10 - 10) + "vh";
+        div.style.transform = `rotate(${Math.random() * 360}deg)`;
+        div.style.animationDelay = (Math.random() * 0.4) + "s";
+        container.appendChild(div);
+        setTimeout(() => container.removeChild(div), 1800);
+      }
+    }
+    const gridSize = 10;
+
+    // Grid-Daten und State
+    let grid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(null));
+    let words = [];
+    let currentWordIndex = 0;
+    let currentDirection = 'horizontal';
+    let lastFocusedCell = null;
+    let userClicked = false;
+let revealsLeft = 3;
+
+// Puzzle-Auswahl per URL-Parameter
+const params = new URLSearchParams(location.search);
+const puzzleType = params.get('puzzle') || 'classic';
+const puzzleConfig = {
+  classic:       { json: 'words.json',        title: 'Kreuzworträtsel' },
+  jura:          { json: 'words.law.json',    title: 'Jura-Kreuzworträtsel' },
+  reisesspecial: { json: 'REISESPECIAL.json', title: 'Reise-Special Kreuzworträtsel' }
+};
+const { json: wordFile, title: puzzleTitle } = puzzleConfig[puzzleType] || puzzleConfig.classic;
+// Dynamischer Dokument- und Überschrift-Titel
+document.title = puzzleTitle;
+document.querySelector('.card > h1').textContent = puzzleTitle;
+// Eindeutiger Key pro Rätsel-Seite für LocalStorage (inkl. Puzzle-Typ)
+const RAEETSEL_STORAGE_KEY = `${location.pathname.split('/').pop()}_${puzzleType}`;
+
+    // Wortliste wird extern geladen
+    let wordList = [];
+    function saveState() {
+      const userInputs = {};
+      document.querySelectorAll("input.cell:not(.black)").forEach(input => {
+        const r = input.dataset.row;
+        const c = input.dataset.col;
+        userInputs[`${r},${c}`] = input.value.toUpperCase();
+      });
+      const state = { grid, words, revealsLeft, currentWordIndex, currentDirection, userInputs };
+      localStorage.setItem(RAEETSEL_STORAGE_KEY, JSON.stringify(state));    }
+
+    function loadState() {
+    const s = localStorage.getItem(RAEETSEL_STORAGE_KEY);      
+    return s ? JSON.parse(s) : null;
+    }
+
+    // Fisher–Yates shuffle for unbiased randomization
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // Wählt `count` zufällige Einträge aus
+    function getRandomWords(count) {
+      return shuffleArray([...wordList]).slice(0, count);
+    }
+
+    // Intelligente Platzierung von Wörtern
+    function generateWords() {
+      // Randomize word list
+      const shuffled = shuffleArray([...wordList]);
+      // Prepare unplaced words
+      let unplaced = shuffled.slice();
+      // Initialize empty test grid
+      const testGrid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(null));
+      const placed = [];
+
+      // Place first word centered horizontally, ensure it fits within grid
+      // Find the first word whose length does not exceed gridSize
+      const firstIdx = unplaced.findIndex(item => item.word.length <= gridSize);
+      if (firstIdx === -1) {
+        // No fitting word found; abort generation
+        words = [];
+        return;
+      }
+      const first = unplaced.splice(firstIdx, 1)[0];
+      const sx = Math.floor((gridSize - first.word.length) / 2);
+      const sy = Math.floor(gridSize / 2);
+      for (let i = 0; i < first.word.length; i++) {
+        testGrid[sy][sx + i] = first.word[i];
+      }
+      placed.push({ word: first.word, x: sx, y: sy, horizontal: true, clue: first.clue });
+      // Block cells directly before and after the first word
+      const firstEndX = sx + first.word.length - 1;
+      const barrierPositionsFirst = [
+        { r: sy, c: sx - 1 },
+        { r: sy, c: firstEndX + 1 }
+      ];
+      barrierPositionsFirst.forEach(pos => {
+        if (
+          pos.r >= 0 && pos.r < gridSize &&
+          pos.c >= 0 && pos.c < gridSize &&
+          testGrid[pos.r][pos.c] === null
+        ) {
+          testGrid[pos.r][pos.c] = "*";
+        }
+      });
+
+      // Place remaining words by choosing the one with highest overlaps
+      while (true) {
+        let bestPlacement = null;
+        let bestScore = 0;
+        let bestWordIndex = -1;
+
+        // Evaluate each unplaced word
+        for (let wIdx = 0; wIdx < unplaced.length; wIdx++) {
+          const { word, clue } = unplaced[wIdx];
+          let localBestScore = 0;
+          let localBestPlacement = null;
+
+          // Try both orientations
+          for (const hor of [true, false]) {
+            for (let row = 0; row < gridSize; row++) {
+              for (let col = 0; col < gridSize; col++) {
+                const startX = col;
+                const startY = row;
+                const endX = hor ? col + word.length - 1 : col;
+                const endY = hor ? row : row + word.length - 1;
+                // Bounds
+                if (endX >= gridSize || endY >= gridSize) continue;
+
+                let collision = false;
+                let score = 0;
+                for (let k = 0; k < word.length; k++) {
+                  const r = hor ? startY : startY + k;
+                  const c = hor ? startX + k : startX;
+                  const cell = testGrid[r][c];
+                  if (cell === "*") { collision = true; break; }
+                  if (cell === word[k]) score++;
+                  else if (cell !== null) { collision = true; break; }
+                }
+                if (collision || score === 0) continue;
+
+                // Adjacency before/after
+                const before = hor
+                  ? { r: startY, c: startX - 1 }
+                  : { r: startY - 1, c: startX };
+                const after = hor
+                  ? { r: startY, c: endX + 1 }
+                  : { r: endY + 1, c: startX };
+                if (
+                  (before.r >= 0 && before.r < gridSize && before.c >= 0 && before.c < gridSize &&
+                    testGrid[before.r][before.c] !== null && testGrid[before.r][before.c] !== '*'
+                  ) ||
+                  (after.r  >= 0 && after.r  < gridSize && after.c  >= 0 && after.c  < gridSize &&
+                    testGrid[after.r][after.c] !== null && testGrid[after.r][after.c] !== '*'
+                  )
+                ) continue;
+
+                if (score > localBestScore) {
+                  localBestScore = score;
+                  localBestPlacement = { startX, startY, horizontal: hor };
+                }
+              }
+            }
+          }
+
+          if (localBestPlacement && localBestScore > bestScore) {
+            bestScore = localBestScore;
+            bestPlacement = localBestPlacement;
+            bestWordIndex = wIdx;
+          }
+        }
+
+        // Stop if no valid placement remains
+        if (!bestPlacement) break;
+
+        // Commit best placement
+        const { word, clue } = unplaced[bestWordIndex];
+        const { startX, startY, horizontal: hor } = bestPlacement;
+        for (let k = 0; k < word.length; k++) {
+          const r = hor ? startY : startY + k;
+          const c = hor ? startX + k : startX;
+          testGrid[r][c] = word[k];
+        }
+        placed.push({ word, x: startX, y: startY, horizontal: hor, clue });
+
+        // Barrier before/after
+        const endX = hor ? startX + word.length - 1 : startX;
+        const endY = hor ? startY : startY + word.length - 1;
+        const barrierPositions = hor
+          ? [ { r: startY, c: startX - 1 }, { r: startY, c: endX + 1 } ]
+          : [ { r: startY - 1, c: startX }, { r: endY + 1, c: startX } ];
+        barrierPositions.forEach(pos => {
+          if (
+            pos.r >= 0 && pos.r < gridSize &&
+            pos.c >= 0 && pos.c < gridSize &&
+            testGrid[pos.r][pos.c] === null
+          ) {
+            testGrid[pos.r][pos.c] = "*";
+          }
+        });
+
+        // Remove placed word from unplaced
+        unplaced.splice(bestWordIndex, 1);
+      }
+
+      // Commit testGrid to real grid
+      for (let r = 0; r < gridSize; r++) {
+        grid[r] = testGrid[r].slice();
+      }
+      words = placed;
+    }
+
+
+    // Lade externe Wortliste und initialisiere das Rätsel
+    // (wird nach generateWords() eingefügt)
+
+    // Beispiel für die Verwendung von shuffleArray an anderer Stelle:
+    // In einer Funktion wie findeLoesungswort (falls vorhanden):
+    // const worte = shuffleArray([...wordList]);
+
+    // Lösungsprüfung
+    function checkSolution() {
+      const inputs = document.querySelectorAll("input.cell:not(.black)");
+      let allCorrect = true;
+      inputs.forEach(input => {
+        const r = parseInt(input.dataset.row, 10);
+        const c = parseInt(input.dataset.col, 10);
+        const expected = ('' + grid[r][c]).toUpperCase();
+        const actual = input.value.toUpperCase();
+        if (input.value === "") {
+          // Leere Zellen unmarkiert lassen
+          input.style.backgroundColor = "";
+          allCorrect = false;
+        } else if (actual === expected) {
+          input.style.backgroundColor = "#c8f7c5"; // correct = green
+        } else {
+          input.style.backgroundColor = "#f7c5c5"; // incorrect = red
+          allCorrect = false;
+        }
+      });
+      if (allCorrect) {
+        showConfetti();
+        setTimeout(() => {
+          alert("🎉 Alles richtig! Gut gemacht!");
+        }, 600);
+      } else {
+        alert("❌ Einige Felder sind noch falsch. Versuch’s nochmal!");
+      }
+    }
+
+    function checkAutoSuccess() {
+      const inputs = document.querySelectorAll("input.cell:not(.black)");
+      let allCorrect = true;
+      for (const input of inputs) {
+        const r = parseInt(input.dataset.row, 10);
+        const c = parseInt(input.dataset.col, 10);
+        if ((input.value || '').toUpperCase() !== grid[r][c]) {
+          allCorrect = false;
+          break;
+        }
+      }
+      if (allCorrect) {
+        inputs.forEach(input => {
+          input.style.backgroundColor = "#c8f7c5"; // grün für richtig
+        });
+        showConfetti();
+        setTimeout(() => {
+          alert("🎉 Alles richtig! Gut gemacht!");
+        }, 600);
+        return true;
+      }
+      return false;
+    }
+
+// Lade externe Wortliste und initialisiere das Rätsel
+fetch(wordFile)
+      .then(res => res.json())
+      .then(data => {
+        wordList = data;
+        // Remove duplicate words (keep first occurrence)
+        const seenWords = new Set();
+        wordList = wordList.filter(item => {
+          if (seenWords.has(item.word)) return false;
+          seenWords.add(item.word);
+          return true;
+        });
+        const saved = loadState();
+        if (saved) {
+          saved.grid.forEach((row, i) => { grid[i] = saved.grid[i]; });
+          words = saved.words;
+          revealsLeft = saved.revealsLeft;
+          currentWordIndex = saved.currentWordIndex;
+          currentDirection = saved.currentDirection;
+        } else {
+          generateWords();
+          saveState();
+        }
+
+        const gridContainer = document.getElementById("grid");
+
+        const revealBtn = document.getElementById("revealBtn");
+        revealBtn.addEventListener("click", () => {
+          if (revealsLeft <= 0) return;
+          const cell = lastFocusedCell;
+          if (
+            cell &&
+            cell.tagName === "INPUT" &&
+            cell.classList.contains("cell") &&
+            !cell.classList.contains("black") &&
+            cell.value === ""
+          ) {
+            const r = parseInt(cell.dataset.row);
+            const c = parseInt(cell.dataset.col);
+            cell.value = grid[r][c];
+            cell.style.backgroundColor = "#c8f7c5";
+            revealsLeft--;
+            revealBtn.textContent = `Hinweis (${revealsLeft})`;
+            if (revealsLeft === 0) revealBtn.disabled = true;
+          }
+          saveState();
+        });
+
+        const resetBtn = document.getElementById('resetBtn');
+        resetBtn.addEventListener('click', () => {
+          // Clear saved state
+          localStorage.removeItem(RAEETSEL_STORAGE_KEY);
+          // Reset all input cells
+          document.querySelectorAll('input.cell:not(.black)').forEach(input => {
+            input.value = '';
+            input.style.backgroundColor = '';
+          });
+          // Save cleared state
+          saveState();
+        });
+
+        // Rendert das Highlight und den Hinweis
+        function internalRenderUI() {
+          document.querySelectorAll("input.cell").forEach(i => i.classList.remove("highlight"));
+          const w = words[currentWordIndex];
+          currentDirection = w.horizontal ? 'horizontal' : 'vertical';
+          for (let k = 0; k < w.word.length; k++) {
+            const r = w.y + (w.horizontal ? 0 : k);
+            const c = w.x + (w.horizontal ? k : 0);
+            const cell = document.querySelector(`input.cell[data-row="${r}"][data-col="${c}"]`);
+            if (cell) cell.classList.add("highlight");
+          }
+          document.getElementById("wordHint").textContent = w.clue;
+        }
+
+        // Erzeuge die Eingabefelder
+        for (let row = 0; row < gridSize; row++) {
+          for (let col = 0; col < gridSize; col++) {
+            const input = document.createElement("input");
+            input.classList.add("cell");
+            input.maxLength = 1;
+            if (grid[row][col] === null || grid[row][col] === "*") {
+              input.classList.add("black");
+              input.disabled = true;
+            } else {
+              input.dataset.row = row;
+              input.dataset.col = col;
+              const key = `${row},${col}`;
+              if (saved && saved.userInputs && saved.userInputs[key]) {
+                input.value = saved.userInputs[key];
+              }
+              // Mark user click
+              input.addEventListener("mousedown", () => {
+                userClicked = true;
+              });
+              // (Optional, für Zuverlässigkeit auf allen Browsern) - oldValue-Update
+              input.addEventListener("focus", () => { input.oldValue = input.value; });
+              input.addEventListener("blur", () => { input.oldValue = ""; });
+              input.addEventListener("input", () => { input.oldValue = input.value; });
+
+              input.addEventListener("input", (e) => {
+                // Immer NUR das zuletzt getippte Zeichen als Großbuchstabe übernehmen
+                if (e.data && e.data.length > 0) {
+                  input.value = e.data.slice(-1).toUpperCase();
+                } else if (input.value) {
+                  input.value = input.value.slice(-1).toUpperCase();
+                }
+                let r = parseInt(input.dataset.row), c = parseInt(input.dataset.col);
+
+                // Bestimme die Zellen im aktuellen Wort (damit wir wissen, ob es das letzte Feld ist)
+                const w = words[currentWordIndex];
+                let isLast = false;
+                if (w.horizontal) {
+                  isLast = (r === w.y && c === w.x + w.word.length - 1);
+                } else {
+                  isLast = (c === w.x && r === w.y + w.word.length - 1);
+                }
+
+                if (isLast) {
+                  // Gehe automatisch zum nächsten Wort (erstes Feld)
+                  currentWordIndex = (currentWordIndex + 1) % words.length;
+                  const nw = words[currentWordIndex];
+                  const first = document.querySelector(`input.cell[data-row="${nw.y}"][data-col="${nw.x}"]`);
+                  if (first) {
+                    first.focus();
+                    lastFocusedCell = first;
+                  }
+                  internalRenderUI();
+                } else {
+                  // Weiter wie bisher zum nächsten Buchstaben im Wort springen
+                  let next;
+                  if (currentDirection === 'horizontal') {
+                    c++;
+                    next = document.querySelector(`input.cell[data-row="${r}"][data-col="${c}"]`);
+                  } else {
+                    r++;
+                    next = document.querySelector(`input.cell[data-row="${r}"][data-col="${c}"]`);
+                  }
+                  if (next && next.classList.contains("highlight")) {
+                    next.focus();
+                  }
+                }
+                saveState();
+
+                // Automatische Erfolgsmeldung wenn alles korrekt ausgefüllt ist
+                checkAutoSuccess();
+              });
+              input.addEventListener("keydown", e => {
+                if (e.key === "Backspace") {
+                  let r = parseInt(input.dataset.row), c = parseInt(input.dataset.col);
+                  if (input.value === "") {
+                    // Gehe ein Feld zurück und leere es
+                    if (currentDirection === "horizontal") { c--; } else { r--; }
+                    const prev = document.querySelector(`input.cell[data-row="${r}"][data-col="${c}"]`);
+                    if (prev) {
+                      prev.focus();
+                      prev.value = "";
+                      e.preventDefault();
+                    }
+                  } else {
+                    // Nur das aktuelle Feld leeren (nicht springen)
+                    input.value = "";
+                    e.preventDefault();
+                  }
+                  saveState();
+                }
+              });
+              // Nur auf echten Benutzerversuch reagieren: Wort wechseln bei Klick/Tab
+              input.addEventListener("focus", event => {
+                // Only respond to real user clicks
+                if (!userClicked) return;
+                userClicked = false;
+                lastFocusedCell = input;
+                const r = parseInt(input.dataset.row);
+                const c = parseInt(input.dataset.col);
+                // Finde alle Wörter, die diese Zelle enthalten
+                const candidates = words.map((w, i) => {
+                  if (w.horizontal && w.y === r && c >= w.x && c < w.x + w.word.length) return i;
+                  if (!w.horizontal && w.x === c && r >= w.y && r < w.y + w.word.length) return i;
+                  return null;
+                }).filter(i => i !== null);
+                if (candidates.length > 0) {
+                  // Wähle das Wort passend zur aktuellen Richtung oder das erste
+                  const preferred = candidates.find(i => words[i].horizontal === currentDirection);
+                  currentWordIndex = preferred !== undefined ? preferred : candidates[0];
+                  internalRenderUI();
+                }
+              });
+              // Leertaste im Eingabefeld: Nur bei Schnittpunkten Wort wechseln
+              input.addEventListener("keydown", e => {
+                if ((e.code === "Space" || e.key === " ") && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                  e.preventDefault();
+                  // Wechsel nur, wenn Feld Teil von zwei Wörtern ist
+                  const r = parseInt(input.dataset.row);
+                  const c = parseInt(input.dataset.col);
+                  const candidates = words.map((w, i) => {
+                    if (w.horizontal && w.y === r && c >= w.x && c < w.x + w.word.length) return i;
+                    if (!w.horizontal && w.x === c && r >= w.y && r < w.y + w.word.length) return i;
+                    return null;
+                  }).filter(i => i !== null);
+                  if (candidates.length > 1) {
+                    // Wechsel zum anderen Wort
+                    const other = candidates.find(i => i !== currentWordIndex);
+                    if (other !== undefined) {
+                      currentWordIndex = other;
+                      internalRenderUI();
+                    }
+                  }
+                }
+              });
+            }
+            input.style.gridColumnStart = col + 1;
+            input.style.gridRowStart = row + 1;
+            gridContainer.appendChild(input);
+          }
+        }
+
+        // Prev/Next & Leertaste zur Navigation
+        document.getElementById("prevWord").addEventListener("click", () => {
+          currentWordIndex = (currentWordIndex - 1 + words.length) % words.length;
+          internalRenderUI();
+          saveState();
+        });
+        document.getElementById("nextWord").addEventListener("click", () => {
+          currentWordIndex = (currentWordIndex + 1) % words.length;
+          internalRenderUI();
+          saveState();
+        });
+        document.addEventListener("keydown", e => {
+          if (e.code === "Space") {
+            e.preventDefault();
+            currentDirection = currentDirection === 'horizontal' ? 'vertical' : 'horizontal';
+            // Wechsle Wort, falls die aktuelle Zelle zwei Optionen bietet
+            if (lastFocusedCell) {
+              const r = parseInt(lastFocusedCell.dataset.row);
+              const c = parseInt(lastFocusedCell.dataset.col);
+              const candidates = words.map((w, i) => {
+                if (w.horizontal && w.y === r && c >= w.x && c < w.x + w.word.length) return i;
+                if (!w.horizontal && w.x === c && r >= w.y && r < w.y + w.word.length) return i;
+                return null;
+              }).filter(i => i !== null);
+              const preferred = candidates.find(i => words[i].horizontal === currentDirection);
+              if (preferred !== undefined) {
+                currentWordIndex = preferred;
+              }
+            }
+            internalRenderUI();
+          } else if (e.code === "ArrowRight") {
+            currentWordIndex = (currentWordIndex + 1) % words.length;
+            internalRenderUI();
+            // Fokus auf das erste Feld des neuen Wortes setzen
+            const wRight = words[currentWordIndex];
+            const startRight = document.querySelector(`input.cell[data-row="${wRight.y}"][data-col="${wRight.x}"]`);
+            if (startRight) startRight.focus();
+          } else if (e.code === "ArrowLeft") {
+            currentWordIndex = (currentWordIndex - 1 + words.length) % words.length;
+            internalRenderUI();
+            // Fokus auf das erste Feld des neuen Wortes setzen
+            const wLeft = words[currentWordIndex];
+            const startLeft = document.querySelector(`input.cell[data-row="${wLeft.y}"][data-col="${wLeft.x}"]`);
+            if (startLeft) startLeft.focus();
+          }
+        });
+
+        // Initial
+        internalRenderUI();
+        // Auto-Fokus auf das erste Wort
+        const w0 = words[currentWordIndex];
+        const start0 = document.querySelector(`input.cell[data-row="${w0.y}"][data-col="${w0.x}"]`);
+        if (start0) {
+          start0.focus();
+          lastFocusedCell = start0;
+        }
+      })
+      .catch(err => console.error("Fehler beim Laden der Wortliste:", err));
+    window.addEventListener("beforeunload", saveState);
+  </script>
+  <footer class="footer">
+    <button id="impressumBtn" onclick="window.location.href='impressum.html'">Impressum</button>
+  </footer>
+  <div id="confetti-container"></div>
+</body>
+</html>

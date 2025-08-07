@@ -1,0 +1,523 @@
+[
+  {
+    "word": "VORSATZ",
+    "clue": "Wille zur Verwirklichung eines Straftatbestands in Kenntnis aller objektiven Tatumstände"
+  },
+  {
+    "word": "FAHRLAESSIGKEIT",
+    "clue": "Außerachtlassen der im Verkehr erforderlichen Sorgfalt bei objektiver und subjektiver Vorhersehbarkeit"
+  },
+  {
+    "word": "STRAFTAT",
+    "clue": "Tatbestandsmäßige, rechtswidrige und schuldhafte Handlung"
+  },
+  {
+    "word": "TATBESTAND",
+    "clue": "Gesamtheit der Merkmale, die erfüllt sein müssen, damit eine Strafnorm eingreift"
+  },
+  {
+    "word": "RECHTSWIDRIGKEIT",
+    "clue": "Widerspruch der Tat zur Rechtsordnung ohne Rechtfertigungsgrund"
+  },
+  {
+    "word": "SCHULD",
+    "clue": "Persönlicher Vorwurf an den Täter, trotz Einsichts- und Steuerungsfähigkeit Unrecht getan zu haben"
+  },
+  {
+    "word": "NOTWEHR",
+    "clue": "Erlaubte Verteidigung gegen einen gegenwärtigen, rechtswidrigen Angriff"
+  },
+  {
+    "word": "PUTATIVNOTWEHR",
+    "clue": "Irrtümliche Annahme einer Notwehrlage"
+  },
+  {
+    "word": "STRAFVERSUCH",
+    "clue": "Unvollendete, aber zur Ausführung angesetzte Straftat bei Vorliegen von Tatentschluss"
+  },
+  {
+    "word": "UNTATERSCHAFT",
+    "clue": "Täterschaft durch einen anderen, der als Werkzeug benutzt wird"
+  },
+  {
+    "word": "WILLENSERKLAERUNG",
+    "clue": "Private Willensäußerung, die auf das Herbeiführen einer Rechtsfolge gerichtet ist"
+  },
+  {
+    "word": "GESCHAEFTSFAEHIGKEIT",
+    "clue": "Fähigkeit, Rechtsgeschäfte selbst wirksam vorzunehmen"
+  },
+  {
+    "word": "ANFECHTUNG",
+    "clue": "Rückwirkende Beseitigung eines Rechtsgeschäfts aufgrund eines Willensmangels"
+  },
+  {
+    "word": "VERTRAG",
+    "clue": "Zwei korrespondierende Willenserklärungen, bestehend aus Angebot und Annahme"
+  },
+  {
+    "word": "ANNAHME",
+    "clue": "Empfangsbedürftige Willenserklärung, mit der jemand das Angebot eines anderen annimmt"
+  },
+  {
+    "word": "ANFECHTUNGSFRIST",
+    "clue": "Zeitlicher Rahmen, innerhalb dessen die Anfechtung erklärt werden muss"
+  },
+  {
+    "word": "NICHTIGKEIT",
+    "clue": "Rechtsfolge, bei der ein Rechtsgeschäft von Anfang an keine Wirkung entfaltet"
+  },
+  {
+    "word": "SITTENWIDRIGKEIT",
+    "clue": "Verstoß eines Rechtsgeschäfts gegen das Anstandsgefühl aller billig und gerecht Denkenden"
+  },
+  {
+    "word": "GESCHAEFTSUNFAEHIGKEIT",
+    "clue": "Unfähigkeit, wirksam Willenserklärungen abzugeben oder entgegenzunehmen"
+  },
+  {
+    "word": "ERKLAERUNGSMANGEL",
+    "clue": "Unstimmigkeit zwischen dem objektiv Erklärten und dem subjektiv Gewollten"
+  },
+  {
+    "word": "GRUNDRECHT",
+    "clue": "Verfassungsmäßig garantiertes subjektives Recht des Einzelnen gegenüber dem Staat"
+  },
+  {
+    "word": "WESENSGEHALT",
+    "clue": "Kernbereich eines Grundrechts, der unter keinen Umständen angetastet werden darf"
+  },
+  {
+    "word": "VERHAELTNISMAESSIGKEIT",
+    "clue": "Grundsatz, nach dem staatliche Maßnahmen geeignet, erforderlich und angemessen sein müssen"
+  },
+  {
+    "word": "BUNDESSTAAT",
+    "clue": "Staatenbund mit vertikaler Gewaltenteilung zwischen Bund und Ländern"
+  },
+  {
+    "word": "GEWALTENTEILUNG",
+    "clue": "Prinzip der Aufteilung staatlicher Macht in Legislative, Exekutive und Judikative"
+  },
+  {
+    "word": "PARLAMENTSRESERVAT",
+    "clue": "Wesentliche Entscheidungen müssen vom Parlament getroffen werden"
+  },
+  {
+    "word": "DEMOKRATIEPRINZIP",
+    "clue": "Verfassungsprinzip, das die Herrschaft des Volkes über freie Wahlen garantiert"
+  },
+  {
+    "word": "RECHTSSTAAT",
+    "clue": "Staat, der an Gesetz und Recht gebunden ist und Grundrechte garantiert"
+  },
+  {
+    "word": "EINFACHEMENSCHENWUERDE",
+    "clue": "Unantastbarer Wert des Menschen, der als oberster Verfassungswert gilt"
+  },
+  {
+    "word": "ALLGEMEINESPERSOENLICHKEITSRECHT",
+    "clue": "Grundrecht auf Schutz der Persönlichkeit, insbesondere vor Eingriffen in Privatleben und Ehre"
+  },
+{
+  "word": "SCHULDVERHAELTNIS",
+  "clue": "Rechtsbeziehung, kraft derer der Gläubiger vom Schuldner eine Leistung fordern kann"
+},
+{
+  "word": "LEISTUNG",
+  "clue": "Bewusstes Tun oder Unterlassen zur Erfüllung einer Verbindlichkeit"
+},
+{
+  "word": "UNMOEGLICHKEIT",
+  "clue": "Dauerhafte Nichterbringbarkeit der geschuldeten Leistung durch niemanden"
+},
+{
+  "word": "GLAEUBIGERVERZUG",
+  "clue": "Verzug des Gläubigers mit der Annahme der ordnungsgemäß angebotenen Leistung"
+},
+{
+  "word": "VERZUG",
+  "clue": "Nichtleistung trotz Möglichkeit, Fälligkeit und Mahnung"
+},
+{
+  "word": "SELBSTVORNAHME",
+  "clue": "Berechtigung des Gläubigers, eine unterlassene Handlung auf Kosten des Schuldners selbst vorzunehmen"
+},
+{
+  "word": "RUECKTRITT",
+  "clue": "Gestaltungsrecht zur einseitigen Lösung vom Vertrag bei bestimmten Voraussetzungen"
+},
+{
+  "word": "ERFUELLUNGSINTERESSE",
+  "clue": "Interesse des Gläubigers an der ordnungsgemäßen Leistung, gemessen am wirtschaftlichen Vorteil"
+},
+{
+  "word": "VERTRETUNG",
+  "clue": "Handeln im Namen eines anderen mit Vertretungsmacht"
+},
+{
+  "word": "ZINSEN",
+  "clue": "Geldwerter Ausgleich für die Überlassung von Kapital über einen bestimmten Zeitraum"
+},
+{
+  "word": "VERBOT",
+  "clue": "Grundsatz, dass niemand einem anderen widerrechtlich Schaden zufügen darf (§ 823 Abs. 1 BGB)"
+},
+{
+  "word": "ABSICHT",
+  "clue": "Form des Vorsatzes, bei der der Erfolg zielgerichtet herbeigeführt werden soll"
+},
+{
+  "word": "VORSATZ",
+  "clue": "Wissen und Wollen der Tatbestandsverwirklichung"
+},
+{
+  "word": "RECHT",
+  "clue": "Durch die Rechtsordnung geschütztes Interesse – etwa Leben, Gesundheit, Eigentum"
+},
+{
+  "word": "HANDLUNG",
+  "clue": "Vom menschlichen Willen beherrschtes oder beherrschbares Verhalten"
+},
+{
+  "word": "KAUSALITAET",
+  "clue": "Verknüpfung zwischen Handlung und Schaden im Sinne der Äquivalenztheorie"
+},
+{
+  "word": "ADEQUANZ",
+  "clue": "Rechtlich relevante Ursache, wenn die Handlung nicht völlig außerhalb jeder Lebenserfahrung liegt"
+},
+{
+  "word": "HAFTUNG",
+  "clue": "Einstehenmüssen für einen entstandenen Schaden"
+},
+{
+  "word": "ZURECHNUNG",
+  "clue": "Rechtliche Bewertung, ob ein Schaden dem Handelnden zugeordnet wird"
+},
+{
+  "word": "SCHADEN",
+  "clue": "Unfreiwilliger Vermögensnachteil durch ein schädigendes Ereignis"
+},
+{
+  "word": "MORD",
+  "clue": "Tötung eines Menschen mit Verwirklichung eines Mordmerkmals gemäß § 211 StGB"
+},
+{
+  "word": "RAUB",
+  "clue": "Wegnahme einer fremden beweglichen Sache unter Anwendung von Gewalt oder Drohung mit gegenwärtiger Gefahr für Leib oder Leben"
+},
+{
+  "word": "DIEBSTAHL",
+  "clue": "Wegnahme einer fremden beweglichen Sache in Zueignungsabsicht"
+},
+{
+  "word": "NOETIGUNG",
+  "clue": "Veranlassung einer Person zu einem Verhalten durch Gewalt oder Drohung mit einem empfindlichen Übel"
+},
+{
+  "word": "BETRUG",
+  "clue": "Vermögensschädigung durch Täuschung, Irrtum und darauf beruhende Vermögensverfügung"
+},
+{
+  "word": "HEHLEREI",
+  "clue": "Vermögensvorteil aus einer rechtswidrigen Vortat eines anderen wird sich oder einem Dritten zugeführt"
+},
+{
+  "word": "GEWALT",
+  "clue": "Körperlich wirkender Zwang, der zur Überwindung eines geleisteten oder erwarteten Widerstands geeignet ist"
+},
+{
+  "word": "TAEUSCHUNG",
+  "clue": "Einwirken auf das Vorstellungsbild eines anderen mit dem Ziel, einen Irrtum zu erregen oder aufrechtzuerhalten"
+},
+{
+  "word": "FREIHEIT",
+  "clue": "Strafrechtlich geschütztes Rechtsgut, insbesondere die körperliche Bewegungsfreiheit"
+},
+{
+  "word": "MOTIV",
+  "clue": "Innere Beweggründe des Täters, die bei bestimmten Tatbeständen strafbarkeitsbegründend sein können (z. B. Habgier)"
+},
+{
+  "word": "ANKLAGE",
+  "clue": "Förmliche Beschuldigung einer Person wegen einer Straftat durch die Staatsanwaltschaft"
+},
+{
+  "word": "BEWEIS",
+  "clue": "Tatsächliche Grundlage, die der richterlichen Überzeugungsbildung dient"
+},
+{
+  "word": "GESTAENDNIS",
+  "clue": "Einlassung des Beschuldigten, mit der er die Tat vollständig oder teilweise einräumt"
+},
+{
+  "word": "HAFT",
+  "clue": "Entzug der Freiheit eines Beschuldigten aufgrund richterlicher Anordnung"
+},
+{
+  "word": "RICHER",
+  "clue": "Unparteiische Entscheidungsinstanz mit Leitungsbefugnis im Strafverfahren"
+},
+{
+  "word": "STRAFBEFEHL",
+  "clue": "Urteilsvertretende Entscheidung im schriftlichen Verfahren ohne Hauptverhandlung"
+},
+{
+  "word": "EINSCHUECHTERUNG",
+  "clue": "Verbotenes Ziel bei der Vernehmung – unzulässige Beeinflussung der Aussagefreiheit"
+},
+{
+  "word": "WIDERSPRUCH",
+  "clue": "Förmliche Erklärung, dass man mit einer Entscheidung oder Handlung nicht einverstanden ist"
+},
+{
+  "word": "REVISION",
+  "clue": "Rechtsmittel gegen ein Urteil, das nur auf Rechtsfehler gestützt ist"
+},
+{
+  "word": "VERHAELTNISMAESSIGKEIT",
+  "clue": "Grundsatz, dass staatliche Eingriffe nicht über das erforderliche Maß hinausgehen dürfen – auch im Strafprozess"
+},
+{
+  "word": "BESITZ",
+  "clue": "Tatsächliche Herrschaft über eine Sache, getragen von einem Besitzwillen"
+},
+{
+  "word": "EIGENTUM",
+  "clue": "Rechtliche Herrschaft über eine Sache, umfassender als der bloße Besitz"
+},
+{
+  "word": "UEBEREIGNUNG",
+  "clue": "Übertragung des Eigentums an einer beweglichen Sache durch Einigung und Übergabe"
+},
+{
+  "word": "VERFUEGUNG",
+  "clue": "Rechtsgeschäft, das unmittelbar auf ein bestehendes Recht einwirkt, z. B. Übertragung, Belastung, Aufhebung"
+},
+{
+  "word": "ABTRETUNG",
+  "clue": "Übertragung einer Forderung von einem Gläubiger auf einen anderen"
+},
+{
+  "word": "TREUHAENDER",
+  "clue": "Person, die eine Sache oder ein Recht für einen anderen verwaltet und dabei fremdnützig gebunden ist"
+},
+{
+  "word": "LASTEN",
+  "clue": "Rechte oder Pflichten, die mit einer Sache verbunden sind und sie wirtschaftlich belasten"
+},
+{
+  "word": "HAND",
+  "clue": "Begriff in der Übergabe: Besitz wird von einer zur anderen Person tatsächlich übertragen"
+},
+{
+  "word": "VERLOREN",
+  "clue": "Besitzverlust ohne Willen – entscheidend für das Recht zum Besitz und Fundrecht"
+},
+{
+  "word": "PFAND",
+  "clue": "Zur Sicherung einer Forderung eingeräumtes dingliches Recht an einer Sache"
+},
+{
+  "word": "HABGIER",
+  "clue": "Mordmerkmal – rücksichtsloses Streben nach Vermögensmehrung um jeden Preis"
+},
+{
+  "word": "GRAUSAM",
+  "clue": "Mordmerkmal – Zufügen besonderer Qualen aus gefühlloser, unbarmherziger Gesinnung"
+},
+{
+  "word": "HEIMTUECKISCH",
+  "clue": "Mordmerkmal – Ausnutzung der Arg- und Wehrlosigkeit des Opfers in feindlicher Willensrichtung"
+},
+{
+  "word": "NIEDEREBEWEGGRUENDE",
+  "clue": "Mordmerkmal – Tatantrieb, der nach allgemeiner sittlicher Wertung auf tiefster Stufe steht"
+},
+{
+  "word": "VERWENDUNG",
+  "clue": "Tatbestandsmerkmal bei § 250 StGB – Einsatz eines gefährlichen Werkzeugs oder einer Waffe"
+},
+{
+  "word": "GEFAEHRLICESWERKZEUG",
+  "clue": "Gegenstand, der aufgrund seiner objektiven Beschaffenheit und konkreten Verwendung erhebliche Verletzungen verursachen kann"
+},
+{
+  "word": "TATHERRSCHAFT",
+  "clue": "Zentrales Abgrenzungskriterium zwischen Täterschaft und Teilnahme – Wer das Geschehen beherrscht, ist Täter"
+},
+{
+  "word": "MITTELBARETAETER",
+  "clue": "Wer eine Straftat durch einen anderen begeht, der als Werkzeug handelt"
+},
+{
+  "word": "UNTERLASSEN",
+  "clue": "Nichtvornahme einer gebotenen Handlung, bei rechtlicher Pflicht zum Handeln"
+},
+{
+  "word": "OBJEKTIVZURECHENBAR",
+  "clue": "Schaden ist objektiv zurechenbar, wenn der Täter eine rechtlich missbilligte Gefahr geschaffen hat, die sich im konkreten Erfolg realisiert"
+},
+{
+  "word": "GEWALT",
+  "clue": "Körperlich wirkender Zwang zur Überwindung eines Widerstands – typisches Merkmal bei Raub und Nötigung"
+},
+{
+  "word": "DROHUNG",
+  "clue": "Das Inaussichtstellen eines Übels, auf dessen Eintritt der Drohende Einfluss hat"
+},
+{
+  "word": "WEGNAHME",
+  "clue": "Bruch fremden und Begründung neuen, nicht notwendigerweise tätereigenen Gewahrsams"
+},
+{
+  "word": "GEWALTSAMKEIT",
+  "clue": "Besondere Form der Gewalt – oft im Zusammenhang mit Landfriedensbruch (§ 125 StGB)"
+},
+{
+  "word": "VERNICHTUNG",
+  "clue": "Bei Brandstiftung: Zustand völliger Unbrauchbarkeit einer Sache für ihren bestimmungsgemäßen Gebrauch"
+},
+{
+  "word": "FALSCHHEIT",
+  "clue": "Merkmal bei Urkundsdelikten – wenn über die Ausstelleridentität oder den Inhalt der Erklärung getäuscht wird"
+},
+{
+  "word": "TAEUSCHUNG",
+  "clue": "Einwirken auf das Vorstellungsbild eines anderen – zentrales Merkmal beim Betrug"
+},
+{
+  "word": "IRRTUM",
+  "clue": "Fehlvorstellung über Tatsachen, ausgelöst durch Täuschung – Voraussetzung für § 263 StGB"
+},
+{
+  "word": "VERMOEGENSVERFUEGUNG",
+  "clue": "Jedes Handeln, Dulden oder Unterlassen, das sich unmittelbar vermögensmindernd auswirkt"
+},
+{
+  "word": "STEUERUNG",
+  "clue": "Kontrollmöglichkeit über den Kausalverlauf – Grundlage für Täter- oder Teilnehmerbewertung"
+},
+{
+  "word": "EINGRIFF",
+  "clue": "Jede staatliche Maßnahme, die ein grundrechtlich geschütztes Verhalten erschwert oder unmöglich macht"
+},
+{
+  "word": "SCHRANKE",
+  "clue": "Verfassungsrechtlich zulässige Einschränkung eines Grundrechts, z. B. durch Gesetz"
+},
+{
+  "word": "VERHAELTNISMAESSIG",
+  "clue": "Staatliche Maßnahme muss einem legitimen Zweck dienen, geeignet, erforderlich und angemessen sein"
+},
+{
+  "word": "WEHRFAEHIG",
+  "clue": "Grundrechtsträger kann sich gegen staatliche Eingriffe mit Rechtsmitteln wehren"
+},
+{
+  "word": "GRUNDRECHTSKONKURRENZ",
+  "clue": "Frage, wie mehrere einschlägige Grundrechte zueinander stehen und geprüft werden"
+},
+{
+  "word": "UNTERLASSUNGSANSPRUCH",
+  "clue": "Grundrechtlich fundierter Anspruch auf Unterlassen eines staatlichen Eingriffs"
+},
+{
+  "word": "UNMITTELBARERDRITTWIRKUNG",
+  "clue": "Grundrechte gelten direkt zwischen Privaten – Ausnahme, nicht die Regel"
+},
+{
+  "word": "MITTELBARERDRITTWIRKUNG",
+  "clue": "Grundrechte beeinflussen über zivilrechtliche Generalklauseln auch privatrechtliche Rechtsverhältnisse"
+},
+{
+  "word": "INHALTSUNDGRENZENBESTIMMUNG",
+  "clue": "Gesetzgeber darf das Eigentum gestalten, solange er es nicht entwertet"
+},
+{
+  "word": "WESENSGEHALTSGARANTIE",
+  "clue": "Der Kernbereich eines Grundrechts darf selbst durch Gesetze nicht angetastet werden"
+},
+{
+  "word": "KLAGE",
+  "clue": "Prozessuale Geltendmachung eines Anspruchs vor Gericht"
+},
+{
+  "word": "BEKLAGTER",
+  "clue": "Person, gegen die sich die Klage richtet"
+},
+{
+  "word": "ZUSTAENDIGKEIT",
+  "clue": "Frage, ob ein Gericht den Rechtsstreit sachlich, örtlich und funktional verhandeln darf"
+},
+{
+  "word": "ANTRAG",
+  "clue": "Förmliche Erklärung einer Partei über den begehrten gerichtlichen Ausspruch"
+},
+{
+  "word": "VERHANDELUNG",
+  "clue": "Mündliche Erörterung des Streitstoffs vor dem Richter"
+},
+{
+  "word": "VERSAEUMNIS",
+  "clue": "Nichterscheinen einer Partei trotz ordnungsgemäßer Ladung – kann zu Versäumnisurteil führen"
+},
+{
+  "word": "URTEIL",
+  "clue": "Förmliche Entscheidung des Gerichts über den Streitgegenstand"
+},
+{
+  "word": "VOLLSTRECKUNG",
+  "clue": "Durchsetzung eines Titels mit staatlicher Hilfe"
+},
+{
+  "word": "KOSTEN",
+  "clue": "Gerichtsgebühren, Anwaltskosten und sonstige Aufwendungen des Rechtsstreits"
+},
+{
+  "word": "BERUFUNG",
+  "clue": "Rechtsmittel gegen erstinstanzliche Urteile zur Überprüfung in tatsächlicher und rechtlicher Hinsicht"
+},
+{
+  "word": "VERWALTUNGSAKT",
+  "clue": "Hoheitliche Maßnahme einer Behörde auf dem Gebiet des öffentlichen Rechts zur Regelung eines Einzelfalls mit Außenwirkung"
+},
+{
+  "word": "RUCKNAHME",
+  "clue": "Beseitigung eines rechtswidrigen Verwaltungsakts mit Wirkung für die Zukunft und Vergangenheit"
+},
+{
+  "word": "WIDERRUF",
+  "clue": "Aufhebung eines rechtmäßigen Verwaltungsakts, meist aus Gründen des öffentlichen Interesses"
+},
+{
+  "word": "BEHOERDE",
+  "clue": "Jede Stelle, die Aufgaben der öffentlichen Verwaltung wahrnimmt"
+},
+{
+  "word": "ERMESSEN",
+  "clue": "Spielraum der Verwaltung zwischen mehreren rechtlich zulässigen Entscheidungen"
+},
+{
+  "word": "GEBOT",
+  "clue": "Verpflichtung zu einem bestimmten Tun – Gegenteil zum Verbot"
+},
+{
+  "word": "BEGRUENDUNG",
+  "clue": "Erforderlicher Bestandteil eines Verwaltungsakts – erklärt die tatsächlichen und rechtlichen Gründe"
+},
+{
+  "word": "ANFECHTUNG",
+  "clue": "Rechtsbehelf gegen belastende Verwaltungsakte mit dem Ziel der Aufhebung"
+},
+{
+  "word": "KLAGEBEFUGNIS",
+  "clue": "Erforderlich für eine zulässige Anfechtungsklage – der Kläger muss in eigenen Rechten verletzt sein können"
+},
+{
+  "word": "SUBJEKTIV",
+  "clue": "Rechtlicher Maßstab, der an den Einzelnen und seine rechtlich geschützten Interessen anknüpft"
+}
+]
+ 

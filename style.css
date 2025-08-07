@@ -1,0 +1,281 @@
+
+@media (min-width: 601px) {
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+}
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+      padding: 2rem;
+      margin: 0;
+      min-height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(10, 50px);
+      grid-template-rows: repeat(10, 50px);
+      gap: 2px;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      /* Eng anliegender Kasten */
+      padding: 4px;
+      margin: 2rem auto 1rem auto;
+      width: fit-content;
+      max-width: 100%;
+      justify-content: center;
+    }
+    input.cell {
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 20px;
+      border: 1px solid #ccc;
+      border-radius: 0;
+      box-sizing: border-box;
+    }
+    .black {
+      background: black;
+      border: 1px solid #999;
+      pointer-events: none;
+      border-radius: 0;
+      box-sizing: border-box;
+    }
+    .clue-cell {
+      align-self: start;
+      justify-self: start;
+      padding-left: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .highlight {
+      background-color: rgba(255, 255, 0, 0.4);
+    }
+    .navigation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 1000;
+    }
+    /* Make the hint span expand and center its text */
+    #wordHint {
+      flex: 1;
+      text-align: center;
+      font-weight: bold;
+    }
+    .navigation button, button.control {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      padding: 0.5rem 1rem;
+      margin: 0 0.5rem;
+      font-size: 1rem;
+    }
+    .navigation button:hover,
+    button.control:hover {
+      background-color: #0056b3;
+    }
+    button.control {
+      display: inline-block;
+      margin: 0;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+    }
+    /* Footer Impressum */
+    .footer {
+      position: static;
+      width: 100%;
+      text-align: center;
+      margin-top: 1rem;
+      padding: 1rem 0;
+    }
+
+    #impressumBtn {
+      background: none;
+      border: none;
+      color: #007BFF;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #impressumBtn:hover {
+      text-decoration: underline;
+    }
+  /* Card-Layout für Haupt-Content */
+  .card {
+    max-width: 650px;
+    margin: 2rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+    /* Button-Farbkodierung */
+    :root {
+      --btn-check: #28a745;
+      --btn-hint: #ffc107;
+      --btn-reset: #17a2b8;
+      --btn-new: #dc3545;
+    }
+    button.control.check {
+      background-color: var(--btn-check);
+      color: white;
+    }
+    button.control.hint {
+      background-color: var(--btn-hint);
+      color: #333;
+    }
+    button.control.reset {
+      background-color: var(--btn-reset);
+      color: white;
+    }
+    button.control.new {
+      background-color: var(--btn-new);
+      color: white;
+    }
+    button.control.check:hover {
+      background-color: #218838;
+    }
+    button.control.hint:hover {
+      background-color: #e0a800;
+    }
+    button.control.reset:hover {
+      background-color: #138496;
+    }
+    button.control.new:hover {
+      background-color: #c82333;
+    }
+  /* Layout für Button-Gruppe */
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+    /* Navigation Icons */
+    .navigation button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem;
+    }
+    .navigation button .icon {
+      width: 1.2em;
+      height: 1.2em;
+    }
+  /* Responsive für Tablets und kleine Bildschirme */
+  @media (max-width: 768px) {
+    .card {
+      margin: 1rem;
+      padding: 1.5rem;
+    }
+    .grid {
+      grid-template-columns: repeat(10, 40px);
+      grid-template-rows: repeat(10, 40px);
+      padding: 0.75rem;
+    }
+    input.cell {
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+    }
+    .controls {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .controls button.control {
+      width: 100%;
+    }
+    .navigation {
+      gap: 0.5rem;
+    }
+    .navigation button {
+      padding: 0.4rem;
+    }
+  }
+
+  /* Responsive für sehr kleine Bildschirme */
+  @media (max-width: 480px) {
+    .grid {
+      display: grid;
+      /* 10 Spalten, jeweils gleich breit */
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(10, auto);
+      border-radius: 0;
+      gap: 2px;
+      padding: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      overflow-x: hidden;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+    .clue-cell {
+      display: none;
+    }
+    input.cell {
+      width: 100%;
+      aspect-ratio: 1;
+      font-size: 14px;
+      line-height: normal;
+      height: auto;
+    }
+    h1 {
+      font-size: 1.25rem;
+    }
+    .card {
+      max-width: 100vw;
+      margin: 0.5rem;
+      padding: 0.5rem;
+    }
+    .black {
+      background: #111 !important;
+      border: 1px solid #333 !important;
+    }
+  }
+.back-to-menu button {
+  font-size: 1.08em;
+  border-radius: 1.2em;
+  padding: 0.6em 2em;
+  background: #eee;
+  border: 1px solid #ccc;
+  color: #222;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.back-to-menu button:hover {
+  background: #ddd;
+}
+
+.back-to-menu {
+  position: fixed;
+  top: 3rem;
+  left: 3rem;
+  z-index: 200;
+}
+@media (max-width: 600px) {
+  .back-to-menu {
+    top: 0.6rem;
+    left: 0.6rem;
+  }
+}

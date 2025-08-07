@@ -1,0 +1,1190 @@
+[
+  {
+    "word": "DEUTSCHLAND",
+    "clue": "Mitteleuropäischer Staat, bekannt für Bierfeste und Autobahnen ohne allgemeines Tempolimit."
+  },
+  {
+    "word": "FRANKREICH",
+    "clue": "Westeuropäisches Land mit einem ikonischen Turm und bekannten Weinen."
+  },
+  {
+    "word": "SPANIEN",
+    "clue": "Südwestliches Land, berühmt für Flamenco und sonnige Strände."
+  },
+  {
+    "word": "ITALIEN",
+    "clue": "Halbinsel im Mittelmeer mit antiken Ruinen und Pasta."
+  },
+  {
+    "word": "PORTUGAL",
+    "clue": "Iberisches Land mit Atlantikküste und historischen Seefahrern."
+  },
+  {
+    "word": "NIEDERLANDE",
+    "clue": "Flaches Land mit Kanälen, Tulpen und Windmühlen."
+  },
+  {
+    "word": "BELGIEN",
+    "clue": "Zwischen Frankreich und Niederlande gelegen, bekannt für Schokolade."
+  },
+  {
+    "word": "LUXEMBURG",
+    "clue": "Kleiner Staat in Europa, oft als Finanzzentrum bezeichnet."
+  },
+  {
+    "word": "SCHWEIZ",
+    "clue": "Alpenland mit neutraler Politik und Uhrenmanufakturen."
+  },
+  {
+    "word": "OESTERREICH",
+    "clue": "Gebirgiges Land mit klassischer Musikgeschichte."
+  },
+  {
+    "word": "POLEN",
+    "clue": "Osteuropäisches Land mit historischen Städten und Kirchen."
+  },
+  {
+    "word": "TSCHECHIEN",
+    "clue": "Mitteleuropäisches Land mit mittelalterlicher Altstadt in der Hauptstadt."
+  },
+  {
+    "word": "SLOWAKEI",
+    "clue": "Land mit vielen Burgen und Karpatenanteil."
+  },
+  {
+    "word": "UNGARN",
+    "clue": "Land mit Thermalquellen und großer Donau-Metropole."
+  },
+  {
+    "word": "DAENEMARK",
+    "clue": "Nordisches Königreich mit dem Konzept 'Hygge'."
+  },
+  {
+    "word": "NORWEGEN",
+    "clue": "Skandinavisches Land mit Fjorden und Nordlichtern."
+  },
+  {
+    "word": "SCHWEDEN",
+    "clue": "Nordeuropäisches Land mit Möbelkonzernen und Seen."
+  },
+  {
+    "word": "FINNLAND",
+    "clue": "Seenreiches Land mit Saunakultur."
+  },
+  {
+    "word": "ISLAND",
+    "clue": "Insel mit vulkanischer Aktivität und Geysiren."
+  },
+  {
+    "word": "RUSSLAND",
+    "clue": "Ausgedehntes Land, das Europa und Asien verbindet."
+  },
+  {
+    "word": "UKRAINE",
+    "clue": "Fruchtbare Ebenen in Osteuropa, historisch und aktuell bedeutsam."
+  },
+  {
+    "word": "WEISSRUSSLAND",
+    "clue": "Östliches Nachbarland Russlands, auch Belarus genannt."
+  },
+  {
+    "word": "USA",
+    "clue": "Großes Land mit vielfältigen Bundesstaaten und bekannten Metropolen."
+  },
+  {
+    "word": "KANADA",
+    "clue": "Nordamerikanisches Land mit großen Wäldern und Seen."
+  },
+  {
+    "word": "MEXIKO",
+    "clue": "Land mit präkolumbianischer Geschichte und scharfer Küche."
+  },
+  {
+    "word": "BRASILIEN",
+    "clue": "Südamerikanisches Land mit Regenwald und Karneval."
+  },
+  {
+    "word": "ARGENTINIEN",
+    "clue": "Land mit Tango und Rinderzucht in Südamerika."
+  },
+  {
+    "word": "CHILE",
+    "clue": "Langes, schmales Land an der Westküste Südamerikas."
+  },
+  {
+    "word": "PERU",
+    "clue": "Andenland mit bedeutenden Inka-Ruinen."
+  },
+  {
+    "word": "BOLIVIEN",
+    "clue": "Hochlandstaat mit großer Salzebene."
+  },
+  {
+    "word": "KOLUMBIEN",
+    "clue": "Südamerikanisches Land mit Kaffee und Küsten."
+  },
+  {
+    "word": "VENEZUELA",
+    "clue": "Ölreiches Land in Südamerika mit spektakulären Wasserfällen."
+  },
+  {
+    "word": "AEGYPTEN",
+    "clue": "Land mit alten Pyramiden und einem langen Fluss."
+  },
+  {
+    "word": "MAROKKO",
+    "clue": "Nordafrikanisches Königreich mit Basaren und Wüstenrand."
+  },
+  {
+    "word": "TUNESIEN",
+    "clue": "Mediterranes Land mit römischen Überresten."
+  },
+  {
+    "word": "SUEDAFRIKA",
+    "clue": "Land am Kap, bekannt für Artenvielfalt und Weinregionen."
+  },
+  {
+    "word": "KENIA",
+    "clue": "Ostafrikanisches Land mit jährlicher Tiermigration."
+  },
+  {
+    "word": "TANSANIA",
+    "clue": "Heimat des höchsten Gipfels Afrikas und großer Tierreservate."
+  },
+  {
+    "word": "AUSTRALIEN",
+    "clue": "Kontinent mit einzigartiger Tierwelt und großer Wüste."
+  },
+  {
+    "word": "NEUSEELAND",
+    "clue": "Pazifischer Inselstaat mit dramatischer Natur."
+  },
+  {
+    "word": "JAPAN",
+    "clue": "Inselstaat mit Fusion aus Tradition und Hightech."
+  },
+  {
+    "word": "CHINA",
+    "clue": "Asiatisches Riesenreich mit langer Geschichte und Mauer."
+  },
+  {
+    "word": "INDIEN",
+    "clue": "Subkontinent mit bunter Kultur und Gewürzen."
+  },
+  {
+    "word": "THAILAND",
+    "clue": "Asiatisches Land mit Tempeln und tropischen Inseln."
+  },
+  {
+    "word": "VIETNAM",
+    "clue": "Langes Küstenland mit Dschungel und Geschichte."
+  },
+  {
+    "word": "INDONESIEN",
+    "clue": "Archipel mit tausenden Inseln in Südostasien."
+  },
+  {
+    "word": "MALAYSIA",
+    "clue": "Multikultureller Staat mit Regenwald und Großstädten."
+  },
+  {
+    "word": "PHILIPPINEN",
+    "clue": "Inselstaat mit vielen Stränden im Pazifik."
+  },
+  {
+    "word": "IRLAND",
+    "clue": "Grüne Insel mit Traditionen und keltischer Musik."
+  },
+  {
+    "word": "SCHOTTLAND",
+    "clue": "Region mit Highlands und alten Schlössern."
+  },
+  {
+    "word": "SINGAPUR",
+    "clue": "Stadtstaat mit futuristischem Stadtbild in Südostasien."
+  },
+  {
+    "word": "SUEDKOREA",
+    "clue": "Halbinsel mit Technologiezentren und Popkultur."
+  },
+  {
+    "word": "NEPAL",
+    "clue": "Himalaya-Staat mit dem höchsten Gebirge der Erde."
+  },
+  {
+    "word": "KUBA",
+    "clue": "Karibische Insel mit Oldtimern und Rum."
+  },
+  {
+    "word": "BERLIN",
+    "clue": "Deutsche Hauptstadt mit einem bekannten Tor als Wahrzeichen."
+  },
+  {
+    "word": "PARIS",
+    "clue": "Französische Metropole, Schauplatz der Modewochen und eines berühmten Turms."
+  },
+  {
+    "word": "ROM",
+    "clue": "Italienische Stadt mit antiken Ruinen und eigener Kirche des Papstes nahebei."
+  },
+  {
+    "word": "MADRID",
+    "clue": "Spanische Hauptstadt mit königlichem Palast und Fußballstadion."
+  },
+  {
+    "word": "LISSABON",
+    "clue": "Hügelige Stadt an der Atlantikküste mit historischen Straßenbahnen."
+  },
+  {
+    "word": "AMSTERDAM",
+    "clue": "Stadt mit Wasserwegen und fahrradfreundlichem Verkehr."
+  },
+  {
+    "word": "BRUESSEL",
+    "clue": "Sitz europäischer Institutionen, berühmt für Waffeln."
+  },
+  {
+    "word": "ZUERICH",
+    "clue": "Finanzstadt mit See in einem Alpenland."
+  },
+  {
+    "word": "WIEN",
+    "clue": "Kulturstadt mit Oper und alten Kaffeehäusern."
+  },
+  {
+    "word": "PRAG",
+    "clue": "Stadt mit astronomischer Uhr und verwinkelter Altstadt."
+  },
+  {
+    "word": "BUDAPEST",
+    "clue": "Stadt mit Thermalquellen auf beiden Seiten eines Flusses."
+  },
+  {
+    "word": "KOPENHAGEN",
+    "clue": "Skandinavische Hauptstadt mit farbenfrohen Hafenhäusern."
+  },
+  {
+    "word": "OSLO",
+    "clue": "Norwegische Hauptstadt nahe Fjorden."
+  },
+  {
+    "word": "STOCKHOLM",
+    "clue": "Schwedische Stadt, verteilt auf zahlreiche Inseln."
+  },
+  {
+    "word": "HELSINKI",
+    "clue": "Hauptstadt mit maritimem Flair und Sauna-Tradition."
+  },
+  {
+    "word": "REYKJAVIK",
+    "clue": "Kleinste europäische Hauptstadt, umgeben von Lavafeldern."
+  },
+  {
+    "word": "MOSKAU",
+    "clue": "Große Stadt mit roter Platz und prächtigen Kirchen."
+  },
+  {
+    "word": "KIEW",
+    "clue": "Historische Hauptstadt mit goldenen Domkuppeln."
+  },
+  {
+    "word": "NEWYORK",
+    "clue": "Stadt, die nie schläft, mit großer Freiheitsstatue."
+  },
+  {
+    "word": "LOSANGELES",
+    "clue": "Westküstenstadt der Filmbranche."
+  },
+  {
+    "word": "MIAMI",
+    "clue": "Sonnige Strandmetropole in Florida."
+  },
+  {
+    "word": "SANFRANCISCO",
+    "clue": "Hügelige Stadt mit markanter rote Brücke."
+  },
+  {
+    "word": "TORONTO",
+    "clue": "Kanadische Metropole, multikulturell und am See gelegen."
+  },
+  {
+    "word": "MONTREAL",
+    "clue": "Französisch geprägte Stadt in einem nordamerikanischen Land."
+  },
+  {
+    "word": "RIO",
+    "clue": "Stadt, die für Karneval und eine große Christusstatue bekannt ist."
+  },
+  {
+    "word": "SAOPAULO",
+    "clue": "Wirtschaftliches Zentrum Südamerikas mit hoher Bevölkerungszahl."
+  },
+  {
+    "word": "BUENOSAIRES",
+    "clue": "Tango-Metropole in Südamerika."
+  },
+  {
+    "word": "SANTIAGO",
+    "clue": "Stadt, eingebettet zwischen Anden und Küste."
+  },
+  {
+    "word": "LIMA",
+    "clue": "Küste und historische Stätten in einem südamerikanischen Land."
+  },
+  {
+    "word": "BOGOTA",
+    "clue": "Hochgelegene Hauptstadt mit reicher Kultur."
+  },
+  {
+    "word": "CARACAS",
+    "clue": "Lateinamerikanische Metropole in einem ölreichen Land."
+  },
+  {
+    "word": "KAIRO",
+    "clue": "Großstadt nahe alten Pyramiden am Nil."
+  },
+  {
+    "word": "MARRAKESCH",
+    "clue": "Wüstennahe Stadt mit bunten Märkten und Riads."
+  },
+  {
+    "word": "TUNIS",
+    "clue": "Mediterrane Stadt mit römischem Erbe."
+  },
+  {
+    "word": "KAPSTADT",
+    "clue": "Stadt am südlichsten Zipfel Afrikas mit markantem Tafelberg."
+  },
+  {
+    "word": "NAIROBI",
+    "clue": "Tor zu Safarierlebnissen in Ostafrika."
+  },
+  {
+    "word": "DARESSALAAM",
+    "clue": "Historische Hafenstadt an der Ostküste Afrikas."
+  },
+  {
+    "word": "SYDNEY",
+    "clue": "Opernhaus und Hafen sind markante Merkmale dieser Stadt."
+  },
+  {
+    "word": "MELBOURNE",
+    "clue": "Kulturelles Zentrum auf der Südostküste Australiens."
+  },
+  {
+    "word": "AUCKLAND",
+    "clue": "Hafenstadt mit vielen Segelbooten in Neuseeland."
+  },
+  {
+    "word": "TOKYO",
+    "clue": "Riesige asiatische Metropole mit Neonlichtern und Tempeln."
+  },
+  {
+    "word": "KYOTO",
+    "clue": "Traditionelle japanische Stadt mit Schreinen."
+  },
+  {
+    "word": "SHANGHAI",
+    "clue": "Asiatische Metropole mit ikonischer Skyline."
+  },
+  {
+    "word": "PEKING",
+    "clue": "Historische Hauptstadt mit verbotener Stadt."
+  },
+  {
+    "word": "MUMBAI",
+    "clue": "Film- und Handelszentrum an der Westküste Indiens."
+  },
+  {
+    "word": "DELHI",
+    "clue": "Mix aus Altstadt und modernem Regierungsviertel."
+  },
+  {
+    "word": "BANGKOK",
+    "clue": "Stadt mit Flusskanälen und buddhistischen Tempeln."
+  },
+  {
+    "word": "HANOI",
+    "clue": "Kapitalstadt mit französischer Kolonialarchitektur."
+  },
+  {
+    "word": "JAKARTA",
+    "clue": "Megastadt auf einer Insel Indonesiens."
+  },
+  {
+    "word": "MANILA",
+    "clue": "Hauptstadt eines Inselstaates im Pazifik."
+  },
+  {
+    "word": "LONDON",
+    "clue": "Metropole mit königlicher Residenz und roter Doppeldeckerbusse."
+  },
+  {
+    "word": "BERN",
+    "clue": "Stadt mit Bärenpark und mittelalterlicher Altstadt in den Alpen."
+  },
+  {
+    "word": "FLORENZ",
+    "clue": "Geburtstätte der Renaissance in Italien."
+  },
+  {
+    "word": "VENEDIG",
+    "clue": "Wasserstadt mit Gondeln und engen Gassen."
+  },
+  {
+    "word": "ATHEN",
+    "clue": "Antike Stadt mit einer berühmten Tempelanlage."
+  },
+  {
+    "word": "DUBLIN",
+    "clue": "Irische Hauptstadt mit Literaturtradition."
+  },
+  {
+    "word": "EDINBURGH",
+    "clue": "Schottische Stadt mit Schloss auf einem Hügel."
+  },
+  {
+    "word": "BARCELONA",
+    "clue": "Stadt mit ungewöhnlicher Architektur eines berühmten Architekten."
+  },
+  {
+    "word": "VALENCIA",
+    "clue": "Spanische Stadt mit futuristischem Wissenschaftspark."
+  },
+  {
+    "word": "MALAGA",
+    "clue": "Hafenstadt an der Costa del Sol."
+  },
+  {
+    "word": "SEVILLA",
+    "clue": "Andalusische Stadt mit maurischem Erbe."
+  },
+  {
+    "word": "GENF",
+    "clue": "Stadt am See, Sitz vieler internationaler Organisationen."
+  },
+  {
+    "word": "NAPOLI",
+    "clue": "Italienische Stadt, Ursprung der Pizza."
+  },
+  {
+    "word": "SALZBURG",
+    "clue": "Geburtsstadt eines berühmten Komponisten, umgeben von Bergen."
+  },
+  {
+    "word": "EIFELTURM",
+    "clue": "Stahlkonstruktion, die Paris überragt."
+  },
+  {
+    "word": "BRANDENBURGER",
+    "clue": "Symbolisches Tor einer deutschen Hauptstadt."
+  },
+  {
+    "word": "COLLOSEUM",
+    "clue": "Römisches Amphitheater für Gladiatorenkämpfe."
+  },
+  {
+    "word": "SAGRADAFAMILIA",
+    "clue": "Unvollendete Kirche in Spanien mit filigraner Fassade."
+  },
+  {
+    "word": "BIGBEN",
+    "clue": "Uhrenturm neben dem Parlament in London."
+  },
+  {
+    "word": "LONDONBRIDGE",
+    "clue": "Englische Brücke über einen bekannten Fluss."
+  },
+  {
+    "word": "FREIHEITSSTATUE",
+    "clue": "Große Statue in New York, Geschenk aus Europa."
+  },
+  {
+    "word": "TIMESQUARE",
+    "clue": "Leuchtender Platz im Herzen einer US-Metropole."
+  },
+  {
+    "word": "GOLDENGATE",
+    "clue": "Rote Brücke an der kalifornischen Küste."
+  },
+  {
+    "word": "CHRISTUSSTATUE",
+    "clue": "Überblickt eine brasilianische Großstadt von oben."
+  },
+  {
+    "word": "MACHUPICCHU",
+    "clue": "Versteckte Inkastadt in den Anden."
+  },
+  {
+    "word": "TAJMAHAL",
+    "clue": "Marmormonument als Liebesbeweis in Südasien."
+  },
+  {
+    "word": "GREATWALL",
+    "clue": "Lange Mauer zur Verteidigung in Asien."
+  },
+  {
+    "word": "ANGKORTEMPEL",
+    "clue": "Ruinenstadt mit Tempeln in Südostasien."
+  },
+  {
+    "word": "SYDNEYOPER",
+    "clue": "Segelartige Architektur am Hafen."
+  },
+  {
+    "word": "BURJKHALIFA",
+    "clue": "Extrem hohes Gebäude in einer Wüstenmetropole."
+  },
+  {
+    "word": "PYRAMIDEN",
+    "clue": "Monumentale Grabbauten alter Herrscher in Afrika."
+  },
+  {
+    "word": "SPHINX",
+    "clue": "Steinerne Figur mit Mischgestalt aus Mensch und Löwe."
+  },
+  {
+    "word": "NIAGARAFALLEN",
+    "clue": "Wassersturz zwischen zwei Ländern in Nordamerika."
+  },
+  {
+    "word": "GRANDCANYON",
+    "clue": "Tiefe Schlucht, vom Fluss über Jahrtausende geformt."
+  },
+  {
+    "word": "EVEREST",
+    "clue": "Berg, der die meisten Höhenmeter übertrifft."
+  },
+  {
+    "word": "MATTERHORN",
+    "clue": "Markanter alpenförmiger Gipfel mit scharfer Spitze."
+  },
+  {
+    "word": "NEUSCHWANSTEIN",
+    "clue": "Traumschloss, das viele Märchen inspiriert hat."
+  },
+  {
+    "word": "SCHWARZWALD",
+    "clue": "Dichter Wald mit Traditionen und Uhren."
+  },
+  {
+    "word": "LOUVRE",
+    "clue": "Kunstmuseum mit berühmtem Louvre-Glasdach."
+  },
+  {
+    "word": "DISNEYLAND",
+    "clue": "Freizeitpark mit bekannten Zeichentrickfiguren."
+  },
+  {
+    "word": "AKROPOLIS",
+    "clue": "Antike Festung auf einem Hügel in Griechenland."
+  },
+  {
+    "word": "PETRA",
+    "clue": "In Felsen gehauene historische Stadt."
+  },
+  {
+    "word": "FUSHIMIINARI",
+    "clue": "Schrein mit vielen roten Torbögen."
+  },
+  {
+    "word": "PETERSDOM",
+    "clue": "Große Kirche im Zentrum eines Kirchenstaates."
+  },
+  {
+    "word": "SIEGESAEULE",
+    "clue": "Säule, die militärische Erfolge einer Hauptstadt feiert."
+  },
+  {
+    "word": "TAJMAHAL",
+    "clue": "Bekannte Sehenswürdigkeit Indiens"
+  },
+  {
+    "word": "FLUGHAFEN",
+    "clue": "Ort für Abflug und Ankunft von Flugzeugen."
+  },
+  {
+    "word": "HOTEL",
+    "clue": "Gepflegte Unterkunft für Urlauber und Geschäftsreisende."
+  },
+  {
+    "word": "STRAND",
+    "clue": "Uferzone mit Sand und Meeresnähe."
+  },
+  {
+    "word": "INSEL",
+    "clue": "Vom Wasser umgebene Landfläche."
+  },
+  {
+    "word": "FERIENHAUS",
+    "clue": "Urlaubsdomizil außerhalb der Heimat."
+  },
+  {
+    "word": "URLAUB",
+    "clue": "Zeitraum für Erholung und Reisen."
+  },
+  {
+    "word": "REISEPASS",
+    "clue": "Offizielles Dokument zur Einreise in andere Länder."
+  },
+  {
+    "word": "TICKET",
+    "clue": "Nachweis für gebuchte Fahrt oder Eintritt."
+  },
+  {
+    "word": "GEPAECK",
+    "clue": "Alles, was auf Reisen mitgenommen wird."
+  },
+  {
+    "word": "REISEFUEHRER",
+    "clue": "Ratgeber zu Sehenswürdigkeiten und Kultur."
+  },
+  {
+    "word": "STADTPLAN",
+    "clue": "Karte zur Orientierung in einer Stadt."
+  },
+  {
+    "word": "FAEHRE",
+    "clue": "Wasserfahrzeug für Überquerungen."
+  },
+  {
+    "word": "BUSREISE",
+    "clue": "Gruppentransport über Land."
+  },
+  {
+    "word": "BAHNFAHRT",
+    "clue": "Reise auf Schienen."
+  },
+  {
+    "word": "CAMPING",
+    "clue": "Übernachtung in Zelten oder Wohnwagen."
+  },
+  {
+    "word": "RUNDREISE",
+    "clue": "Mehrere Stationen umfassende Tour."
+  },
+  {
+    "word": "WANDERWEG",
+    "clue": "Pfad durch Natur zum Gehen."
+  },
+  {
+    "word": "TOURGUIDE",
+    "clue": "Erklärt Besuchern lokale Attraktionen."
+  },
+  {
+    "word": "SOUVENIR",
+    "clue": "Kleines Erinnerungsstück vom Trip."
+  },
+  {
+    "word": "POSTKARTE",
+    "clue": "Bildkarte, die man verschickt."
+  },
+  {
+    "word": "SONNENCREME",
+    "clue": "Schützt vor UV-Strahlen bei Aufenthalten draußen."
+  },
+  {
+    "word": "SONNENBRILLE",
+    "clue": "Schützt Augen vor grellem Licht."
+  },
+  {
+    "word": "KOMPASS",
+    "clue": "Zeigt Himmelsrichtungen mithilfe Magnetismus."
+  },
+  {
+    "word": "NATIONALPARK",
+    "clue": "Geschützte Naturregion für Besucher."
+  },
+  {
+    "word": "SAFARI",
+    "clue": "Tierbeobachtungstour, oft in Afrika."
+  },
+  {
+    "word": "BERGWANDERUNG",
+    "clue": "Längere Wanderung in bergiger Landschaft."
+  },
+  {
+    "word": "KREUZFAHRT",
+    "clue": "Reisen mit einem Schiff zu mehreren Zielen."
+  },
+  {
+    "word": "KOFFER",
+    "clue": "Behälter für Kleidung auf Reisen."
+  },
+  {
+    "word": "BOARDING",
+    "clue": "Prozess des Einsteigens in ein Flugzeug."
+  },
+  {
+    "word": "CHECKIN",
+    "clue": "Anmeldung vor einer Reise oder im Hotel."
+  },
+  {
+    "word": "REISEVERSICHERUNG",
+    "clue": "Schutz bei unerwarteten Vorfällen unterwegs."
+  },
+  {
+    "word": "VISUM",
+    "clue": "Einreisegenehmigung für bestimmte Länder."
+  },
+  {
+    "word": "SICHERHEITSKONTROLLE",
+    "clue": "Überprüfung vor dem Betreten eines Flugzeugs."
+  },
+  {
+    "word": "SAISON",
+    "clue": "Zeitraum, in dem viele Touristen reisen."
+  },
+  {
+    "word": "CHECKOUT",
+    "clue": "Abmeldung aus einer Unterkunft."
+  },
+  {
+    "word": "REISEBUERO",
+    "clue": "Ort, wo Reisen gebucht und organisiert werden."
+  },
+  {
+    "word": "ZOLL",
+    "clue": "Behörde, die Gepäck bei Grenzübertritten prüft."
+  },
+  {
+    "word": "PASSKONTROLLE",
+    "clue": "Überprüfung des Reisedokuments bei Einreise."
+  },
+  {
+    "word": "STADTFUEHRUNG",
+    "clue": "Geführte Tour durch Sehenswürdigkeiten einer Stadt."
+  },
+  {
+    "word": "KAFFEEHAUS",
+    "clue": "Gemütlicher Ort für Getränke und Gespräche im Ausland."
+  },
+  {
+    "word": "FERNREISE",
+    "clue": "Längere Reise, die weit entfernt führt."
+  },
+  {
+    "word": "LASTMINUTE",
+    "clue": "Reiseangebot kurz vor Abflug zu reduzierten Preisen."
+  },
+  {
+    "word": "TRANSFER",
+    "clue": "Weiterfahrt zwischen Flughafen und Unterkunft."
+  },
+  {
+    "word": "REISEGRUPPE",
+    "clue": "Mehrere Personen, die gemeinsam unterwegs sind."
+  },
+  {
+    "word": "TOURISTENINFO",
+    "clue": "Anlaufstelle für Besucherinformationen vor Ort."
+  },
+  {
+    "word": "UEBERGABE",
+    "clue": "Akt beim Zurückgeben von Schlüsseln im Hotel."
+  },
+  {
+    "word": "SIGHTSEEING",
+    "clue": "Besichtigung von Highlights einer Stadt."
+  },
+  {
+    "word": "KULTURERBE",
+    "clue": "Historisch wertvolle Stätten und Traditionen einer Region."
+  },
+  {
+    "word": "SPRACHE",
+    "clue": "Mittel zur Kommunikation in fremden Ländern."
+  },
+  {
+    "word": "REISEPASS",
+    "clue": "Offizielles Dokument für internationale Einreisen."
+  },
+  {
+    "word": "FLUGHAFEN",
+    "clue": "Ort, an dem Flugzeuge starten und landen."
+  },
+  {
+    "word": "HOTEL",
+    "clue": "Unterkunft, in der man während der Reise übernachtet."
+  },
+  {
+    "word": "STADTFUEHRUNG",
+    "clue": "Geführte Tour durch eine Stadt mit Erklärungen."
+  },
+  {
+    "word": "KOMPASS",
+    "clue": "Gerät zur Orientierung, das Himmelsrichtungen zeigt."
+  },
+  {
+    "word": "VISUM",
+    "clue": "Einreisegenehmigung für bestimmte Länder."
+  },
+  {
+    "word": "KREUZFAHRT",
+    "clue": "Reise mit einem Schiff zu mehreren Zielen."
+  },
+  {
+    "word": "REISEVERSICHERUNG",
+    "clue": "Schutz gegen unerwartete Probleme während der Reise."
+  },
+  {
+    "word": "SOUVENIR",
+    "clue": "Kleines Erinnerungsstück von unterwegs."
+  },
+  {
+    "word": "STADTPLAN",
+    "clue": "Grafische Karte zur Orientierung in einer Stadt."
+  },
+  {
+    "word": "CHECKIN",
+    "clue": "Anmeldung vor dem Abflug oder bei der Unterkunft."
+  },
+  {
+    "word": "CHECKOUT",
+    "clue": "Abmeldung beim Verlassen einer Unterkunft."
+  },
+  {
+    "word": "UMSTEIGEN",
+    "clue": "Wechsel zwischen zwei Verkehrsmitteln während der Reise."
+  },
+  {
+    "word": "ANREISE",
+    "clue": "Erste Etappe zum Urlaubsort hin."
+  },
+  {
+    "word": "ABREISE",
+    "clue": "Verlassen des Urlaubsortes am Ende."
+  },
+  {
+    "word": "TRANSFER",
+    "clue": "Verbindung zwischen Flughafen und Zielort oder anderen Verkehrsmitteln."
+  },
+  {
+    "word": "REISEFUEHRER",
+    "clue": "Person oder Buch mit Informationen zu Sehenswürdigkeiten."
+  },
+  {
+    "word": "PASSKONTROLLE",
+    "clue": "Überprüfung von Reisedokumenten an der Grenze."
+  },
+  {
+    "word": "FLUGGESELLSCHAFT",
+    "clue": "Unternehmen, das Flugverbindungen durchführt."
+  },
+  {
+    "word": "BORDKARTE",
+    "clue": "Ticket zum Einsteigen in das Flugzeug."
+  },
+  {
+    "word": "ALHAMBRA",
+    "clue": "Palast- und Festungskomplex mit maurischer Architektur in Spanien."
+  },
+  {
+    "word": "SANTORINI",
+    "clue": "Griechische Insel mit weiß-blauen Häusern und spektakulären Sonnenuntergängen."
+  },
+  {
+    "word": "GREATBARRIERREEF",
+    "clue": "Weltgrößtes Korallenriff vor der Küste Australiens."
+  },
+  {
+    "word": "FLUGTICKET",
+    "clue": "Nachweis für gebuchte Sitzplätze in einem Flugzeug."
+  },
+  {
+    "word": "ZUGFAHRT",
+    "clue": "Reise mit Schienenfahrzeug über Land."
+  },
+  {
+    "word": "FOTOAPARAT",
+    "clue": "Gerät, mit dem man Erinnerungen visuell festhält."
+  },
+  {
+    "word": "REISEBLOG",
+    "clue": "Online-Tagebuch mit Erfahrungen und Tipps von unterwegs."
+  },
+  {
+    "word": "BACKPACKER",
+    "clue": "Reisender mit Rucksack, oft mit geringem Budget unterwegs."
+  },
+  {
+    "word": "NATIONALPARK",
+    "clue": "Geschützte Landschaft, die Besucher erleben können."
+  },
+  {
+    "word": "REISEGEPAECK",
+    "clue": "Gesamtheit der mitgenommenen Koffer und Taschen."
+  },
+  {
+    "word": "STADTBESUCH",
+    "clue": "Kurzer Aufenthalt in einer Stadt, um Sehenswürdigkeiten zu erkunden."
+  },
+  {
+    "word": "MEERESUFER",
+    "clue": "Grenzlinie zwischen Land und Ozean oder See."
+  },
+  {
+    "word": "INSELHOPPING",
+    "clue": "Reisen von einer Insel zur nächsten, meist in einer Region."
+  },
+  {
+    "word": "REISEBLOGGER",
+    "clue": "Person, die ihre Touren und Tipps online dokumentiert."
+  },
+  {
+    "word": "REISEPLAN",
+    "clue": "Strukturierte Abfolge von Stationen und Aktivitäten einer Tour."
+  },
+  {
+    "word": "REISEFUEHRUNG",
+    "clue": "Organisierte Erklärung zu Orten durch eine sachkundige Person."
+  },
+  {
+    "word": "HAFENSTADT",
+    "clue": "Ort an der Küste mit Umschlagplatz für Schiffe."
+  },
+  {
+    "word": "AUSSICHTSPUNKT",
+    "clue": "Erhöhter Ort, von dem man eine weite Sicht genießen kann."
+  },
+  {
+    "word": "REISEZIEL",
+    "clue": "Ort, zu dem eine Reise führt."
+  },
+  {
+    "word": "VENEDIG",
+    "clue": "Wasserstadt mit Kanälen und Gondeln."
+  },
+  {
+    "word": "BARCELONA",
+    "clue": "Spanische Stadt mit ungewöhnlicher Architektur eines berühmten Architekten."
+  },
+  {
+    "word": "LONDON",
+    "clue": "Metropole mit königlichem Palast und roten Doppeldeckerbussen."
+  },
+  {
+    "word": "NEWYORK",
+    "clue": "Stadt, die nie schläft, mit großer Freiheitsstatue."
+  },
+  {
+    "word": "ROM",
+    "clue": "Italienische Stadt mit antiken Ruinen und Papstbezirk in der Nähe."
+  },
+  {
+    "word": "PETERSDOM",
+    "clue": "Beeindruckende Kirche im Herzen eines kleinsten Staates."
+  },
+  {
+    "word": "BIGBEN",
+    "clue": "Uhrenturm neben dem Parlament in England."
+  },
+  {
+    "word": "SCHLOSSNEUSCHWANSTEIN",
+    "clue": "Märchenhaftes Schloss, das als Inspiration für Filmkulissen diente."
+  },
+  {
+    "word": "REISEBEGLEITER",
+    "clue": "Person, die einen unterwegs begleitet und unterstützt."
+  },
+  {
+    "word": "REISEGUTSCHEIN",
+    "clue": "Wertbon für zukünftige Reisen oder Aufenthalte."
+  },
+  {
+    "word": "REISEGRUPPE",
+    "clue": "Mehrere Personen, die gemeinsam unterwegs sind."
+  },
+  {
+    "word": "STADTSPAZIERGANG",
+    "clue": "Gemächlicher Rundgang durch eine urbane Umgebung."
+  },
+  {
+    "word": "KULTURERLEBNIS",
+    "clue": "Teilnahme an lokalen Traditionen oder Veranstaltungen."
+  },
+  {
+    "word": "URLAUBSORT",
+    "clue": "Ort, an dem man zur Erholung hinfährt."
+  },
+  {
+    "word": "REISEBUDGET",
+    "clue": "Festgelegter Geldrahmen für die Tour."
+  },
+  {
+    "word": "FERNREISE",
+    "clue": "Reise über große Entfernungen, oft interkontinental."
+  },
+  {
+    "word": "ZOLLKONTROLLE",
+    "clue": "Überprüfung von Waren und Dokumenten bei Grenzübertritt."
+  },
+  {
+    "word": "STADTPARK",
+    "clue": "Grüne Oase mitten in einer Stadt zum Erholen."
+  },
+  {
+    "word": "FLUGHAFENSHUTTLE",
+    "clue": "Transport zwischen Flughafen und Stadt oder Hotel."
+  },
+  {
+    "word": "TOKYO",
+    "clue": "Hochmoderne asiatische Metropole mit Tempeln und Technik."
+  },
+  {
+    "word": "KYOTO",
+    "clue": "Traditionelle japanische Stadt mit Schreinen und Gärten."
+  },
+  {
+    "word": "OSLO",
+    "clue": "Norwegische Hauptstadt nahe Fjorden und Wikingergeschichte."
+  },
+  {
+    "word": "STOCKHOLM",
+    "clue": "Schwedische Stadt, verteilt auf viele Inseln im Archipel."
+  },
+  {
+    "word": "PRAG",
+    "clue": "Mitteleuropäische Stadt mit astronomischer Uhr und Altstadt."
+  },
+  {
+    "word": "BUDAPEST",
+    "clue": "Ungarische Stadt mit Thermalbädern an beiden Seiten eines Flusses."
+  },
+  {
+    "word": "AMSTERDAM",
+    "clue": "Stadt mit Grachten, Fahrrädern und entspannter Atmosphäre."
+  },
+  {
+    "word": "MOSKAU",
+    "clue": "Russische Metropole mit roter Platz und prunkvollen Kirchen."
+  },
+  {
+    "word": "KIEW",
+    "clue": "Historische Stadt mit goldenen Kuppeln in Osteuropa."
+  },
+  {
+    "word": "RIO",
+    "clue": "Südamerikanische Stadt, bekannt für Karneval und Christusstatue."
+  },
+  {
+    "word": "SAOPAULO",
+    "clue": "Riesige Metropole in Südamerika mit wirtschaftlicher Bedeutung."
+  },
+  {
+    "word": "KAPSTADT",
+    "clue": "Stadt am Kap mit markantem Tafelberg in Südafrika."
+  },
+  {
+    "word": "SYDNEY",
+    "clue": "Australische Hafenstadt mit berühmtem Opernhaus."
+  },
+  {
+    "word": "MELBOURNE",
+    "clue": "Kulturelles Zentrum an der Südostküste Australiens."
+  },
+  {
+    "word": "AUCKLAND",
+    "clue": "Neuseeländische Hafenstadt mit vielen Segelbooten."
+  },
+  {
+    "word": "KAIRO",
+    "clue": "Großstadt nahe antiken Pyramiden am Nil in Nordafrika."
+  },
+  {
+    "word": "MARRAKESCH",
+    "clue": "Marktstadt mit bunten Souks und roten Mauern in Nordafrika."
+  },
+  {
+    "word": "DUBLIN",
+    "clue": "Irische Hauptstadt mit Literaturtradition und Pubs."
+  },
+  {
+    "word": "EDINBURGH",
+    "clue": "Schottische Stadt mit Schloss auf einem Hügel und Festivals."
+  },
+  {
+    "word": "LISSABON",
+    "clue": "Hügelige Hauptstadt Portugals mit alten Straßenbahnen."
+  },
+  {
+    "word": "KREUZFAHRT",
+    "clue": "Reiseform, bei der man mit einem Schiff mehrere Orte besucht."
+  },
+  {
+    "word": "REISEPASS",
+    "clue": "Offizielles Dokument für internationale Grenzübertritte."
+  },
+  {
+    "word": "GEPAECK",
+    "clue": "Alles, was man für eine Reise mitnimmt, meist in Koffern verpackt."
+  },
+  {
+    "word": "TOURISTENINFO",
+    "clue": "Anlaufstelle mit Auskünften zu Sehenswürdigkeiten und Aktivitäten vor Ort."
+  },
+  {
+    "word": "STADTFUEHRUNG",
+    "clue": "Geführte Erkundung einer Stadt mit Hintergrundwissen."
+  },
+  {
+    "word": "SOUVENIR",
+    "clue": "Kleines Erinnerungsstück, das man von einer Reise mitbringt."
+  },
+  {
+    "word": "REISEFUEHRER",
+    "clue": "Buch oder Person mit Tipps und Informationen zu einer Destination."
+  },
+  {
+    "word": "UNTERKUNFT",
+    "clue": "Ort, an dem man während einer Reise übernachtet."
+  },
+  {
+    "word": "MUSEUM",
+    "clue": "Ort, an dem kulturelle oder historische Exponate ausgestellt werden."
+  },
+  {
+    "word": "REISEZIEL",
+    "clue": "Ort, zu dem man unterwegs ist, um ihn zu erkunden oder sich zu erholen."
+  },
+  {
+    "word": "FLUGGESELLSCHAFT",
+    "clue": "Unternehmen, das Passagiere per Flugzeug befördert."
+  },
+  {
+    "word": "BORDKARTE",
+    "clue": "Nachweis, der das Einsteigen in ein Flugzeug erlaubt."
+  },
+  {
+    "word": "STADTPLAN",
+    "clue": "Grafische Darstellung einer Stadt zur Orientierung."
+  },
+  {
+    "word": "REISEGRUPPE",
+    "clue": "Mehrere Personen, die gemeinsam unterwegs sind."
+  },
+  {
+    "word": "LOKALVERKEHR",
+    "clue": "Verkehrsmittel, mit denen man sich in einer Stadt fortbewegt."
+  },
+  {
+    "word": "REISEVERSICHERUNG",
+    "clue": "Absicherung gegen unerwartete Zwischenfälle unterwegs."
+  },
+  {
+    "word": "SEHENSWÜRDIGKEIT",
+    "clue": "Bekannter Ort oder Bauwerk, das viele Besucher anzieht."
+  },
+  {
+    "word": "REISEPLAN",
+    "clue": "Vorab festgelegte Reihenfolge von Stationen und Aktivitäten."
+  },
+  {
+    "word": "ANREISE",
+    "clue": "Erste Etappe auf dem Weg zum Urlaubsort."
+  },
+  {
+    "word": "ABREISE",
+    "clue": "Verlassen eines Ortes am Ende der Reise."
+  }
+]
