@@ -374,7 +374,7 @@ const RAEETSEL_STORAGE_KEY = `${location.pathname.split('/').pop()}_${puzzleType
 // Lade externe Wortliste und initialisiere das Rätsel
 fetch(`/${wordFile}`)
       .then(res => res.json())
-      .then(data => {
+      .then(async data => {
         wordList = data;
         // Remove duplicate words (keep first occurrence)
         const seenWords = new Set();
@@ -383,6 +383,35 @@ fetch(`/${wordFile}`)
           seenWords.add(item.word);
           return true;
         });
+        // --- Fetch feedback metrics from server and compute scores ---
+        try {
+          const resMetrics = await fetch('/api/metrics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              puzzle: puzzleType,
+              words: wordList.map(w => w.word)
+            })
+          });
+          if (resMetrics.ok) {
+            const metrics = await resMetrics.json();
+            wordList.forEach(w => {
+              const m = metrics[w.word] || {};
+              const avg   = Number(m.avgRating || 0);   // 0..5
+              const count = Number(m.ratingCount || 0); // Anzahl Ratings
+              const flags = Number(m.flags || 0);       // Flag-Zähler
+              const trust = Math.min(count / 50, 1);    // 0..1, Vertrauen wächst mit Sample-Size
+              w.score = avg * 0.7 + trust * 0.2 - flags * 0.3; // Beispiel-Formel
+            });
+            // Beste Wörter zuerst platzieren
+            wordList.sort((a, b) => (b.score || 0) - (a.score || 0));
+          } else {
+            console.warn('metrics endpoint failed', resMetrics.status);
+          }
+        } catch (err) {
+          console.warn('metrics fetch error', err);
+        }
+        // --- end metrics scoring ---
         const saved = loadState();
         if (saved) {
           saved.grid.forEach((row, i) => { grid[i] = saved.grid[i]; });

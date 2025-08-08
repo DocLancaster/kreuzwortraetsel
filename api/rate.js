@@ -9,26 +9,40 @@ const FILES = {
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
-  
-  const { word, rating, puzzle } = req.body;
+
+  const { word, rating, puzzle } = req.body || {};
   if (!word || typeof rating !== 'number') {
     return res.status(400).json({ error: 'word & rating required' });
-  }
-
-  const filename = FILES[puzzle] || FILES.classic;
-  const filePath = path.join(process.cwd(), filename);
-  const list = JSON.parse(await fs.readFile(filePath, 'utf8'));
-
-  for (let e of list) {
-    if (e.word === word) {
-      const prevAvg   = e.userRatingAvg   || 0;
-      const prevCount = e.userRatingCount || 0;
-      e.userRatingAvg   = (prevAvg * prevCount + rating) / (prevCount + 1);
-      e.userRatingCount = prevCount + 1;
-      break;
     }
+
+  const base = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!base || !token) {
+    return res.status(500).json({ error: 'missing redis env vars' });
   }
 
-  await fs.writeFile(filePath, JSON.stringify(list, null, 2), 'utf8');
-  res.status(204).end();
+  const ns = puzzle || 'classic';
+  const sumKey = `ratingSum:${ns}:${word}`;
+  const cntKey = `ratingCount:${ns}:${word}`;
+
+  try {
+    const r1 = await fetch(
+      `${base}/incrby/${encodeURIComponent(sumKey)}/${rating}`,
+      { method: 'POST', headers: { Authorization: `Bearer ${token}` } }
+    );
+    const r2 = await fetch(
+      `${base}/incr/${encodeURIComponent(cntKey)}`,
+      { method: 'POST', headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    if (!r1.ok || !r2.ok) {
+      const d1 = await r1.text().catch(() => '');
+      const d2 = await r2.text().catch(() => '');
+      return res.status(500).json({ error: 'redis error', details: [d1, d2] });
+    }
+
+    return res.status(204).end();
+  } catch (err) {
+    return res.status(500).json({ error: 'unexpected', details: String(err) });
+  }
 }
