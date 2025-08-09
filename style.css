@@ -39,11 +39,11 @@ h1{ text-align:center; color:var(--text); text-shadow:none; font-size:clamp(1.6r
   margin: .6rem 0 1rem;
   position: sticky;
   top: 0;
-  background: rgba(255,255,255,.8);
+  background: transparent;
   backdrop-filter: saturate(180%) blur(8px);
-  border: 1px solid var(--grid-border);
+  border: none;
   border-radius: 12px;
-  padding: .4rem;
+  padding: 0;
   z-index: 1000;
 }
 .navigation #currentClue,
@@ -54,6 +54,14 @@ h1{ text-align:center; color:var(--text); text-shadow:none; font-size:clamp(1.6r
   color: var(--text);
   overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
   padding: 0 .25rem;
+}
+/* Clue pill, visually aligned with control buttons */
+.navigation .clue-text{
+  background:#fff; border:1px solid var(--grid-border); border-radius:12px;
+  padding:.55rem .9rem; margin:.25rem 0; box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+@media (prefers-color-scheme: dark){
+  .navigation .clue-text{ background:#111827; color:#e5e7eb; border-color:#334155; box-shadow:0 2px 12px rgba(0,0,0,.5); }
 }
 .grid{
   display:grid;
@@ -69,8 +77,11 @@ h1{ text-align:center; color:var(--text); text-shadow:none; font-size:clamp(1.6r
 }
 input.cell{
   width:50px; height:50px; line-height:50px; text-align:center; font-weight:700; text-transform:uppercase;
-  font-size:20px; border:1px solid var(--cell-border); border-radius:0px; box-sizing:border-box; background:#fff; color:var(--text);
+  font-size:20px; border:1px solid var(--cell-border); border-radius:0px; box-sizing:border-box; background:#fff; color:#111111;
   transition: box-shadow .15s ease, border-color .15s ease, background .15s ease;
+}
+@media (prefers-color-scheme: dark){
+  input.cell{ color:#111111 !important; }
 }
 input.cell:focus{
   outline:none;
@@ -246,8 +257,15 @@ button.control.new{ --accent: var(--danger); }
   }
   .black{ background:#000; border:none; border-radius:4px; }
 }
-.back-to-menu button{ font-size:1.02em; border-radius:999px; padding:.6em 1.3em; background:#f3f4f6; border:1px solid #e5e7eb; color:#111827; cursor:pointer; transition: background .2s, transform .08s; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+.back-to-menu button{ 
+  font-size:1.02em; border-radius:999px; padding:.6em 1.3em; 
+  background:#fff; border:1px solid var(--grid-border); color:var(--text);
+  cursor:pointer; transition: background .2s, transform .08s; box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
 .back-to-menu button:hover{ background:#e5e7eb; transform:translateY(-1px); }
+@media (prefers-color-scheme: dark){
+  .back-to-menu button{ background:#111827; color:#e5e7eb; border-color:#334155; box-shadow:0 2px 12px rgba(0,0,0,.5); }
+} 
 
 .back-to-menu {
   position: fixed;
