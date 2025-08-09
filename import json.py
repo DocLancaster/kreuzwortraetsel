@@ -27,6 +27,6 @@ for entry in words:
 
 # Schreibe die aktualisierte Liste zurück
 with open(FILE_PATH, 'w', encoding='utf-8') as f:
-    json.dump(words, f, ensure_ascii=False, indent=2)
+    json.dump(words, f, ensure_ascii=False, indent=2, separators=(',', ': '), sort_keys=True)
 
 print(f"✅ {len(words)} Einträge in '{FILE_PATH}' aktualisiert.")

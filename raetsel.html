@@ -560,7 +560,8 @@ fetch(`/${wordFile}`)
                 body: JSON.stringify({
                   userId: USER_ID,
                   puzzle: puzzleType,
-                  words: wordList.map(w => w.word)
+                  words: wordList.map(w => w.word),
+                  ids:   wordList.map(w => w.id)
                 })
               });
               if (resCd.ok) {

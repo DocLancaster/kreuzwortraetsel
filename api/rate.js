@@ -10,10 +10,10 @@ const FILES = {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { word, rating, puzzle } = req.body || {};
-  if (!word || typeof rating !== 'number') {
-    return res.status(400).json({ error: 'word & rating required' });
-    }
+  const { id, word, rating, puzzle } = req.body || {};
+  if ((!id && !word) || typeof rating !== 'number') {
+    return res.status(400).json({ error: 'id or word and numeric rating required' });
+  }
 
   const base = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
@@ -22,23 +22,38 @@ export default async function handler(req, res) {
   }
 
   const ns = puzzle || 'classic';
-  const sumKey = `ratingSum:${ns}:${word}`;
-  const cntKey = `ratingCount:${ns}:${word}`;
+  const tasks = [];
 
   try {
-    const r1 = await fetch(
-      `${base}/incrby/${encodeURIComponent(sumKey)}/${rating}`,
-      { method: 'POST', headers: { Authorization: `Bearer ${token}` } }
-    );
-    const r2 = await fetch(
-      `${base}/incr/${encodeURIComponent(cntKey)}`,
-      { method: 'POST', headers: { Authorization: `Bearer ${token}` } }
-    );
+    // New: ID-based keys
+    if (id) {
+      const sumKeyId = `ratingSumId:${ns}:${id}`;
+      const cntKeyId = `ratingCountId:${ns}:${id}`;
+      tasks.push(fetch(`${base}/incrby/${encodeURIComponent(sumKeyId)}/${rating}`, {
+        method: 'POST', headers: { Authorization: `Bearer ${token}` }
+      }));
+      tasks.push(fetch(`${base}/incr/${encodeURIComponent(cntKeyId)}`, {
+        method: 'POST', headers: { Authorization: `Bearer ${token}` }
+      }));
+    }
 
-    if (!r1.ok || !r2.ok) {
-      const d1 = await r1.text().catch(() => '');
-      const d2 = await r2.text().catch(() => '');
-      return res.status(500).json({ error: 'redis error', details: [d1, d2] });
+    // Legacy: word-based keys (compat)
+    if (word) {
+      const sumKey = `ratingSum:${ns}:${word}`;
+      const cntKey = `ratingCount:${ns}:${word}`;
+      tasks.push(fetch(`${base}/incrby/${encodeURIComponent(sumKey)}/${rating}`, {
+        method: 'POST', headers: { Authorization: `Bearer ${token}` }
+      }));
+      tasks.push(fetch(`${base}/incr/${encodeURIComponent(cntKey)}`, {
+        method: 'POST', headers: { Authorization: `Bearer ${token}` }
+      }));
+    }
+
+    const results = await Promise.all(tasks);
+    const bad = results.find(r => !r.ok);
+    if (bad) {
+      const details = await bad.text().catch(() => '');
+      return res.status(500).json({ error: 'redis error', details });
     }
 
     return res.status(204).end();

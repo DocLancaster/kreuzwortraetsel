@@ -1,9 +1,13 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { word, words, puzzle } = req.body || {};
-  const list = Array.isArray(words) ? words : (word ? [word] : []);
-  if (list.length === 0) return res.status(400).json({ error: 'word(s) required' });
+  const { id, ids, word, words, puzzle } = req.body || {};
+  const idList = Array.isArray(ids) ? ids : (id ? [id] : []);
+  const wordList = Array.isArray(words) ? words : (word ? [word] : []);
+
+  if (idList.length === 0 && wordList.length === 0) {
+    return res.status(400).json({ error: 'ids[] or words[] required' });
+  }
 
   const base = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
@@ -11,14 +15,29 @@ export default async function handler(req, res) {
 
   const ns = puzzle || 'classic';
   try {
-    await Promise.all(
-      list.map(w =>
-        fetch(`${base}/incr/${encodeURIComponent(`appear:${ns}:${w}`)}`, {
+    const tasks = [];
+    // New: count by ID (separate namespace)
+    for (const i of idList) {
+      const key = `appearId:${ns}:${i}`;
+      tasks.push(
+        fetch(`${base}/incr/${encodeURIComponent(key)}`, {
           method: 'POST',
           headers: { Authorization: `Bearer ${token}` }
         })
-      )
-    );
+      );
+    }
+    // Legacy: also count by word for backward compatibility
+    for (const w of wordList) {
+      const key = `appear:${ns}:${w}`;
+      tasks.push(
+        fetch(`${base}/incr/${encodeURIComponent(key)}`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` }
+        })
+      );
+    }
+
+    await Promise.all(tasks);
     return res.status(204).end();
   } catch (err) {
     return res.status(500).json({ error: 'unexpected', details: String(err) });
