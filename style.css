@@ -28,6 +28,31 @@ body{
   padding: 2rem; margin:0; min-height:100vh; color:var(--text);
 }
 h1{ text-align:center; color:var(--text); text-shadow:none; font-size:clamp(1.6rem,2.3vw,2.2rem); letter-spacing:.2px; margin-top:.4rem; }
+/* Centered sticky clue bar with arrows left/right */
+.navigation{
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  gap: .6rem;
+  margin: .6rem 0 1rem;
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,.8);
+  backdrop-filter: saturate(180%) blur(8px);
+  border: 1px solid var(--grid-border);
+  border-radius: 12px;
+  padding: .4rem;
+  z-index: 1000;
+}
+.navigation #currentClue,
+.navigation .clue,
+.navigation .clue-text{
+  text-align: center;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  padding: 0 .25rem;
+}
 .grid{
   display:grid;
   grid-template-columns:repeat(10,50px);
@@ -46,8 +71,8 @@ input.cell{
   transition: box-shadow .15s ease, border-color .15s ease, background .15s ease;
 }
 input.cell:focus{ outline:none; box-shadow:0 0 0 3px var(--outline) inset, 0 0 0 2px var(--outline); border-color:var(--primary); }
-.black{ background:#000; border:1px solid #666; pointer-events:none; border-radius:6px; box-sizing:border-box; }
-@media (prefers-color-scheme: dark){ .black{ background:#0b1220; border-color:#1f2a44; } }
+.black{ background:#000 !important; border:1px solid #000; pointer-events:none; border-radius:6px; box-sizing:border-box; }
+@media (prefers-color-scheme: dark){ .black{ background:#0b1220 !important; border-color:#1f2a44; } }
     .clue-cell {
       align-self: start;
       justify-self: start;
@@ -55,7 +80,7 @@ input.cell:focus{ outline:none; box-shadow:0 0 0 3px var(--outline) inset, 0 0 0
       font-size: 12px;
       white-space: nowrap;
     }
- .highlight{ background: rgba(11,116,255,.22); }
+ .highlight{ background: rgba(11,116,255,.28) !important; box-shadow: inset 0 0 0 2px rgba(11,116,255,.25); }
 .correct{ background:#dcfce7 !important; color:#065f46; }
 .incorrect{ background:#fee2e2 !important; color:#7f1d1d; }
 /* Navigation: neutral outline buttons */
@@ -71,6 +96,7 @@ button.control{
   background:#fff; color:var(--text); border:1px solid var(--grid-border); border-radius:12px;
   box-shadow: inset 4px 0 0 var(--accent, transparent), 0 2px 8px rgba(0,0,0,.06);
   transition: background .2s ease, transform .08s ease, box-shadow .2s ease;
+  padding: .65em 1.1em; font-size: .95rem;
 }
 button.control:hover{ background:#f8fafc; transform: translateY(-1px); }
 button.control.check{ --accent: var(--ok); }
@@ -101,9 +127,9 @@ button.control.new{ --accent: var(--danger); }
 /* Layout für Button-Gruppe */
 .controls {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.6rem;
   margin-top: 1.5rem;
 }
 /* Navigation Icons */
