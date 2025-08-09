@@ -116,6 +116,19 @@ document.title = puzzleTitle;
 document.querySelector('.card > h1').textContent = puzzleTitle;
 // Eindeutiger Key pro Rätsel-Seite für LocalStorage (inkl. Puzzle-Typ)
 const RAEETSEL_STORAGE_KEY = `${location.pathname.split('/').pop()}_${puzzleType}`;
+// Stable per-user id (stored locally)
+function getUserId() {
+  const KEY = 'puzzle_user_id_v1';
+  let id = localStorage.getItem(KEY);
+  if (!id) {
+    const arr = new Uint8Array(16);
+    (window.crypto || window.msCrypto).getRandomValues(arr);
+    id = Array.from(arr, b => b.toString(16).padStart(2,'0')).join('');
+    localStorage.setItem(KEY, id);
+  }
+  return id;
+}
+const USER_ID = getUserId();
 
     // Wortliste wird extern geladen
     let wordList = [];
@@ -413,7 +426,28 @@ fetch(`/${wordFile}`)
               const explore = exploreBase + (1 - trust) * 0.35; // 0.15..0.5
               w.rank = (w.score || 0) + explore * Math.random();
             });
-            // nach rank (Score + Exploration) sortieren
+            // Demote words currently in per-user cooldown, then sort by rank
+            try {
+              const resCd = await fetch('/api/cooldown-get', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  userId: USER_ID,
+                  puzzle: puzzleType,
+                  words: wordList.map(w => w.word)
+                })
+              });
+              if (resCd.ok) {
+                const { map } = await resCd.json();
+                const available = [];
+                const cooled = [];
+                for (const w of wordList) {
+                  (map && map[w.word] ? cooled : available).push(w);
+                }
+                wordList = available.concat(cooled);
+              }
+            } catch(_) {}
+            // final sort by rank among the merged list
             wordList.sort((a, b) => (b.rank || 0) - (a.rank || 0));
           } else {
             console.warn('metrics endpoint failed', resMetrics.status);
@@ -431,13 +465,18 @@ fetch(`/${wordFile}`)
           currentDirection = saved.currentDirection;
         } else {
           generateWords();
-          // einmalig Appearances für dieses frisch generierte Rätsel zählen
+          // einmalig Appearances zählen und per-user Cooldown setzen (24h)
           try {
             const unique = [...new Set(words.map(w => w.word))];
             fetch('/api/appearance', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ puzzle: puzzleType, words: unique })
+            }).catch(() => {});
+            fetch('/api/cooldown-set', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ userId: USER_ID, puzzle: puzzleType, words: unique, ttlSeconds: 86400 })
             }).catch(() => {});
           } catch (e) {}
           saveState();
