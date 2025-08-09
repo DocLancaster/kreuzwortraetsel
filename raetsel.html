@@ -38,6 +38,34 @@
       opacity: 0;
     }
   }
+  /* Rating modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; z-index: 10000; min-height: 100vh; padding: 12px; }
+  .modal { background:#fff; max-width: 420px; width: calc(100% - 32px); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.2); padding: 18px; max-height: 90vh; overflow:auto; }
+  .modal h2 { margin: 0 0 8px; font-size: 20px; }
+  .modal p { margin: 0 0 12px; color:#555; }
+  .stars { display:flex; gap:8px; justify-content:center; padding: 8px 0 12px; }
+  .stars button { appearance:none; border:none; background:none; cursor:pointer; font-size: 28px; line-height:1; padding:4px; min-width:44px; min-height:44px; }
+  .star { color:#ccc; transition: transform .08s ease, color .08s ease; }
+  .star.hover, .star.selected { color: #f5b301; transform: scale(1.05); }
+  .modal .actions { display:flex; gap:10px; justify-content:flex-end; margin-top: 10px; }
+  .modal .actions button { padding: 8px 12px; border:none; border-radius:8px; cursor:pointer; }
+  .btn-secondary { background:#eee; }
+  .btn-primary { background:#007bff; color:#fff; opacity:.6; }
+  .btn-primary.enabled { opacity:1; }
+
+  /* Better mobile sizing & safe areas */
+  @supports (height: 100dvh) {
+    .modal-overlay { min-height: 100dvh; }
+    .modal { max-height: 90dvh; }
+  }
+
+  @media (max-width: 480px) {
+    .modal { width: calc(100% - 24px); padding: 16px; }
+    .stars { gap: 10px; }
+    .stars button { font-size: 36px; padding: 8px; }
+    .modal .actions { flex-direction: column; }
+    .modal .actions button { width: 100%; padding: 12px; font-size: 16px; }
+  }
   </style>
 </head>
 <body>
@@ -74,6 +102,24 @@
     <button id="flagBtn" class="control flag">🚩 Wort melden</button>
   </div>
 
+  </div>
+  <!-- Rating Modal -->
+  <div id="ratingModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="ratingTitle">
+    <div class="modal">
+      <h2 id="ratingTitle">🎉 Rätsel gelöst!</h2>
+      <p>Wie viele Sterne gibst du diesem Rätsel?</p>
+      <div class="stars" id="ratingStars" aria-label="Sternebewertung">
+        <button type="button" class="star" data-value="1" aria-label="1 Stern">★</button>
+        <button type="button" class="star" data-value="2" aria-label="2 Sterne">★</button>
+        <button type="button" class="star" data-value="3" aria-label="3 Sterne">★</button>
+        <button type="button" class="star" data-value="4" aria-label="4 Sterne">★</button>
+        <button type="button" class="star" data-value="5" aria-label="5 Sterne">★</button>
+      </div>
+      <div class="actions">
+        <button id="ratingSkip" class="btn-secondary" type="button">Überspringen</button>
+        <button id="ratingSend" class="btn-primary" type="button" disabled>Bewerten</button>
+      </div>
+    </div>
   </div>
   <script>
     function showConfetti() {
@@ -129,6 +175,90 @@ function getUserId() {
   return id;
 }
 const USER_ID = getUserId();
+// --- Rating modal helpers ---
+let ratingSelected = 0;
+let completionHandled = false;
+
+function openRatingModal() {
+  return new Promise(resolve => {
+    const overlay = document.getElementById('ratingModal');
+    const stars = Array.from(document.querySelectorAll('#ratingStars .star'));
+    const btnSkip = document.getElementById('ratingSkip');
+    const btnSend = document.getElementById('ratingSend');
+
+    ratingSelected = 0;
+    btnSend.disabled = true; btnSend.classList.remove('enabled');
+    stars.forEach(s => s.classList.remove('selected','hover'));
+
+    const setVisual = (n) => {
+      stars.forEach(st => {
+        const v = Number(st.dataset.value);
+        st.classList.toggle('selected', v <= n);
+      });
+      ratingSelected = n;
+      if (ratingSelected > 0) { btnSend.disabled = false; btnSend.classList.add('enabled'); }
+      else { btnSend.disabled = true; btnSend.classList.remove('enabled'); }
+    };
+
+    const onEnter = (e)=>{ const v = Number(e.currentTarget.dataset.value); stars.forEach(st=>st.classList.toggle('hover', Number(st.dataset.value) <= v)); };
+    const onLeave = ()=>{ stars.forEach(st=>st.classList.remove('hover')); };
+    const onClick = (e)=>{ setVisual(Number(e.currentTarget.dataset.value)); };
+
+    stars.forEach(st => {
+      st.addEventListener('mouseenter', onEnter);
+      st.addEventListener('mouseleave', onLeave);
+      st.addEventListener('click', onClick);
+    });
+
+    const cleanup = () => {
+      stars.forEach(st => {
+        st.removeEventListener('mouseenter', onEnter);
+        st.removeEventListener('mouseleave', onLeave);
+        st.removeEventListener('click', onClick);
+      });
+      btnSkip.removeEventListener('click', onSkip);
+      btnSend.removeEventListener('click', onSend);
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    };
+
+    const onSkip = () => { cleanup(); resolve(null); };
+    const onSend = () => { if (ratingSelected>0) { cleanup(); resolve(ratingSelected); } };
+
+    btnSkip.addEventListener('click', onSkip);
+    btnSend.addEventListener('click', onSend);
+
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  });
+}
+
+async function submitPuzzleRating(stars) {
+  try {
+    await Promise.all(
+      words.map(w => fetch('/api/rate', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ puzzle: puzzleType, word: w.word, rating: Number(stars) })
+      }))
+    );
+  } catch(_) {}
+}
+
+async function handlePuzzleCompleted() {
+  if (completionHandled) return; // prevent double-trigger
+  completionHandled = true;
+  showConfetti();
+  setTimeout(async () => {
+    const stars = await openRatingModal();
+    if (stars && Number(stars) >= 1) {
+      await submitPuzzleRating(stars);
+      alert('Danke für dein Feedback! Du hast alle Felder korrekt ausgefüllt.');
+    } else {
+      alert('Du hast alle Felder korrekt ausgefüllt!');
+    }
+  }, 600);
+}
+// --- end rating modal helpers ---
 
     // Wortliste wird extern geladen
     let wordList = [];
@@ -337,24 +467,7 @@ const USER_ID = getUserId();
         }
       });
       if (allCorrect) {
-        showConfetti();
-        setTimeout(async () => {
-          // Prompt for puzzle rating
-          const puzzleRating = parseInt(prompt('🎉 Rätsel gelöst! Wie viele Sterne gibst du dem Rätsel insgesamt? (1–5)'), 10);
-          if ([1,2,3,4,5].includes(puzzleRating)) {
-            // Send rating for each word to influence their scores
-            for (const w of words) {
-              await fetch('/api/rate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ puzzle: puzzleType, word: w.word, rating: puzzleRating })
-              });
-            }
-            alert('Danke für dein Feedback! Du hast alle Felder korrekt ausgefüllt.');
-          } else {
-            alert('Du hast alle Felder korrekt ausgefüllt!');
-          }
-        }, 600);
+        handlePuzzleCompleted();
       } else {
         alert("❌ Einige Felder sind noch falsch. Versuch’s nochmal!");
       }
@@ -372,13 +485,8 @@ const USER_ID = getUserId();
         }
       }
       if (allCorrect) {
-        inputs.forEach(input => {
-          input.style.backgroundColor = "#c8f7c5"; // grün für richtig
-        });
-        showConfetti();
-        setTimeout(() => {
-          alert("🎉 Alles richtig! Gut gemacht!");
-        }, 600);
+        inputs.forEach(input => { input.style.backgroundColor = "#c8f7c5"; });
+        handlePuzzleCompleted();
         return true;
       }
       return false;
