@@ -395,16 +395,26 @@ fetch(`/${wordFile}`)
           });
           if (resMetrics.ok) {
             const metrics = await resMetrics.json();
+            const prior = 4.0;      // Grundannahme: gutes Wort (0..5)
+            const weight = 10;      // Stärke der Vorannahme
             wordList.forEach(w => {
-              const m = metrics[w.word] || {};
-              const avg   = Number(m.avgRating || 0);   // 0..5
-              const count = Number(m.ratingCount || 0); // Anzahl Ratings
-              const flags = Number(m.flags || 0);       // Flag-Zähler
-              const trust = Math.min(count / 50, 1);    // 0..1, Vertrauen wächst mit Sample-Size
-              w.score = avg * 0.7 + trust * 0.2 - flags * 0.3; // Beispiel-Formel
+              const m        = metrics[w.word] || {};
+              const sum      = Number(m.ratingSum   || 0);
+              const count    = Number(m.ratingCount || 0);
+              const appear   = Number(m.appear      || 0);
+              const flags    = Number(m.flags       || 0);
+              const flagRate = appear > 0 ? (flags / appear) : 0; // 0..1
+              const trust    = Math.min(count / 50, 1); // 0..1
+              const bayesAvg = (prior * weight + sum) / (weight + count); // 0..5
+              // Score: Bayes-Ø gewichtet mit Vertrauen, Flag-Rate zieht ab
+              w.score = bayesAvg * (0.6 + 0.2 * trust) - 2.0 * flagRate;
+              // Exploration: etwas Zufall, stärker bei wenig Vertrauen
+              const exploreBase = 0.15;                 // immer etwas Variabilität
+              const explore = exploreBase + (1 - trust) * 0.35; // 0.15..0.5
+              w.rank = (w.score || 0) + explore * Math.random();
             });
-            // Beste Wörter zuerst platzieren
-            wordList.sort((a, b) => (b.score || 0) - (a.score || 0));
+            // nach rank (Score + Exploration) sortieren
+            wordList.sort((a, b) => (b.rank || 0) - (a.rank || 0));
           } else {
             console.warn('metrics endpoint failed', resMetrics.status);
           }
@@ -421,6 +431,15 @@ fetch(`/${wordFile}`)
           currentDirection = saved.currentDirection;
         } else {
           generateWords();
+          // einmalig Appearances für dieses frisch generierte Rätsel zählen
+          try {
+            const unique = [...new Set(words.map(w => w.word))];
+            fetch('/api/appearance', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ puzzle: puzzleType, words: unique })
+            }).catch(() => {});
+          } catch (e) {}
           saveState();
         }
 
