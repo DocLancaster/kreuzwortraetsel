@@ -175,6 +175,23 @@ function getUserId() {
   return id;
 }
 const USER_ID = getUserId();
+// --- stable IDs for words (fallback if JSON has no id) ---
+function fnv1a(str){
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+  }
+  return h >>> 0;
+}
+function makeWordId(word){
+  const base = (word || '').toUpperCase().trim();
+  return 'w' + fnv1a(base).toString(36);
+}
+function ensureIds(list){
+  return list.map(w => ({ ...w, id: w.id || makeWordId(w.word) }));
+}
+// --- end id helpers ---
 // --- Rating modal helpers ---
 let ratingSelected = 0;
 let completionHandled = false;
@@ -238,7 +255,7 @@ async function submitPuzzleRating(stars) {
     await Promise.all(
       words.map(w => fetch('/api/rate', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ puzzle: puzzleType, word: w.word, rating: Number(stars) })
+        body: JSON.stringify({ puzzle: puzzleType, word: w.word, id: w.id, rating: Number(stars) })
       }))
     );
   } catch(_) {}
@@ -315,7 +332,7 @@ async function handlePuzzleCompleted() {
       for (let i = 0; i < first.word.length; i++) {
         testGrid[sy][sx + i] = first.word[i];
       }
-      placed.push({ word: first.word, x: sx, y: sy, horizontal: true, clue: first.clue });
+      placed.push({ id: first.id, word: first.word, x: sx, y: sy, horizontal: true, clue: first.clue });
       // Block cells directly before and after the first word
       const firstEndX = sx + first.word.length - 1;
       const barrierPositionsFirst = [
@@ -402,14 +419,14 @@ async function handlePuzzleCompleted() {
         if (!bestPlacement) break;
 
         // Commit best placement
-        const { word, clue } = unplaced[bestWordIndex];
+        const { id, word, clue } = unplaced[bestWordIndex];
         const { startX, startY, horizontal: hor } = bestPlacement;
         for (let k = 0; k < word.length; k++) {
           const r = hor ? startY : startY + k;
           const c = hor ? startX + k : startX;
           testGrid[r][c] = word[k];
         }
-        placed.push({ word, x: startX, y: startY, horizontal: hor, clue });
+        placed.push({ id, word, x: startX, y: startY, horizontal: hor, clue });
 
         // Barrier before/after
         const endX = hor ? startX + word.length - 1 : startX;
@@ -496,7 +513,7 @@ async function handlePuzzleCompleted() {
 fetch(`/${wordFile}`)
       .then(res => res.json())
       .then(async data => {
-        wordList = data;
+        wordList = ensureIds(data);
         // Remove duplicate words (keep first occurrence)
         const seenWords = new Set();
         wordList = wordList.filter(item => {
@@ -511,7 +528,8 @@ fetch(`/${wordFile}`)
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               puzzle: puzzleType,
-              words: wordList.map(w => w.word)
+              words: wordList.map(w => w.word),
+              ids:   wordList.map(w => w.id)
             })
           });
           if (resMetrics.ok) {
@@ -550,8 +568,9 @@ fetch(`/${wordFile}`)
                 const available = [];
                 const cooled = [];
                 for (const w of wordList) {
-                  (map && map[w.word] ? cooled : available).push(w);
-                }
+                const hit = map ? (map[w.id] ?? map[w.word]) : undefined;
+                (hit ? cooled : available).push(w);
+              }
                 wordList = available.concat(cooled);
               }
             } catch(_) {}
@@ -576,15 +595,17 @@ fetch(`/${wordFile}`)
           // einmalig Appearances zählen und per-user Cooldown setzen (24h)
           try {
             const unique = [...new Set(words.map(w => w.word))];
+            const uniqueIds   = [...new Set(words.map(w => w.id))];
+            const uniqueWords = [...new Set(words.map(w => w.word))];
             fetch('/api/appearance', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ puzzle: puzzleType, words: unique })
+              body: JSON.stringify({ puzzle: puzzleType, ids: uniqueIds, words: uniqueWords })
             }).catch(() => {});
             fetch('/api/cooldown-set', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ userId: USER_ID, puzzle: puzzleType, words: unique, ttlSeconds: 86400 })
+              body: JSON.stringify({ userId: USER_ID, puzzle: puzzleType, ids: uniqueIds, words: uniqueWords, ttlSeconds: 86400 })
             }).catch(() => {});
           } catch (e) {}
           saveState();
@@ -846,7 +867,7 @@ fetch(`/${wordFile}`)
           fetch('/api/flag', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ puzzle: puzzleType, word: w.word })
+            body: JSON.stringify({ puzzle: puzzleType, word: w.word, id: w.id })
           })
           .then(() => alert('Dieses Wort wurde gemeldet.'))
           .catch(() => alert('Fehler beim Melden des Wortes.'));
