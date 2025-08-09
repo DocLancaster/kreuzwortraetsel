@@ -204,9 +204,11 @@
         </tr>
       `);
 
-      // Appearances
+      // Appearances (numeric desc), with stable tie-breakers
       const topAppear = [...filtered]
-        .sort((a,b) => b.appear - a.appear)
+        .sort((a,b) => (Number(b.appear||0) - Number(a.appear||0))
+                        || (Number(b.flags||0) - Number(a.flags||0))
+                        || a.word.localeCompare(b.word))
         .slice(0, 50);
       fillTable('tblAppear', topAppear, row => `
         <tr>
