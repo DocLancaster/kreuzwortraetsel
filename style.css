@@ -80,7 +80,10 @@ input.cell:focus{ outline:none; box-shadow:0 0 0 3px var(--outline) inset, 0 0 0
       font-size: 12px;
       white-space: nowrap;
     }
- .highlight{ background: rgba(11,116,255,.28) !important; box-shadow: inset 0 0 0 2px rgba(11,116,255,.25); }
+.highlight{ background: rgba(11,116,255,.28) !important; box-shadow: inset 0 0 0 2px rgba(11,116,255,.25); }
+@media (prefers-color-scheme: dark){
+  .highlight{ background: rgba(147,197,253,.35) !important; box-shadow: inset 0 0 0 2px rgba(59,130,246,.6); }
+}
 .correct{ background:#dcfce7 !important; color:#065f46; }
 .incorrect{ background:#fee2e2 !important; color:#7f1d1d; }
 /* Navigation: neutral outline buttons */
