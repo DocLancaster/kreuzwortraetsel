@@ -114,6 +114,33 @@
       .btn-ghost { background:#0f1729; color:#93c5fd; border-color:#1f2937; }
       .btn-secondary { background:#0f1b33; color:#cfe1ff; border-color:#1f2a44; }
     }
+
+    /* --- Scoped overrides to beat global style.css on landing page --- */
+    .start-card .raetsel-list { padding-inline: .25rem !important; margin: 0 !important; }
+
+    .start-card .btn {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 12px !important;
+      width: 100% !important;
+      text-decoration: none !important;
+      padding: 0.9em 1rem !important;
+      border-radius: 14px !important;
+      position: relative !important;
+      box-sizing: border-box !important;
+      box-shadow: 0 2px 10px #0001 !important;
+    }
+    .start-card .btn .left { display:flex !important; align-items:center !important; gap:12px !important; }
+    .start-card .icon { font-size: 1.3em !important; line-height: 1 !important; }
+    .start-card .btn strong { font-weight: 700 !important; }
+    .start-card .sublabel { display:block !important; font-size: .8rem !important; color: var(--muted) !important; margin-top: 2px !important; }
+
+    .start-card .btn-primary { background: var(--primary) !important; color: #fff !important; border: none !important; }
+    .start-card .btn-secondary { background:#f7faff !important; color: var(--primary) !important; border: 1px solid #e6efff !important; }
+    .start-card .btn-ghost { background:#fff !important; color: var(--primary) !important; border: 1px solid #e5e7eb !important; }
+
+    .start-card .btn:focus-visible { box-shadow: 0 0 0 3px var(--outline) !important; }
   </style>
 </head>
 <body>
