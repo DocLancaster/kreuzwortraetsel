@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin – Rätsel-Stats</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .admin-controls { display:flex; gap:12px; align-items:center; flex-wrap: wrap; }
+    .admin-controls select, .admin-controls button { padding:8px 12px; font-size:14px; }
+    .tables { display:grid; grid-template-columns: 1fr; gap:18px; }
+    @media(min-width: 900px){ .tables { grid-template-columns: 1fr 1fr; } }
+    table { width:100%; border-collapse: collapse; font-size:14px; }
+    th, td { padding:8px 10px; border-bottom:1px solid #e5e5e5; text-align:left; }
+    th { background:#f7f7f7; position:sticky; top:0; z-index:1; }
+    .num { text-align:right; font-variant-numeric: tabular-nums; }
+    .search { margin-left:auto; }
+    .muted { color:#666; font-size:12px; }
+  </style>
+</head>
+<body>
+  <div class="back-to-menu" style="position:fixed;top:10px;left:10px;z-index:10000;">
+    <button onclick="window.location.href='index.html'">← Hauptmenü</button>
+  </div>
+  <div class="card" style="max-width: 980px;">
+    <h1>Admin – Rätsel-Statistiken</h1>
+
+    <div class="admin-controls">
+      <label for="puzzleSel">Modus:</label>
+      <select id="puzzleSel">
+        <option value="classic">Classic</option>
+        <option value="jura">Jura</option>
+        <option value="reisesspecial">Reise-Special</option>
+      </select>
+      <button id="reloadBtn">Neu laden</button>
+      <input id="search" class="search" type="search" placeholder="Suchen… (Wort oder Hinweis)" />
+    </div>
+
+    <p class="muted" id="summary">Lade…</p>
+
+    <div class="tables">
+      <div>
+        <h3>⭐ Top-Ratings (Bayes)</h3>
+        <table id="tblRatings">
+          <thead>
+            <tr>
+              <th>Wort</th>
+              <th>Hinweis</th>
+              <th class="num">Ø (Bayes)</th>
+              <th class="num">Bewertungen</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div>
+        <h3>🚩 Top-Flags (nach Rate)</h3>
+        <table id="tblFlags">
+          <thead>
+            <tr>
+              <th>Wort</th>
+              <th>Hinweis</th>
+              <th class="num">Flags</th>
+              <th class="num">Einblendungen</th>
+              <th class="num">Rate</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div>
+        <h3>👀 Meist angezeigt</h3>
+        <table id="tblAppear">
+          <thead>
+            <tr>
+              <th>Wort</th>
+              <th>Hinweis</th>
+              <th class="num">Einblendungen</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const puzzleConfig = {
+      classic:       { json: 'words.json',        title: 'Kreuzworträtsel' },
+      jura:          { json: 'words.law.json',    title: 'Jura-Kreuzworträtsel' },
+      reisesspecial: { json: 'REISESPECIAL.json', title: 'Reise-Special Kreuzworträtsel' }
+    };
+
+    const sel = document.getElementById('puzzleSel');
+    const btn = document.getElementById('reloadBtn');
+    const search = document.getElementById('search');
+    const summary = document.getElementById('summary');
+
+    // Preselect from URL ?puzzle=...
+    const params = new URLSearchParams(location.search);
+    const initial = params.get('puzzle') || 'classic';
+    sel.value = puzzleConfig[initial] ? initial : 'classic';
+
+    btn.addEventListener('click', () => load(sel.value));
+    sel.addEventListener('change', () => load(sel.value));
+    search.addEventListener('input', () => render(currentData));
+
+    let wordsData = [];
+    let metricsMap = {};
+    let currentData = [];
+
+    async function fetchJSON(path){
+      const r = await fetch(path);
+      if (!r.ok) throw new Error('fetch failed: '+ path);
+      return r.json();
+    }
+
+    // Chunked metrics fetch to avoid URL length limits
+    async function fetchMetricsChunked(puzzle, words, chunkSize=300){
+      const map = {};
+      for (let i=0; i<words.length; i += chunkSize){
+        const slice = words.slice(i, i+chunkSize);
+        const r = await fetch('/api/metrics', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ puzzle, words: slice })
+        });
+        if (!r.ok){ console.warn('metrics failed', i, r.status); continue; }
+        const part = await r.json();
+        Object.assign(map, part);
+      }
+      return map;
+    }
+
+    function bayes(sum, count, prior=4.0, weight=10){
+      return (prior*weight + sum) / (weight + count);
+    }
+
+    function fmt(n, digits=2){ return Number(n).toFixed(digits); }
+
+    function render(data){
+      const q = (search.value || '').trim().toLowerCase();
+      let filtered = data;
+      if (q){
+        filtered = data.filter(row => row.word.toLowerCase().includes(q) || (row.clue || '').toLowerCase().includes(q));
+      }
+
+      // Ratings
+      const topRatings = [...filtered]
+        .sort((a,b) => b.bayesAvg - a.bayesAvg)
+        .slice(0, 50);
+      fillTable('tblRatings', topRatings, row => `
+        <tr>
+          <td>${row.word}</td>
+          <td>${row.clue || ''}</td>
+          <td class="num">${fmt(row.bayesAvg,2)}</td>
+          <td class="num">${row.ratingCount}</td>
+        </tr>
+      `);
+
+      // Flags (by rate); require min appearances to reduce noise
+      const minAppear = 5;
+      const topFlags = filtered
+        .filter(r => r.appear >= minAppear)
+        .sort((a,b) => b.flagRate - a.flagRate)
+        .slice(0, 50);
+      fillTable('tblFlags', topFlags, row => `
+        <tr>
+          <td>${row.word}</td>
+          <td>${row.clue || ''}</td>
+          <td class="num">${row.flags}</td>
+          <td class="num">${row.appear}</td>
+          <td class="num">${fmt(row.flagRate,3)}</td>
+        </tr>
+      `);
+
+      // Appearances
+      const topAppear = [...filtered]
+        .sort((a,b) => b.appear - a.appear)
+        .slice(0, 50);
+      fillTable('tblAppear', topAppear, row => `
+        <tr>
+          <td>${row.word}</td>
+          <td>${row.clue || ''}</td>
+          <td class="num">${row.appear}</td>
+        </tr>
+      `);
+
+      // Summary
+      const totalFlags = filtered.reduce((s,r)=>s+(r.flags||0),0);
+      const totalAppear = filtered.reduce((s,r)=>s+(r.appear||0),0);
+      const rated = filtered.filter(r => r.ratingCount>0);
+      const avgOfAvg = rated.length ? (rated.reduce((s,r)=>s+r.avgRating,0)/rated.length) : 0;
+      summary.textContent = `${filtered.length} Wörter · Flags: ${totalFlags} · Einblendungen: ${totalAppear} · Ø Rating (nur bewertete): ${fmt(avgOfAvg,2)}`;
+    }
+
+    function fillTable(id, rows, rowTmpl){
+      const tb = document.querySelector(`#${id} tbody`);
+      tb.innerHTML = rows.map(rowTmpl).join('');
+    }
+
+    async function load(puzzle){
+      try {
+        const wordFile = puzzleConfig[puzzle]?.json || puzzleConfig.classic.json;
+        wordsData = await fetchJSON(`/${wordFile}`);
+        const unique = [];
+        const seen = new Set();
+        for (const it of wordsData){
+          if (!seen.has(it.word)){ seen.add(it.word); unique.push(it); }
+        }
+        const wordsOnly = unique.map(w => w.word);
+        metricsMap = await fetchMetricsChunked(puzzle, wordsOnly, 250);
+
+        // combine
+        currentData = unique.map(it => {
+          const m = metricsMap[it.word] || {};
+          const sum = Number(m.ratingSum||0), count = Number(m.ratingCount||0);
+          const avg = count ? sum / count : 0;
+          const bayesAvg = bayes(sum, count);
+          const appear = Number(m.appear||0);
+          const flags = Number(m.flags||0);
+          const flagRate = appear>0 ? flags/appear : 0;
+          return {
+            word: it.word,
+            clue: it.clue,
+            ratingSum: sum,
+            ratingCount: count,
+            avgRating: avg,
+            bayesAvg,
+            appear,
+            flags,
+            flagRate
+          };
+        });
+
+        render(currentData);
+      } catch (e){
+        summary.textContent = 'Fehler beim Laden: ' + e.message;
+        console.error(e);
+      }
+    }
+
+    // initial
+    load(sel.value);
+  </script>
+</body>
+</html>
