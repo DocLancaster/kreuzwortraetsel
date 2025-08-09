@@ -56,12 +56,16 @@ h1{ text-align:center; color:var(--text); text-shadow:none; font-size:clamp(1.6r
   padding: 0 .25rem;
 }
 /* Clue pill, visually aligned with control buttons */
-.navigation .clue-text{
+ .navigation .clue-text{
   background:#fff; border:1px solid var(--grid-border); border-radius:12px;
   padding:.55rem .9rem; margin:.25rem 0; box-shadow:0 2px 8px rgba(0,0,0,.06);
+  grid-column: 2;              /* always the center column */
+  justify-self: center;        /* center horizontally within column */
+  display:inline-flex; align-items:center; justify-content:center;
+  max-width: min(100%, 70ch);  /* keep long clues tidy */
 }
 @media (prefers-color-scheme: dark){
-  .navigation .clue-text{ background:#111827; color:#e5e7eb; border-color:#334155; box-shadow:0 2px 12px rgba(0,0,0,.5); }
+  .navigation .clue-text{ background:#111827; color:#e5e7eb; border-color:#334155; box-shadow:0 2px 12px rgba(0,0,0,.5); grid-column:2; justify-self:center; display:inline-flex; align-items:center; justify-content:center; max-width:min(100%,70ch); }
 }
 .grid{
   display:grid;
