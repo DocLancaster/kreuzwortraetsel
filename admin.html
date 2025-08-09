@@ -72,6 +72,20 @@
         </table>
       </div>
       <div>
+        <h3>🆕 Neu gemeldet (alle Flags)</h3>
+        <table id="tblFlagsAll">
+          <thead>
+            <tr>
+              <th>Wort</th>
+              <th>Hinweis</th>
+              <th class="num">Flags</th>
+              <th class="num">Einblendungen</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div>
         <h3>👀 Meist angezeigt</h3>
         <table id="tblAppear">
           <thead>
@@ -173,6 +187,20 @@
           <td class="num">${row.flags}</td>
           <td class="num">${row.appear}</td>
           <td class="num">${fmt(row.flagRate,3)}</td>
+        </tr>
+      `);
+
+      // Neu gemeldet (alle Flags, ohne Mindest-Einblendungen)
+      const flaggedAll = filtered
+        .filter(r => (r.flags || 0) > 0)
+        .sort((a,b) => b.flags - a.flags)
+        .slice(0, 50);
+      fillTable('tblFlagsAll', flaggedAll, row => `
+        <tr>
+          <td>${row.word}</td>
+          <td>${row.clue || ''}</td>
+          <td class="num">${row.flags}</td>
+          <td class="num">${row.appear}</td>
         </tr>
       `);
 
