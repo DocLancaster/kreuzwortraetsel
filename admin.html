@@ -19,6 +19,31 @@
 
     /* Force scrolling on admin page */
     html, body { overflow: auto !important; }
+
+    /* Clickable rows */
+    tbody tr.row-word { cursor: pointer; }
+    tbody tr.row-word:hover { background: #f8fafc; }
+
+    /* Modal styles */
+    .modal[hidden] { display: none; }
+    .modal { position: fixed; inset: 0; z-index: 10000; }
+    .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.45); }
+    .modal-panel {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      width: min(720px, calc(100vw - 32px)); max-height: calc(100vh - 32px);
+      overflow: auto; background: #fff; border-radius: 16px; padding: 18px 18px 16px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.25);
+    }
+    .modal-panel h2 { margin: 0 0 6px; font-size: 20px; }
+    .modal-close { position:absolute; right:10px; top:10px; border:none; background:#f3f4f6; border-radius:8px; padding:6px 10px; cursor:pointer; }
+    .detail-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; margin-top: 8px; font-size: 14px; }
+    .detail-grid .label { color:#6b7280; }
+    .detail-grid .value { font-weight:600; }
+    @media (max-width: 720px){ .detail-grid{ grid-template-columns: 1fr; } }
+    @media (prefers-color-scheme: dark){
+      .modal-panel{ background:#0f1729; color:#e5e7eb; }
+      .modal-close{ background:#111827; color:#e5e7eb; }
+    }
   </style>
 </head>
 <body>
@@ -144,6 +169,30 @@
     let metricsMap = {};
     let currentData = [];
 
+    function findRowBy(word, id){
+      if (id) { const r = currentData.find(x => x.id === id); if (r) return r; }
+      return currentData.find(x => x.word === word);
+    }
+
+    // Mirror of placement priority (keep in sync with raetsel.html)
+    function computePlacementScore(row){
+      const len = (row.word || '').length;
+      const lenNorm = Math.max(0, Math.min(1, (len - 3) / 9)); // 3..12 → 0..1
+      const ratingNorm = Math.max(0, Math.min(1, (row.bayesAvg || 0) / 5));
+      const flagRate = Number(row.flagRate || 0);
+      const flagPenalty = Math.max(0, Math.min(1, (flagRate - 0.03) / 0.12)); // 3% safe, 15% = full
+      const appear = Number(row.appear || 0);
+      const usagePenalty = appear > 0 ? (appear / (appear + 20)) : 0; // saturations curb repeat words
+
+      const W = { base: 1.0, len: 0.6, rating: 1.2, flags: -1.0, usage: -0.8 };
+      const score = W.base + W.len*lenNorm + W.rating*ratingNorm + W.flags*flagPenalty + W.usage*usagePenalty;
+
+      return {
+        score,
+        breakdown: { lenNorm, ratingNorm, flagPenalty, usagePenalty, W }
+      };
+    }
+
     async function fetchJSON(path){
       const r = await fetch(path);
       if (!r.ok) throw new Error('fetch failed: '+ path);
@@ -187,7 +236,7 @@
         .sort((a,b) => b.bayesAvg - a.bayesAvg)
         .slice(0, 50);
       fillTable('tblRatings', topRatings, row => `
-        <tr>
+        <tr class="row-word" data-id="${row.id||''}" data-word="${row.word}" title="Details anzeigen">
           <td>${row.word}</td>
           <td>${row.clue || ''}</td>
           <td class="num">${fmt(row.bayesAvg,2)}</td>
@@ -202,7 +251,7 @@
         .sort((a,b) => b.flagRate - a.flagRate)
         .slice(0, 50);
       fillTable('tblFlags', topFlags, row => `
-        <tr>
+        <tr class="row-word" data-id="${row.id||''}" data-word="${row.word}" title="Details anzeigen">
           <td>${row.word}</td>
           <td>${row.clue || ''}</td>
           <td class="num">${row.flags}</td>
@@ -217,7 +266,7 @@
         .sort((a,b) => b.flags - a.flags)
         .slice(0, 50);
       fillTable('tblFlagsAll', flaggedAll, row => `
-        <tr>
+        <tr class="row-word" data-id="${row.id||''}" data-word="${row.word}" title="Details anzeigen">
           <td>${row.word}</td>
           <td>${row.clue || ''}</td>
           <td class="num">${row.flags}</td>
@@ -232,7 +281,7 @@
                         || a.word.localeCompare(b.word))
         .slice(0, 50);
       fillTable('tblAppear', topAppear, row => `
-        <tr>
+        <tr class="row-word" data-id="${row.id||''}" data-word="${row.word}" title="Details anzeigen">
           <td>${row.word}</td>
           <td>${row.clue || ''}</td>
           <td class="num">${row.appear}</td>
@@ -276,8 +325,10 @@
           const flags = Number(m.flags||0);
           const flagRate = appear>0 ? flags/appear : 0;
           return {
+            id: it.id,
             word: it.word,
             clue: it.clue,
+            themes: Array.isArray(it.themes) ? it.themes : [],
             ratingSum: sum,
             ratingCount: count,
             avgRating: avg,
@@ -289,14 +340,75 @@
         });
 
         render(currentData);
+        wireRowClicks();
       } catch (e){
         summary.textContent = 'Fehler beim Laden: ' + e.message;
         console.error(e);
       }
     }
 
+    let _wired = false;
+    function wireRowClicks(){
+      if (_wired) return; _wired = true;
+      document.addEventListener('click', (ev) => {
+        const tr = ev.target.closest('tr.row-word');
+        if (!tr) return;
+        const id = tr.getAttribute('data-id') || undefined;
+        const word = tr.getAttribute('data-word');
+        const row = findRowBy(word, id);
+        if (!row) return;
+        const modal = document.getElementById('detailModal');
+        const closeBtn = modal.querySelector('.modal-close');
+        // Fill fields
+        document.getElementById('detailTitle').textContent = row.word;
+        document.getElementById('dWord').textContent = row.word;
+        document.getElementById('dClue').textContent = row.clue || '';
+        document.getElementById('dId').textContent = row.id || '—';
+        document.getElementById('dThemes').textContent = (row.themes||[]).join(', ') || '—';
+        document.getElementById('dLen').textContent = (row.word||'').length;
+        document.getElementById('dAppear').textContent = Number(row.appear||0);
+        document.getElementById('dFlags').textContent = Number(row.flags||0);
+        document.getElementById('dFlagRate').textContent = fmt(Number(row.flagRate||0), 3);
+        document.getElementById('dCount').textContent = Number(row.ratingCount||0);
+        document.getElementById('dBayes').textContent = fmt(Number(row.bayesAvg||0), 2);
+        const s = computePlacementScore(row);
+        document.getElementById('dScore').textContent = fmt(s.score, 3);
+        document.getElementById('dFormula').textContent = `1 + 0.6*lenNorm(${fmt(s.breakdown.lenNorm,2)}) + 1.2*rating(${fmt(s.breakdown.ratingNorm,2)}) - 1.0*flags(${fmt(s.breakdown.flagPenalty,2)}) - 0.8*usage(${fmt(s.breakdown.usagePenalty,2)})`;
+        // Open
+        modal.hidden = false;
+        // close handlers
+        const backdrop = modal.querySelector('.modal-backdrop');
+        function close(){ modal.hidden = true; document.removeEventListener('keydown', onEsc); }
+        function onEsc(e){ if (e.key === 'Escape') close(); }
+        backdrop.addEventListener('click', close, { once:true });
+        closeBtn.addEventListener('click', close, { once:true });
+        document.addEventListener('keydown', onEsc, { once:true });
+      });
+    }
+
     // initial
     load(sel.value);
   </script>
 </body>
+  <div id="detailModal" class="modal" hidden>
+    <div class="modal-backdrop"></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+      <button class="modal-close" type="button" aria-label="Schließen">✕</button>
+      <h2 id="detailTitle">Wort-Details</h2>
+      <div class="detail-grid">
+        <div class="label">Wort</div><div class="value" id="dWord"></div>
+        <div class="label">Hinweis</div><div class="value" id="dClue"></div>
+        <div class="label">ID</div><div class="value" id="dId"></div>
+        <div class="label">Themes</div><div class="value" id="dThemes"></div>
+        <div class="label">Länge</div><div class="value" id="dLen"></div>
+        <div class="label">Einblendungen</div><div class="value" id="dAppear"></div>
+        <div class="label">Flags</div><div class="value" id="dFlags"></div>
+        <div class="label">Flag-Rate</div><div class="value" id="dFlagRate"></div>
+        <div class="label">Bewertungen</div><div class="value" id="dCount"></div>
+        <div class="label">Rating-Ø (Bayes)</div><div class="value" id="dBayes"></div>
+        <div class="label">Live-Score</div><div class="value" id="dScore"></div>
+        <div class="label">Formel</div><div class="value" id="dFormula"></div>
+      </div>
+    </div>
+  </div>
 </html>
