@@ -67,11 +67,11 @@ h1{ text-align:center; color:var(--text); text-shadow:none; font-size:clamp(1.6r
 }
 input.cell{
   width:50px; height:50px; line-height:50px; text-align:center; font-weight:700; text-transform:uppercase;
-  font-size:20px; border:1px solid var(--cell-border); border-radius:6px; box-sizing:border-box; background:#fff; color:var(--text);
+  font-size:20px; border:1px solid var(--cell-border); border-radius:0px; box-sizing:border-box; background:#fff; color:var(--text);
   transition: box-shadow .15s ease, border-color .15s ease, background .15s ease;
 }
 input.cell:focus{ outline:none; box-shadow:0 0 0 3px var(--outline) inset, 0 0 0 2px var(--outline); border-color:var(--primary); }
-.black{ background:#000 !important; border:1px solid #000; pointer-events:none; border-radius:6px; box-sizing:border-box; }
+.black{ background:#000 !important; border:1px solid #000; pointer-events:none; border-radius:0px; box-sizing:border-box; }
 @media (prefers-color-scheme: dark){ .black{ background:#0b1220 !important; border-color:#1f2a44; } }
     .clue-cell {
       align-self: start;
