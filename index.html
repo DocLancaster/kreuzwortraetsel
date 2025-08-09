@@ -83,16 +83,24 @@
     <h1>Kreuzworträtsel</h1>
     <ul class="raetsel-list">
       <li>
-        <a href="raetsel.html?puzzle=classic" class="raetsel-btn">klassisches Kreuzworträtsel starten</a>
+        <a href="raetsel.html" class="raetsel-btn">klassisches Kreuzworträtsel starten</a>
       </li>
       <li>
-        <a href="raetsel.html?puzzle=jura" class="raetsel-btn">Jurarätsel starten</a>
+        <a href="raetsel.html?themes=jura" class="raetsel-btn">Jurarätsel starten</a>
       </li>
       <li>
-        <a href="raetsel.html?puzzle=reisesspecial" class="special-btn">Reise-Special Kreuzworträtsel starten</a>
+        <a id="specialLink" href="raetsel.html?themes=reise" class="special-btn">Special der Woche starten</a>
       </li>
     </ul>
     <a href="impressum.html" class="impressum-link">Impressum</a>
   </div>
+  <script>
+    // Aktuelles Wochenspecial hier steuern – einfach den Wert anpassen
+    const CURRENT_SPECIAL_THEME = 'reise';
+    const specialLink = document.getElementById('specialLink');
+    if (specialLink) {
+      specialLink.href = `raetsel.html?themes=${encodeURIComponent(CURRENT_SPECIAL_THEME)}`;
+    }
+  </script>
 </body>
 </html>
