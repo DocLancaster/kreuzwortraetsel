@@ -269,7 +269,8 @@ button.control.new{ --accent: var(--danger); }
 .back-to-menu button:hover{ background:#e5e7eb; transform:translateY(-1px); }
 @media (prefers-color-scheme: dark){
   .back-to-menu button{ background:#111827; color:#e5e7eb; border-color:#334155; box-shadow:0 2px 12px rgba(0,0,0,.5); }
-} 
+  .back-to-menu button:hover{ background:#0f1729; }
+}
 
 .back-to-menu {
   position: fixed;
