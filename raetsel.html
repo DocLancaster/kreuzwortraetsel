@@ -148,20 +148,49 @@
     let userClicked = false;
 let revealsLeft = 3;
 
-// Puzzle-Auswahl per URL-Parameter
+// Puzzle-/Theme-Auswahl per URL-Parameter
 const params = new URLSearchParams(location.search);
 const puzzleType = params.get('puzzle') || 'classic';
+const themesParam = params.get('themes');           // z.B. "reise,jura"
+const excludeParam = params.get('exclude');         // z.B. "marken,abkuerzungen"
+
+// Eine Datei für alle Wörter – Filter via Themes
 const puzzleConfig = {
-  classic:       { json: 'words.json',        title: 'Kreuzworträtsel' },
-  jura:          { json: 'words.law.json',    title: 'Jura-Kreuzworträtsel' },
-  reisesspecial: { json: 'REISESPECIAL.json', title: 'Reise-Special Kreuzworträtsel' }
+  classic:       { title: 'Kreuzworträtsel',                  themes: null },
+  jura:          { title: 'Jura-Kreuzworträtsel',             themes: ['jura'] },
+  reisesspecial: { title: 'Reise-Special Kreuzworträtsel',    themes: ['reise'] }
 };
-const { json: wordFile, title: puzzleTitle } = puzzleConfig[puzzleType] || puzzleConfig.classic;
+
+const BASE_WORDS_FILE = 'words.json';
+const cfg = puzzleConfig[puzzleType] || puzzleConfig.classic;
+
+// Aus URL (themes=...) kann die Auswahl überschreiben/ergänzen
+let includeThemes = Array.isArray(cfg.themes) ? [...cfg.themes] : null;
+if (themesParam) {
+  const parsed = themesParam.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  includeThemes = parsed.length ? parsed : null;
+}
+let excludeThemes = null;
+if (excludeParam) {
+  excludeThemes = excludeParam.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  if (!excludeThemes.length) excludeThemes = null;
+}
+
+// Titel ableiten
+let puzzleTitle = cfg.title || 'Kreuzworträtsel';
+if (themesParam) {
+  const label = themesParam.split(',').map(s => s.trim()).filter(Boolean).join(', ');
+  if (label) puzzleTitle = `Kreuzworträtsel (${label})`;
+}
+
 // Dynamischer Dokument- und Überschrift-Titel
 document.title = puzzleTitle;
 document.querySelector('.card > h1').textContent = puzzleTitle;
-// Eindeutiger Key pro Rätsel-Seite für LocalStorage (inkl. Puzzle-Typ)
-const RAEETSEL_STORAGE_KEY = `${location.pathname.split('/').pop()}_${puzzleType}`;
+
+// Eindeutiger Key pro Variante (inkl. Themes), damit LocalStorage nicht kollidiert
+const themeKey = includeThemes ? includeThemes.join('-') : 'all';
+const excludeKey = excludeThemes ? ('_x-' + excludeThemes.join('-')) : '';
+const RAEETSEL_STORAGE_KEY = `${location.pathname.split('/').pop()}_${puzzleType}_${themeKey}${excludeKey}`;
 // Stable per-user id (stored locally)
 function getUserId() {
   const KEY = 'puzzle_user_id_v1';
@@ -510,7 +539,7 @@ async function handlePuzzleCompleted() {
     }
 
 // Lade externe Wortliste und initialisiere das Rätsel
-fetch(`/${wordFile}`)
+fetch(`/${BASE_WORDS_FILE}`)
       .then(res => res.json())
       .then(async data => {
         wordList = ensureIds(data);
@@ -521,6 +550,28 @@ fetch(`/${wordFile}`)
           seenWords.add(item.word);
           return true;
         });
+        // --- Theme-Filter anwenden ---
+        const normThemes = (w) => Array.isArray(w.themes) ? w.themes.map(s => String(s).toLowerCase()) : [];
+
+        if (includeThemes && includeThemes.length) {
+          const filtered = wordList.filter(w => {
+            const t = normThemes(w);
+            return t.length && t.some(tag => includeThemes.includes(tag));
+          });
+          // Falls zu wenige übrig bleiben (z. B. neues Special), auf alle Wörter zurückfallen
+          if (filtered.length >= 10) {
+            wordList = filtered;
+          } else {
+            console.warn('Theme-Filter zu streng, benutze alle Wörter');
+          }
+        }
+        if (excludeThemes && excludeThemes.length) {
+          wordList = wordList.filter(w => {
+            const t = normThemes(w);
+            return !t.some(tag => excludeThemes.includes(tag));
+          });
+        }
+        // --- Ende Theme-Filter ---
         // --- Fetch feedback metrics from server and compute scores ---
         try {
           const resMetrics = await fetch('/api/metrics', {
