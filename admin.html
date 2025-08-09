@@ -113,6 +113,24 @@
     const search = document.getElementById('search');
     const summary = document.getElementById('summary');
 
+    // --- stable IDs for words (fallback if JSON has no id) ---
+    function fnv1a(str){
+      let h = 0x811c9dc5;
+      for (let i = 0; i < str.length; i++) {
+        h ^= str.charCodeAt(i);
+        h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+      }
+      return h >>> 0;
+    }
+    function makeWordId(word){
+      const base = (word || '').toUpperCase().trim();
+      return 'w' + fnv1a(base).toString(36);
+    }
+    function ensureIds(list){
+      return list.map(w => ({ ...w, id: w.id || makeWordId(w.word) }));
+    }
+    // --- end id helpers ---
+
     // Preselect from URL ?puzzle=...
     const params = new URLSearchParams(location.search);
     const initial = params.get('puzzle') || 'classic';
@@ -132,14 +150,17 @@
       return r.json();
     }
 
-    // Chunked metrics fetch to avoid URL length limits
-    async function fetchMetricsChunked(puzzle, words, chunkSize=300){
+    // Chunked metrics fetch to avoid URL length limits (ID-first)
+    async function fetchMetricsChunked(puzzle, words, ids, chunkSize=300){
       const map = {};
       for (let i=0; i<words.length; i += chunkSize){
-        const slice = words.slice(i, i+chunkSize);
+        const wslice = words.slice(i, i+chunkSize);
+        const islice = Array.isArray(ids) ? ids.slice(i, i+chunkSize) : undefined;
+        const body = { puzzle, words: wslice };
+        if (islice && islice.length === wslice.length) body.ids = islice;
         const r = await fetch('/api/metrics', {
           method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ puzzle, words: slice })
+          body: JSON.stringify(body)
         });
         if (!r.ok){ console.warn('metrics failed', i, r.status); continue; }
         const part = await r.json();
@@ -234,14 +255,16 @@
     async function load(puzzle){
       try {
         const wordFile = puzzleConfig[puzzle]?.json || puzzleConfig.classic.json;
-        wordsData = await fetchJSON(`/${wordFile}`);
+        wordsData = ensureIds(await fetchJSON(`/${wordFile}`));
         const unique = [];
         const seen = new Set();
         for (const it of wordsData){
-          if (!seen.has(it.word)){ seen.add(it.word); unique.push(it); }
+          const key = it.id || it.word;
+          if (!seen.has(key)) { seen.add(key); unique.push(it); }
         }
         const wordsOnly = unique.map(w => w.word);
-        metricsMap = await fetchMetricsChunked(puzzle, wordsOnly, 250);
+        const idsOnly   = unique.map(w => w.id);
+        metricsMap = await fetchMetricsChunked(puzzle, wordsOnly, idsOnly, 250);
 
         // combine
         currentData = unique.map(it => {
