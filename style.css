@@ -291,26 +291,17 @@ button.control.new{ --accent: var(--danger); }
 
 .back-to-menu {
   position: fixed;
+  top: 3rem;
+  left: 3rem;
   z-index: 200;
-}
-
-/* Desktop: Button seitlich neben der Card, vertikal zentriert */
-@media (min-width: 901px){
-  .back-to-menu{
-    top: 50%;
-    transform: translateY(-50%);
-    /* links bündig zur Card, mit kleinem Abstand nach außen */
-    left: max(0.75rem, calc((100vw - 650px)/2 - 72px));
-  }
-}
-
-/* Tablet: oben links, etwas Abstand */
-@media (min-width: 601px) and (max-width: 900px){
-  .back-to-menu{ top: 1rem; left: 1rem; transform:none; }
 }
 @media (max-width: 600px) {
   .back-to-menu {
-    top: 0.6rem;
-    left: 0.6rem;
+    top: auto;
+    bottom: calc(env(safe-area-inset-bottom) + .8rem);
+    left: .6rem;
+  }
+  .back-to-menu button{
+    padding:.5em 1.1em; font-size:.95em;
   }
 }
