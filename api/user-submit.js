@@ -31,6 +31,7 @@ export default async function handler(req, res) {
   const score = (clientScore >= 0 && clientScore <= 100) ? clientScore : computedScore;
   const scoreRounded = Math.max(0, Math.min(100, Math.round(score)));
   const coinsEarned = Math.floor(scoreRounded / 10); // 10 coins per 100 score
+  const isHistorySpecial = (puzzle === 'history') || (Array.isArray(themes) && themes.includes('history'));
 
   const base = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
@@ -123,6 +124,14 @@ export default async function handler(req, res) {
       tasks.push(post(`${base}/set/${encodeURIComponent(P('lastThemes'))}/${encodeURIComponent(themes.join(','))}`));
     }
 
+    // Mark completion of the current ISO week for the history special (Europe/Berlin)
+    if (isHistorySpecial) {
+      const weekKey = isoWeekKeyBerlin(completedAt); // e.g. "2025-W32"
+      if (weekKey) {
+        tasks.push(post(`${base}/set/${encodeURIComponent(P('special:history:lastWeek'))}/${weekKey}`));
+      }
+    }
+
     const results = await Promise.all(tasks);
     const bad = results.find(r => !r.ok);
     if (bad) {
@@ -146,6 +155,8 @@ export default async function handler(req, res) {
         streak: newStreak,
         maxStreak: newMaxStreak
       }
+      ,
+      special: isHistorySpecial ? { history: { weekKey: isoWeekKeyBerlin(completedAt) } } : undefined
     };
 
     return res.status(200).json(out);
@@ -192,4 +203,38 @@ function daysFromYyyymmdd(s){
   const d = parseInt(s.slice(6,8),10);
   const utc = Date.UTC(y, m, d);
   return Math.floor(utc / DAY_MS);
+}
+
+function isoWeekKeyBerlin(t){
+  try{
+    const { y, m, d } = berlinYMD(t);
+    const wk = isoWeekFromYMD(y, m, d);
+    return `${wk.year}-W${String(wk.week).padStart(2,'0')}`;
+  }catch(_){ return null; }
+}
+
+function berlinYMD(t){
+  const dtf = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin', year: 'numeric', month: '2-digit', day: '2-digit' });
+  const parts = dtf.formatToParts(new Date(t));
+  const map = Object.create(null);
+  for (const p of parts) map[p.type] = p.value;
+  return { y: parseInt(map.year,10), m: parseInt(map.month,10), d: parseInt(map.day,10) };
+}
+
+function isoWeekFromYMD(y, m, d){
+  // Treat the given Y-M-D as a local (Berlin) date anchored at UTC midnight for stable math
+  const date = new Date(Date.UTC(y, m-1, d));
+  const day = date.getUTCDay(); // 0..6, Sun..Sat
+  // Shift to Thursday in current week to determine ISO year
+  const thursday = new Date(date);
+  const diffMon = (day + 6) % 7; // Mon=0
+  thursday.setUTCDate(date.getUTCDate() - diffMon + 3);
+  const isoYear = thursday.getUTCFullYear();
+  // Monday of week 1: the Monday of the week that contains Jan 4th
+  const jan4 = new Date(Date.UTC(isoYear, 0, 4));
+  const jan4Day = (jan4.getUTCDay() + 6) % 7; // Mon=0
+  const week1Mon = new Date(jan4);
+  week1Mon.setUTCDate(jan4.getUTCDate() - jan4Day);
+  const week = Math.floor((date - week1Mon) / (7*DAY_MS)) + 1;
+  return { year: isoYear, week };
 }

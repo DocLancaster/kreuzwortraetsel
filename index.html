@@ -92,6 +92,9 @@
       font-size: .72rem; color:#fff; background: linear-gradient(90deg,#ff7a7a,#ffb36b);
       padding: .25em .55em; border-radius: 999px; align-self: center;
     }
+    .badge-week.done {
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+    }
 
     .impressum-link {
       display: inline-block;
@@ -245,6 +248,22 @@
         document.getElementById('statStreak').textContent = t.streak ?? 0;
         document.getElementById('statScore').textContent = t.totalScore ?? 0;
         el.hidden = false;
+        // Toggle weekly special badge (NEU ↔︎ ✔︎) based on this week's completion
+        const badge = document.querySelector('#specialLink .badge-week');
+        const sp = data.special && data.special.history;
+        if (badge) {
+          if (sp && sp.thisWeek) {
+            badge.textContent = '✔︎';
+            badge.classList.add('done');
+            badge.setAttribute('title', `Abgeschlossen in Woche ${sp.weekKey || ''}`);
+            badge.setAttribute('aria-label', 'Diese Woche abgeschlossen');
+          } else {
+            badge.textContent = 'NEU';
+            badge.classList.remove('done');
+            badge.removeAttribute('title');
+            badge.removeAttribute('aria-label');
+          }
+        }
       }catch(e){ /* no-op on landing */ }
     }
 
