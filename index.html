@@ -146,12 +146,46 @@
     .start-card .btn-ghost { background:#fff !important; color: var(--primary) !important; border: 1px solid #e5e7eb !important; }
 
     .start-card .btn:focus-visible { box-shadow: 0 0 0 3px var(--outline) !important; }
+
+    /* ---- Personal stats on landing ---- */
+    .user-stats { display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:12px; margin: .2rem 0 1rem; font-size:.95rem; color:var(--muted); }
+    .user-stats .stat { display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--text); border:1px solid #e5e7eb; border-radius:999px; padding:.38rem .65rem; box-shadow:0 1px 4px #0001; }
+    .user-stats .label { opacity:.8; }
+    .user-stats .val { font-weight:700; }
+    .user-stats .coin-icon{ position:relative; width:18px; height:18px; border-radius:50%; display:inline-block;
+      background:
+        radial-gradient(circle at 35% 35%, #fff59d 0%, #fde047 35%, #f59e0b 65%, #b45309 100%),
+        conic-gradient(from 200deg, rgba(255,255,255,.25), rgba(0,0,0,.05) 120deg, rgba(255,255,255,.2) 180deg, rgba(0,0,0,.08) 240deg, rgba(255,255,255,.25));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 0 0 1px rgba(0,0,0,.12), 0 1px 1px rgba(0,0,0,.08);
+    }
+    .user-stats .coin-icon::before{ content:""; position:absolute; inset:2px 2px 6px 6px; border-radius:50%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.75), rgba(255,255,255,0) 60%); pointer-events:none; }
+    .user-stats .coin-icon::after{ content:""; position:absolute; left:4px; top:3px; width:3px; height:3px; border-radius:50%; background: rgba(255,255,255,.9); filter: blur(.2px); opacity:.9; pointer-events:none; }
+
+    @media (prefers-color-scheme: dark){
+      .user-stats .stat{ background:#111827; color:#e5e7eb; border-color:#334155; box-shadow:0 1px 6px rgba(0,0,0,.45); }
+      .user-stats .coin-icon{ box-shadow: inset 0 1px 0 rgba(255,255,255,.12), inset 0 0 0 1px rgba(0,0,0,.55), 0 1px 1px rgba(0,0,0,.45); }
+    }
   </style>
 </head>
 <body>
   <div class="start-card">
     <h1>Kreuzworträtsel</h1>
     <p class="sub">Wähle einen Modus – Klassiker, Jura oder unser wöchentliches Special.</p>
+    <div id="userStats" class="user-stats" hidden>
+      <div class="stat" title="Deine Münzen">
+        <span class="coin-icon" aria-hidden="true"></span>
+        <span class="label">Münzen</span>
+        <span class="val" id="statCoins">0</span>
+      </div>
+      <div class="stat" title="Dein Streak">
+        <span class="label">Streak</span>
+        <span class="val" id="statStreak">0</span>
+      </div>
+      <div class="stat" title="Gesamtscore">
+        <span class="label">Score</span>
+        <span class="val" id="statScore">0</span>
+      </div>
+    </div>
     <ul class="raetsel-list">
       <li>
         <a href="raetsel.html" class="btn btn-primary">
@@ -183,12 +217,36 @@
       return key.replace(/[-_]+/g,' ').replace(/\b\w/g, c => c.toUpperCase());
     }
 
+    // --- Personal stats ---
+    const USER_ID_KEY = 'USER_ID';
+    let USER_ID = localStorage.getItem(USER_ID_KEY);
+    if (!USER_ID) {
+      USER_ID = 'u_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem(USER_ID_KEY, USER_ID);
+    }
+
+    async function loadUserStats(){
+      try{
+        const r = await fetch('/api/user-score', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ userId: USER_ID }) });
+        if(!r.ok) return;
+        const data = await r.json();
+        const t = data.totals || {};
+        const el = document.getElementById('userStats');
+        if (!el) return;
+        document.getElementById('statCoins').textContent = t.coins ?? 0;
+        document.getElementById('statStreak').textContent = t.streak ?? 0;
+        document.getElementById('statScore').textContent = t.totalScore ?? 0;
+        el.hidden = false;
+      }catch(e){ /* no-op on landing */ }
+    }
+
     if (specialLink) {
       specialLink.href = `raetsel.html?themes=${encodeURIComponent(CURRENT_SPECIAL_THEME)}`;
     }
     if (specialThemeLabel) {
       specialThemeLabel.textContent = labelizeTheme(CURRENT_SPECIAL_THEME);
     }
+    loadUserStats();
   </script>
 </body>
 </html>
