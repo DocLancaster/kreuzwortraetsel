@@ -57,8 +57,7 @@
       <label for="puzzleSel">Modus:</label>
       <select id="puzzleSel">
         <option value="classic">Classic</option>
-        <option value="jura">Jura</option>
-        <option value="reisesspecial">Reise-Special</option>
+        <option value="history">Geschichte-Special</option>
       </select>
       <button id="reloadBtn">Neu laden</button>
       <input id="search" class="search" type="search" placeholder="Suchen… (Wort oder Hinweis)" />
@@ -128,9 +127,8 @@
 
   <script>
     const puzzleConfig = {
-      classic:       { json: 'words.json',        title: 'Kreuzworträtsel' },
-      jura:          { json: 'words.law.json',    title: 'Jura-Kreuzworträtsel' },
-      reisesspecial: { json: 'REISESPECIAL.json', title: 'Reise-Special Kreuzworträtsel' }
+      classic: { json: 'words.json', title: 'Kreuzworträtsel' },
+      history: { json: 'words.json', title: 'Geschichte-Special', filterTheme: 'history' }
     };
 
     const sel = document.getElementById('puzzleSel');
@@ -311,12 +309,18 @@
           const key = it.id || it.word;
           if (!seen.has(key)) { seen.add(key); unique.push(it); }
         }
-        const wordsOnly = unique.map(w => w.word);
-        const idsOnly   = unique.map(w => w.id);
+        const cfg = puzzleConfig[puzzle] || puzzleConfig.classic;
+        let baseList = unique;
+        if (cfg.filterTheme) {
+          const th = cfg.filterTheme;
+          baseList = unique.filter(it => Array.isArray(it.themes) && it.themes.includes(th));
+        }
+        const wordsOnly = baseList.map(w => w.word);
+        const idsOnly   = baseList.map(w => w.id);
         metricsMap = await fetchMetricsChunked(puzzle, wordsOnly, idsOnly, 250);
 
         // combine
-        currentData = unique.map(it => {
+        currentData = baseList.map(it => {
           const m = metricsMap[it.word] || {};
           const sum = Number(m.ratingSum||0), count = Number(m.ratingCount||0);
           const avg = count ? sum / count : 0;
