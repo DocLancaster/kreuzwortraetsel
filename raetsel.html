@@ -66,6 +66,9 @@
     .modal .actions { flex-direction: column; }
     .modal .actions button { width: 100%; padding: 12px; font-size: 16px; }
   }
+  /* Personal Score HUD */
+  .user-hud { text-align:center; margin:.35rem 0 .2rem; font-size:.95rem; color: var(--muted); }
+  @media (max-width: 480px){ .user-hud{ font-size:.9rem; } }
   </style>
 </head>
 <body>
@@ -89,6 +92,7 @@
       </svg>
     </button>
   </div>
+  <div id="userHud" class="user-hud" aria-live="polite"></div>
 
   <!-- Grid mit Inline-Hinweisen -->
   <div class="grid" id="grid"></div>
@@ -146,6 +150,11 @@
     let currentDirection = 'horizontal';
     let lastFocusedCell = null;
     let userClicked = false;
+let checksCount = 0;           // how often "Lösung prüfen" gedrückt wurde
+let wrongCellsChecked = 0;     // Summe falsch markierter Felder über alle Checks
+let puzzleStart = performance.now();
+let wordsCount = 0;
+let lettersCount = 0;
 let revealsLeft = 3;
 
 // Puzzle-/Theme-Auswahl per URL-Parameter
@@ -482,6 +491,14 @@ async function handlePuzzleCompleted() {
         grid[r] = testGrid[r].slice();
       }
       words = placed;
+      // Stats for scoring
+      wordsCount = words.length;
+      lettersCount = 0;
+      for (let r = 0; r < gridSize; r++) {
+        for (let c = 0; c < gridSize; c++) {
+          if (grid[r][c] !== null && grid[r][c] !== '*') lettersCount++;
+        }
+      }
     }
 
 
@@ -492,8 +509,54 @@ async function handlePuzzleCompleted() {
     // In einer Funktion wie findeLoesungswort (falls vorhanden):
     // const worte = shuffleArray([...wordList]);
 
+    function msToMMSS(ms){
+      const s = Math.floor(ms/1000); const m = Math.floor(s/60); const r = s%60;
+      return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`;
+    }
+    function computeClientScore(){
+      const durationMs = Math.max(0, (performance.now() - puzzleStart));
+      const revealsUsed = Math.max(0, 3 - revealsLeft);
+      const timePenalty = Math.min(40, durationMs / 3000);
+      const revealPenalty = 8 * revealsUsed;
+      const errorPenalty = 0.5 * wrongCellsChecked;
+      const sizeBonus = Math.min(10, (lettersCount||0) / 30);
+      const raw = 100 - timePenalty - revealPenalty - errorPenalty + sizeBonus;
+      return Math.max(0, Math.min(100, Math.round(raw)));
+    }
+    async function updateUserHud(){
+      try{
+        const r = await fetch('/api/user-score', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ userId: USER_ID }) });
+        if(!r.ok) return;
+        const data = await r.json();
+        const t = data.totals || {};
+        const hud = document.getElementById('userHud');
+        hud.textContent = `Gesamtscore: ${t.totalScore ?? 0} • Münzen: ${t.coins ?? 0} • Streak: ${t.streak ?? 0}`;
+      }catch(_){ /* noop */ }
+    }
+    async function submitUserProgress(){
+      const payload = {
+        userId: USER_ID,
+        puzzle: puzzleType,
+        themes: Array.isArray(includeThemes)? includeThemes : [],
+        durationMs: Math.max(0, Math.floor(performance.now() - puzzleStart)),
+        revealsUsed: Math.max(0, 3 - revealsLeft),
+        checks: checksCount,
+        wrongCells: wrongCellsChecked,
+        wordsCount,
+        lettersCount,
+        puzzleScore: computeClientScore(),
+        completedAt: Date.now()
+      };
+      try{
+        const r = await fetch('/api/user-submit', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+        if(r.ok){ const data = await r.json(); await updateUserHud(); return data; }
+      }catch(_){ }
+      return null;
+    }
     // Lösungsprüfung
     function checkSolution() {
+      checksCount++;
+      let wrongNow = 0;
       const inputs = document.querySelectorAll("input.cell:not(.black)");
       let allCorrect = true;
       inputs.forEach(input => {
@@ -509,17 +572,20 @@ async function handlePuzzleCompleted() {
           input.style.backgroundColor = "#c8f7c5"; // correct = green
         } else {
           input.style.backgroundColor = "#f7c5c5"; // incorrect = red
+          wrongNow++;
           allCorrect = false;
         }
       });
+      wrongCellsChecked += wrongNow;
       if (allCorrect) {
+        submitUserProgress().then(updateUserHud).catch(()=>{});
         handlePuzzleCompleted();
       } else {
         alert("❌ Einige Felder sind noch falsch. Versuch’s nochmal!");
       }
     }
 
-    function checkAutoSuccess() {
+    async function checkAutoSuccess() {
       const inputs = document.querySelectorAll("input.cell:not(.black)");
       let allCorrect = true;
       for (const input of inputs) {
@@ -533,6 +599,7 @@ async function handlePuzzleCompleted() {
       if (allCorrect) {
         inputs.forEach(input => { input.style.backgroundColor = "#c8f7c5"; });
         handlePuzzleCompleted();
+        submitUserProgress().then(updateUserHud).catch(()=>{});
         return true;
       }
       return false;
@@ -912,6 +979,8 @@ fetch(`/${BASE_WORDS_FILE}`)
           start0.focus();
           lastFocusedCell = start0;
         }
+        puzzleStart = performance.now();
+        updateUserHud();
         // Flag button handler
         document.getElementById('flagBtn').addEventListener('click', () => {
           if (!currentWordIndex && currentWordIndex !== 0) return;
