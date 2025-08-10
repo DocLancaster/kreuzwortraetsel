@@ -262,16 +262,21 @@ document.querySelector('.card > h1').textContent = puzzleTitle;
 const themeKey = includeThemes ? includeThemes.join('-') : 'all';
 const excludeKey = excludeThemes ? ('_x-' + excludeThemes.join('-')) : '';
 const RAEETSEL_STORAGE_KEY = `${location.pathname.split('/').pop()}_${puzzleType}_${themeKey}${excludeKey}`;
-// Stable per-user id (stored locally)
+// Stable per-user id (stored locally), honors ?uid= and keeps both keys in sync
 function getUserId() {
-  const KEY = 'puzzle_user_id_v1';
-  let id = localStorage.getItem(KEY);
+  const KEY_NEW = 'USER_ID';
+  const KEY_OLD = 'puzzle_user_id_v1';
+  const params = new URLSearchParams(location.search);
+  const fromUrl = params.get('uid');
+  let id = fromUrl || localStorage.getItem(KEY_NEW) || localStorage.getItem(KEY_OLD);
   if (!id) {
     const arr = new Uint8Array(16);
     (window.crypto || window.msCrypto).getRandomValues(arr);
     id = Array.from(arr, b => b.toString(16).padStart(2,'0')).join('');
-    localStorage.setItem(KEY, id);
   }
+  // persist to both keys for cross-page compatibility
+  try { localStorage.setItem(KEY_NEW, id); } catch(_) {}
+  try { localStorage.setItem(KEY_OLD, id); } catch(_) {}
   return id;
 }
 const USER_ID = getUserId();
