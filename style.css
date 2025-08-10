@@ -52,8 +52,14 @@ h1{ text-align:center; color:var(--text); text-shadow:none; font-size:clamp(1.6r
   text-align: center;
   font-weight: 600;
   color: var(--text);
-  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
   padding: 0 .25rem;
+  /* Allow multi-line clues without truncation */
+  white-space: normal;
+  overflow-wrap: anywhere; /* break long tokens/compounds if needed */
+  word-break: break-word;  /* legacy/Safari support */
+  text-overflow: clip;
+  line-height: 1.25;
+  min-width: 0;            /* important in grid/flex to avoid overflow */
 }
 /* Clue pill, visually aligned with control buttons */
 .navigation .clue-text{
@@ -62,7 +68,7 @@ h1{ text-align:center; color:var(--text); text-shadow:none; font-size:clamp(1.6r
   grid-column: 2;              /* always the center column */
   justify-self: center;        /* center within middle column */
   display:flex; align-items:center; justify-content:center;
-  max-width: 100%;
+  min-width: 0; max-width: 100%;
   font-size: 1.075rem;         /* a touch larger on desktop */
 }
 @media (prefers-color-scheme: dark){
