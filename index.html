@@ -170,7 +170,7 @@
 <body>
   <div class="start-card">
     <h1>Kreuzworträtsel</h1>
-    <p class="sub">Wähle einen Modus – Klassiker, Jura oder unser wöchentliches Special.</p>
+    <p class="sub">Wähle einen Modus – Klassiker oder unser wöchentliches Special.</p>
     <div id="userStats" class="user-stats" hidden>
       <div class="stat" title="Deine Münzen">
         <span class="coin-icon" aria-hidden="true"></span>
@@ -193,13 +193,8 @@
         </a>
       </li>
       <li>
-        <a id="juraLink" href="raetsel.html?themes=jura" class="btn btn-secondary">
-          <span class="left"><span class="icon">⚖️</span><span><strong>Jura-Rätsel starten</strong><span class="sublabel">Begriffe aus Recht & Justiz</span></span></span>
-        </a>
-      </li>
-      <li>
-        <a id="specialLink" href="raetsel.html?themes=reise" class="btn btn-ghost">
-          <span class="left"><span class="icon">✨</span><span><strong>Special der Woche</strong><span id="specialThemeLabel" class="sublabel">Reise</span></span></span>
+        <a id="specialLink" href="raetsel.html?themes=history" class="btn btn-ghost">
+          <span class="left"><span class="icon">✨</span><span><strong>Special der Woche</strong><span id="specialThemeLabel" class="sublabel">Geschichte</span></span></span>
           <span class="badge-week">NEU</span>
         </a>
       </li>
@@ -208,12 +203,14 @@
   </div>
   <script>
     // Aktuelles Wochenspecial hier steuern – einfach den Wert anpassen
-    const CURRENT_SPECIAL_THEME = 'reise';
+    const CURRENT_SPECIAL_THEME = 'history';
     const specialLink = document.getElementById('specialLink');
     const specialThemeLabel = document.getElementById('specialThemeLabel');
 
     function labelizeTheme(key){
       if (!key) return '';
+      const map = { history: 'Geschichte', reise: 'Reise', jura: 'Jura' };
+      if (map[key]) return map[key];
       return key.replace(/[-_]+/g,' ').replace(/\b\w/g, c => c.toUpperCase());
     }
 
@@ -259,8 +256,6 @@
     }
     const classicLink = document.getElementById('classicLink');
     if (classicLink) classicLink.href = `raetsel.html?uid=${encodeURIComponent(USER_ID)}`;
-    const juraLink = document.getElementById('juraLink');
-    if (juraLink) juraLink.href = `raetsel.html?themes=jura&uid=${encodeURIComponent(USER_ID)}`;
     loadUserStats();
   </script>
 </body>
