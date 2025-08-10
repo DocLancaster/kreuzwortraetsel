@@ -399,13 +399,21 @@ function showResultModal(){
 async function handlePuzzleCompleted() {
   if (completionHandled) return; // prevent double-trigger
   completionHandled = true;
+  const chk = document.querySelector('.control.check');
+  if (chk) { chk.disabled = true; chk.textContent = 'Gelöst 🎉'; }
+  // Disable hint & reset and lock all inputs to prevent further edits
+  const hintBtn = document.getElementById('revealBtn');
+  if (hintBtn) { hintBtn.disabled = true; hintBtn.textContent = 'Hinweis (0)'; }
+  const resetBtn = document.getElementById('resetBtn');
+  if (resetBtn) { resetBtn.disabled = true; }
+  document.querySelectorAll('input.cell:not(.black)').forEach(inp => { inp.disabled = true; });
   showConfetti();
   setTimeout(async () => {
     const stars = await openRatingModal();
-if (stars && Number(stars) >= 1) {
-  await submitPuzzleRating(stars);
-}
-showResultModal();
+    if (stars && Number(stars) >= 1) {
+      await submitPuzzleRating(stars);
+    }
+    showResultModal();
   }, 600);
 }
 // --- end rating modal helpers ---
