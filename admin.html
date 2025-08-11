@@ -23,7 +23,12 @@
     .mini-charts h4 { margin:0 0 6px; font-size:14px; font-weight:600; }
     .mini-charts select { padding:6px 8px; font-size:12px; }
     .spark-wrap { display:flex; align-items:center; gap:10px; }
-    .spark-wrap canvas { width:100%; height:60px; display:block; }
+    .spark-wrap canvas {
+      max-width: 100%;
+      display: block;
+      height: 60px;
+      flex: 1;
+    }
     .spark-meta { min-width: 160px; }
     .spark-meta .big { font-size:18px; font-variant-numeric: tabular-nums; }
     @media (prefers-color-scheme: dark){
