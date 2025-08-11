@@ -17,6 +17,19 @@
     .search { margin-left:auto; }
     .muted { color:#666; font-size:12px; }
 
+    .mini-charts { margin: 10px 0 18px; display:grid; grid-template-columns: 1fr; gap:12px; }
+    .mini-charts .row { display:grid; grid-template-columns: 1fr 1fr; gap:12px; align-items:center; }
+    .mini-charts .cardish { border:1px solid #e5e5e5; border-radius:10px; padding:10px 12px; background:#fff; }
+    .mini-charts h4 { margin:0 0 6px; font-size:14px; font-weight:600; }
+    .mini-charts select { padding:6px 8px; font-size:12px; }
+    .spark-wrap { display:flex; align-items:center; gap:10px; }
+    .spark-wrap canvas { width:100%; height:60px; display:block; }
+    .spark-meta { min-width: 160px; }
+    .spark-meta .big { font-size:18px; font-variant-numeric: tabular-nums; }
+    @media (prefers-color-scheme: dark){
+      .mini-charts .cardish { background:#0f1729; border-color:#1f2937; }
+    }
+
     /* Force scrolling on admin page */
     html, body { overflow: auto !important; }
 
@@ -52,6 +65,44 @@
   </div>
   <div class="card" style="max-width: 980px;">
     <h1>Admin – Rätsel-Statistiken</h1>
+
+    <p id="globalCounters" class="muted">Lade Zähler…</p>
+
+    <div class="mini-charts">
+      <div class="row">
+        <div class="cardish">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+            <h4>Aktivität – Generiert</h4>
+            <label class="muted">Zeitraum:
+              <select id="tsDays">
+                <option value="7">7 Tage</option>
+                <option value="30">30 Tage</option>
+              </select>
+            </label>
+          </div>
+          <div class="spark-wrap">
+            <div class="spark-meta">
+              <div class="muted">Summe</div>
+              <div id="genSum" class="big">–</div>
+            </div>
+            <canvas id="genSpark" width="600" height="100"></canvas>
+          </div>
+        </div>
+        <div class="cardish">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+            <h4>Aktivität – Abgeschlossen</h4>
+            <span class="muted">Letzte Tage wie links</span>
+          </div>
+          <div class="spark-wrap">
+            <div class="spark-meta">
+              <div class="muted">Summe</div>
+              <div id="compSum" class="big">–</div>
+            </div>
+            <canvas id="compSpark" width="600" height="100"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="admin-controls">
       <label for="puzzleSel">Modus:</label>
@@ -136,6 +187,63 @@
     const search = document.getElementById('search');
     const summary = document.getElementById('summary');
 
+    const tsDaysEl = document.getElementById('tsDays');
+    const genCanvas = document.getElementById('genSpark');
+    const compCanvas = document.getElementById('compSpark');
+    const genSumEl = document.getElementById('genSum');
+    const compSumEl = document.getElementById('compSum');
+
+    function drawSparkline(canvas, data){
+      if (!canvas || !data) return;
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.width, h = canvas.height;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0,0,w,h);
+      const n = data.length;
+      if (!n) return;
+      const max = Math.max(...data, 1);
+      const min = Math.min(...data, 0);
+      const padX = 6, padY = 6;
+      const innerW = w - padX*2, innerH = h - padY*2;
+      // line
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let i=0; i<n; i++){
+        const x = padX + (n===1 ? innerW/2 : (innerW * i/(n-1)));
+        const v = data[i];
+        const yNorm = max===min ? 0.5 : (v - min) / (max - min);
+        const y = padY + innerH * (1 - yNorm);
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+
+    async function loadTimeseries(){
+      try{
+        const days = Number(tsDaysEl?.value || 7);
+        const r = await fetch('/api/user-score', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ global: true, timeseries: true, days })
+        });
+        if (!r.ok) throw new Error('Timeseries failed');
+        const data = await r.json();
+        const ts = data?.timeseries;
+        if (!ts) throw new Error('No timeseries');
+        const gen = Array.isArray(ts.generated?.total) ? ts.generated.total : [];
+        const comp = Array.isArray(ts.completed?.total) ? ts.completed.total : [];
+        drawSparkline(genCanvas, gen);
+        drawSparkline(compCanvas, comp);
+        const sum = arr => arr.reduce((s,v)=>s+Number(v||0),0);
+        genSumEl.textContent = sum(gen).toLocaleString('de-DE');
+        compSumEl.textContent = sum(comp).toLocaleString('de-DE');
+      } catch(e){
+        console.warn(e);
+        if (genSumEl) genSumEl.textContent = '—';
+        if (compSumEl) compSumEl.textContent = '—';
+      }
+    }
+
     // --- stable IDs for words (fallback if JSON has no id) ---
     function fnv1a(str){
       let h = 0x811c9dc5;
@@ -158,10 +266,44 @@
     const params = new URLSearchParams(location.search);
     const initial = params.get('puzzle') || 'classic';
     sel.value = puzzleConfig[initial] ? initial : 'classic';
-
-    btn.addEventListener('click', () => load(sel.value));
+    btn.addEventListener('click', () => { loadGlobalCounters(); loadTimeseries(); load(sel.value); });
+    async function loadGlobalCounters(){
+      try{
+        const r = await fetch('/api/user-score', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ global: true })
+        });
+        const el = document.getElementById('globalCounters');
+        if (!el) return;
+        if (!r.ok){
+          el.textContent = 'Globale Zähler derzeit nicht verfügbar.';
+          return;
+        }
+        const data = await r.json();
+        const g = data && data.global ? data.global : null;
+        if (!g){
+          el.textContent = 'Globale Zähler derzeit nicht verfügbar.';
+          return;
+        }
+        const gen = Number(g.generated || 0);
+        const comp = Number(g.completed || 0);
+        const cGen = Number(g.byPuzzle?.classic?.generated || 0);
+        const cComp = Number(g.byPuzzle?.classic?.completed || 0);
+        const hGen = Number(g.byPuzzle?.history?.generated || 0);
+        const hComp = Number(g.byPuzzle?.history?.completed || 0);
+        el.textContent =
+          `Gesamt: ${gen.toLocaleString('de-DE')} generiert · ${comp.toLocaleString('de-DE')} abgeschlossen — ` +
+          `Classic: ${cGen.toLocaleString('de-DE')} / ${cComp.toLocaleString('de-DE')} — ` +
+          `Geschichte: ${hGen.toLocaleString('de-DE')} / ${hComp.toLocaleString('de-DE')}`;
+      }catch(_e){
+        const el = document.getElementById('globalCounters');
+        if (el) el.textContent = 'Globale Zähler derzeit nicht verfügbar.';
+      }
+    }
     sel.addEventListener('change', () => load(sel.value));
     search.addEventListener('input', () => render(currentData));
+    if (tsDaysEl) tsDaysEl.addEventListener('change', () => loadTimeseries());
 
     let wordsData = [];
     let metricsMap = {};
@@ -391,6 +533,8 @@
     }
 
     // initial
+    loadGlobalCounters();
+    loadTimeseries();
     load(sel.value);
   </script>
 </body>

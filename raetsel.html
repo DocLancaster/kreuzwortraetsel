@@ -843,7 +843,7 @@ fetch(`/${BASE_WORDS_FILE}`)
             fetch('/api/appearance', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ puzzle: puzzleType, ids: uniqueIds, words: uniqueWords })
+              body: JSON.stringify({ puzzle: puzzleType, ids: uniqueIds, words: uniqueWords, gameStart: true })
             }).catch(() => {});
             fetch('/api/cooldown-set', {
               method: 'POST',

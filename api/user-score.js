@@ -1,5 +1,3 @@
-
-
 // api/user-score.js
 // Returns per-user aggregated stats and recent scores
 // Request: POST { userId }
@@ -9,6 +7,110 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   try {
+    // --- global counters branch ---
+    const isGlobal = !!(req.body && req.body.global === true);
+    if (isGlobal) {
+      const base = process.env.UPSTASH_REDIS_REST_URL;
+      const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+      if (!base || !token) return res.status(500).json({ error: 'missing redis env vars' });
+
+      const keys = [
+        'games:generated',
+        'games:completed',
+        'games:generated:classic',
+        'games:completed:classic',
+        'games:generated:history',
+        'games:completed:history'
+      ];
+      const mgetUrl = `${base}/mget/${keys.map(encodeURIComponent).join('/')}`;
+      const r = await fetch(mgetUrl, { headers: { Authorization: `Bearer ${token}` } });
+      if (!r.ok) {
+        const details = await r.text().catch(() => '');
+        return res.status(500).json({ error: 'redis error (mget)', details });
+      }
+      const payload = await r.json();
+      const arr = Array.isArray(payload) ? payload : payload.result;
+
+      const g = (i) => toPosInt(arr?.[i], 0);
+
+      // Optional timeseries for admin mini-charts
+      const wantsTs = !!(req.body && req.body.timeseries === true);
+      if (wantsTs) {
+        const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+        const days = clamp(toPosInt(req.body && req.body.days, 7), 1, 30);
+        // Build last N UTC dates as YYYY-MM-DD (matches key format used when writing)
+        const dayStrings = [];
+        {
+          const start = new Date();
+          start.setUTCHours(0,0,0,0);
+          for (let i = days - 1; i >= 0; i--) {
+            const d = new Date(start);
+            d.setUTCDate(start.getUTCDate() - i);
+            dayStrings.push(d.toISOString().slice(0,10));
+          }
+        }
+        // Helper to mget an array of keys and coerce to ints
+        async function mgetSeries(keys){
+          if (!keys.length) return [];
+          const url = `${base}/mget/${keys.map(encodeURIComponent).join('/')}`;
+          const r2 = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+          if (!r2.ok) {
+            const details = await r2.text().catch(()=>'');
+            throw new Error(`redis error (mget ts): ${details}`);
+          }
+          const payload2 = await r2.json();
+          const arr2 = Array.isArray(payload2) ? payload2 : payload2.result;
+          return (arr2 || []).map(v => toPosInt(v, 0));
+        }
+        // Keys per series
+        const genAllKeys     = dayStrings.map(d => `games:generated:${d}`);
+        const genClassicKeys = dayStrings.map(d => `games:generated:classic:${d}`);
+        const genHistoryKeys = dayStrings.map(d => `games:generated:history:${d}`);
+        const compAllKeys     = dayStrings.map(d => `games:completed:${d}`);
+        const compClassicKeys = dayStrings.map(d => `games:completed:classic:${d}`);
+        const compHistoryKeys = dayStrings.map(d => `games:completed:history:${d}`);
+        // Fetch in parallel (6 mget calls)
+        const [
+          genAll, genClassic, genHistory,
+          compAll, compClassic, compHistory
+        ] = await Promise.all([
+          mgetSeries(genAllKeys),
+          mgetSeries(genClassicKeys),
+          mgetSeries(genHistoryKeys),
+          mgetSeries(compAllKeys),
+          mgetSeries(compClassicKeys),
+          mgetSeries(compHistoryKeys)
+        ]);
+        return res.status(200).json({
+          ok: true,
+          global: {
+            generated: g(0),
+            completed: g(1),
+            byPuzzle: {
+              classic: { generated: g(2), completed: g(3) },
+              history: { generated: g(4), completed: g(5) }
+            }
+          },
+          timeseries: {
+            days: dayStrings,
+            generated: { total: genAll, classic: genClassic, history: genHistory },
+            completed: { total: compAll, classic: compClassic, history: compHistory }
+          }
+        });
+      }
+
+      return res.status(200).json({
+        ok: true,
+        global: {
+          generated: g(0),
+          completed: g(1),
+          byPuzzle: {
+            classic: { generated: g(2), completed: g(3) },
+            history: { generated: g(4), completed: g(5) }
+          }
+        }
+      });
+    }
     const { userId } = req.body || {};
     if (!userId) return res.status(400).json({ error: 'userId required' });
 

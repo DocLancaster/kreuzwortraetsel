@@ -132,6 +132,15 @@ export default async function handler(req, res) {
       }
     }
 
+    // Global completed-games counters (overall + per-puzzle namespace)
+    tasks.push(post(`${base}/incr/${encodeURIComponent('games:completed')}`));
+    tasks.push(post(`${base}/incr/${encodeURIComponent(`games:completed:${puzzle}`)}`));
+    // Day-based counters for mini-charts (YYYY-MM-DD from completedAt in UTC)
+    try {
+      const day = new Date(completedAt).toISOString().slice(0,10);
+      tasks.push(post(`${base}/incr/${encodeURIComponent(`games:completed:${day}`)}`));
+      tasks.push(post(`${base}/incr/${encodeURIComponent(`games:completed:${puzzle}:${day}`)}`));
+    } catch(_e) { /* non-fatal */ }
     const results = await Promise.all(tasks);
     const bad = results.find(r => !r.ok);
     if (bad) {
