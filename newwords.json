@@ -1,0 +1,3098 @@
+[
+  {
+    "word": "AKROBAT",
+    "clue": "Künstler, der akrobatische Kunststücke vorführt."
+  },
+  {
+    "word": "FREGATTE",
+    "clue": "Schnelles Kriegsschiff mittlerer Größe."
+  },
+  {
+    "word": "KARNEVAL",
+    "clue": "Fest mit Verkleidungen und Umzügen vor der Fastenzeit."
+  },
+  {
+    "word": "OBELISK",
+    "clue": "Hoher, vierkantiger Pfeiler mit pyramidenförmiger Spitze."
+  },
+  {
+    "word": "GEPARD",
+    "clue": "Schnellstes Landtier der Welt."
+  },
+  {
+    "word": "KIOSK",
+    "clue": "Kleiner Verkaufsstand für Zeitungen, Getränke oder Snacks."
+  },
+  {
+    "word": "MANDOLINE",
+    "clue": "Zupfinstrument mit acht Saiten."
+  },
+  {
+    "word": "OPERNHAUS",
+    "clue": "Bühnengebäude für Musiktheater."
+  },
+  {
+    "word": "TRUEMMER",
+    "clue": "Reste zerstörter Bauwerke."
+  },
+  {
+    "word": "PARKETT",
+    "clue": "Holzbodenbelag aus einzelnen Stäben."
+  },
+  {
+    "word": "ANAGRAMM",
+    "clue": "Wort, dessen Buchstaben zu einem neuen Wort umgestellt werden."
+  },
+  {
+    "word": "MANGROVE",
+    "clue": "Tropische Küstenpflanze mit Stelzwurzeln."
+  },
+  {
+    "word": "FAKIR",
+    "clue": "Asket, der auf einem Nagelbrett liegen kann."
+  },
+  {
+    "word": "TITAN",
+    "clue": "Sehr starker oder mächtiger Mensch."
+  },
+  {
+    "word": "YETI",
+    "clue": "Sagenhaftes Wesen aus dem Himalaya."
+  },
+  {
+    "word": "MUMIE",
+    "clue": "Konservierter Leichnam aus alter Zeit."
+  },
+  {
+    "word": "ZEPPELIN",
+    "clue": "Lenkbares Luftschiff mit Gerüstbauweise."
+  },
+  {
+    "word": "BASTION",
+    "clue": "Vorspringender Teil einer Festungsmauer."
+  },
+  {
+    "word": "ALIBI",
+    "clue": "Beweis, zur Tatzeit nicht am Tatort gewesen zu sein."
+  },
+  {
+    "word": "SAFARI",
+    "clue": "Reise zur Tierbeobachtung in Afrika."
+  },
+  {
+    "word": "ABTEI",
+    "clue": "Kloster, das von einem Abt oder einer Äbtissin geleitet wird."
+  },
+  {
+    "word": "AGAVE",
+    "clue": "Pflanze, aus deren Saft Tequila hergestellt werden kann."
+  },
+  {
+    "word": "AMULETT",
+    "clue": "Schmuckstück, dem eine schützende Wirkung zugeschrieben wird."
+  },
+  {
+    "word": "ANKER",
+    "clue": "Metallgerät zum Festmachen eines Schiffs."
+  },
+  {
+    "word": "APRIKOSE",
+    "clue": "Süßliche orangefarbene Frucht."
+  },
+  {
+    "word": "ARCHIV",
+    "clue": "Sammlung von Dokumenten oder Urkunden."
+  },
+  {
+    "word": "ARENA",
+    "clue": "Veranstaltungsort für Sport- oder Kulturereignisse."
+  },
+  {
+    "word": "ASTROLABIUM",
+    "clue": "Historisches astronomisches Messinstrument."
+  },
+  {
+    "word": "ATLAS",
+    "clue": "Sammlung von Landkarten in Buchform."
+  },
+  {
+    "word": "AUGE",
+    "clue": "Sinnesorgan des Sehens."
+  },
+  {
+    "word": "BAHNHOF",
+    "clue": "Anlage zum Ein- und Aussteigen bei Zügen."
+  },
+  {
+    "word": "BALLETT",
+    "clue": "Bühnentanzform mit strenger Technik."
+  },
+  {
+    "word": "BALKON",
+    "clue": "Plattform an der Außenseite eines Gebäudes."
+  },
+  {
+    "word": "BANDIT",
+    "clue": "Bewaffneter Räuber."
+  },
+  {
+    "word": "BANNER",
+    "clue": "Lange Fahne oder Werbefläche."
+  },
+  {
+    "word": "BASILIKA",
+    "clue": "Kirchengebäude mit besonderem Rang."
+  },
+  {
+    "word": "BASALT",
+    "clue": "Dunkles vulkanisches Gestein."
+  },
+  {
+    "word": "BAUCHLADEN",
+    "clue": "Tragbarer Verkaufsstand vor dem Körper."
+  },
+  {
+    "word": "BAYONETT",
+    "clue": "Klingenwaffe, die auf ein Gewehr aufgesetzt wird."
+  },
+  {
+    "word": "BERGWERK",
+    "clue": "Anlage zur Förderung von Bodenschätzen."
+  },
+  {
+    "word": "BIRKE",
+    "clue": "Baum mit weißer Rinde."
+  },
+  {
+    "word": "BLITZ",
+    "clue": "Plötzliche elektrische Entladung in der Atmosphäre."
+  },
+  {
+    "word": "BLOCKADE",
+    "clue": "Absperrung eines Gebietes."
+  },
+  {
+    "word": "BOGEN",
+    "clue": "Gebogene Linie oder Schusswaffe für Pfeile."
+  },
+  {
+    "word": "BOOTSMANN",
+    "clue": "Verantwortlicher Seemann an Deck."
+  },
+  {
+    "word": "BOTANIK",
+    "clue": "Wissenschaft von den Pflanzen."
+  },
+  {
+    "word": "BRIGADE",
+    "clue": "Militärische Einheit."
+  },
+  {
+    "word": "BRUNNEN",
+    "clue": "Anlage zur Wasserentnahme aus dem Boden."
+  },
+  {
+    "word": "BUEHNE",
+    "clue": "Erhöhter Ort für künstlerische Darbietungen."
+  },
+  {
+    "word": "BULLE",
+    "clue": "Amtliches Schreiben des Papstes."
+  },
+  {
+    "word": "BUNKER",
+    "clue": "Schutzraum aus Beton."
+  },
+  {
+    "word": "CABRIO",
+    "clue": "Auto mit faltbarem Dach."
+  },
+  {
+    "word": "CAMPUS",
+    "clue": "Gelände einer Universität."
+  },
+  {
+    "word": "CHALET",
+    "clue": "Alpines Holzhaus mit weitem Dach."
+  },
+  {
+    "word": "CHARTA",
+    "clue": "Urkunde oder Grundsatzdokument."
+  },
+  {
+    "word": "CHORAL",
+    "clue": "Kirchenlied in feierlichem Stil."
+  },
+  {
+    "word": "COBRA",
+    "clue": "Giftnatter mit breitem Halskragen."
+  },
+  {
+    "word": "CORDOBA",
+    "clue": "Stadt in Spanien mit berühmter Moschee."
+  },
+  {
+    "word": "DALAI",
+    "clue": "Titel des geistlichen Oberhaupts der Tibeter."
+  },
+  {
+    "word": "DAMAST",
+    "clue": "Gemusterter Stoff mit glänzender Oberfläche."
+  },
+  {
+    "word": "DEICHLAND",
+    "clue": "Land, das durch Deiche geschützt wird."
+  },
+  {
+    "word": "DELTA",
+    "clue": "Flussmündung mit verzweigtem Lauf."
+  },
+  {
+    "word": "DIKTAT",
+    "clue": "Vorgabe, die genau befolgt werden muss."
+  },
+  {
+    "word": "DISKUS",
+    "clue": "Runde Wurfscheibe in der Leichtathletik."
+  },
+  {
+    "word": "DOMINO",
+    "clue": "Spiel mit rechteckigen Steinen."
+  },
+  {
+    "word": "ELDORADO",
+    "clue": "Mythisches Land aus Gold."
+  },
+  {
+    "word": "DRACHE",
+    "clue": "Fabelwesen mit Flügeln und Feueratem."
+  },
+  {
+    "word": "DROMEDAR",
+    "clue": "Kamelart mit einem Höcker."
+  },
+  {
+    "word": "DUKAT",
+    "clue": "Historische Goldmünze."
+  },
+  {
+    "word": "ECHO",
+    "clue": "Schallreflexion, die zurückkehrt."
+  },
+  {
+    "word": "EDIKT",
+    "clue": "Öffentliche Bekanntmachung einer Obrigkeit."
+  },
+  {
+    "word": "EISBERG",
+    "clue": "Großer treibender Block aus Süßwassereis."
+  },
+  {
+    "word": "EISZEIT",
+    "clue": "Kaltzeit mit ausgedehnter Vergletscherung."
+  },
+  {
+    "word": "ELSTER",
+    "clue": "Schwarz-weißer Singvogel mit langem Schwanz."
+  },
+  {
+    "word": "EMBLEM",
+    "clue": "Symbol mit festgelegter Bedeutung."
+  },
+  {
+    "word": "ENDEMIK",
+    "clue": "Nur in einem bestimmten Gebiet vorkommend."
+  },
+  {
+    "word": "ENZYKLOPAEDIE",
+    "clue": "Umfassendes Nachschlagewerk."
+  },
+  {
+    "word": "ERKER",
+    "clue": "Vorspringender Gebäudeteil mit Fenstern."
+  },
+  {
+    "word": "ESKORTE",
+    "clue": "Begleitschutz für Personen oder Fahrzeuge."
+  },
+  {
+    "word": "AESTUAR",
+    "clue": "Trichterförmige Flussmündung."
+  },
+  {
+    "word": "ETUI",
+    "clue": "Kleines Behältnis für Schmuck oder Brillen."
+  },
+  {
+    "word": "EXLIBRIS",
+    "clue": "Besitzvermerk in Büchern."
+  },
+  {
+    "word": "FABEL",
+    "clue": "Erzählung mit Tieren als handelnde Figuren."
+  },
+  {
+    "word": "FALKE",
+    "clue": "Greifvogel mit spitzen Flügeln."
+  },
+  {
+    "word": "FANFARE",
+    "clue": "Kurzes, festliches Blasinstrumentalstück."
+  },
+  {
+    "word": "FAUSTKEIL",
+    "clue": "Steinzeitliches Werkzeug."
+  },
+  {
+    "word": "FELSE",
+    "clue": "Großer, freistehender Gesteinsblock."
+  },
+  {
+    "word": "FELSEN",
+    "clue": "Große Gesteinsformation."
+  },
+  {
+    "word": "FERNGLAS",
+    "clue": "Gerät zur optischen Vergrößerung entfernter Objekte."
+  },
+  {
+    "word": "FJORD",
+    "clue": "Schmale, tief eingeschnittene Meeresbucht."
+  },
+  {
+    "word": "FLAGGE",
+    "clue": "Tuch mit Farben und Symbolen eines Landes."
+  },
+  {
+    "word": "FLAMME",
+    "clue": "Leuchtender Teil eines Feuers."
+  },
+  {
+    "word": "FLIESSBAND",
+    "clue": "Förderanlage zur Serienproduktion."
+  },
+  {
+    "word": "FREGATTE",
+    "clue": "Schnelles Kriegsschiff mittlerer Größe."
+  },
+  {
+    "word": "FRESKO",
+    "clue": "Wandmalerei auf frischem Putz."
+  },
+  {
+    "word": "FUHRWERK",
+    "clue": "Mechanismus zum Heben und Bewegen von Lasten."
+  },
+  {
+    "word": "FUEHRUNG",
+    "clue": "Leitung oder Anleitung einer Gruppe."
+  },
+  {
+    "word": "GALERIE",
+    "clue": "Ausstellungsraum für Kunstwerke."
+  },
+  {
+    "word": "GARNISON",
+    "clue": "Militärstandort."
+  },
+  {
+    "word": "GAULEITER",
+    "clue": "Leiter eines Verwaltungsbezirks in der NS-Zeit."
+  },
+  {
+    "word": "GAZELLE",
+    "clue": "Schnelles, zierliches Steppentier."
+  },
+  {
+    "word": "GENESE",
+    "clue": "Entstehung oder Entwicklung."
+  },
+  {
+    "word": "GEPARD",
+    "clue": "Schnellstes Landtier der Welt."
+  },
+  {
+    "word": "GERMANIST",
+    "clue": "Fachmann für deutsche Sprache und Literatur."
+  },
+  {
+    "word": "GITTER",
+    "clue": "Gitterförmige Struktur zur Absicherung."
+  },
+  {
+    "word": "GIPFEL",
+    "clue": "Höchster Punkt eines Berges."
+  },
+  {
+    "word": "GLASUR",
+    "clue": "Dünne Überzugs­schicht auf Keramik oder Gebäck."
+  },
+  {
+    "word": "GLAUBEN",
+    "clue": "Fester Überzeugungszustand ohne zwingenden Beweis."
+  },
+  {
+    "word": "GLOCKE",
+    "clue": "Hohlkörper, der beim Anschlagen einen Ton erzeugt."
+  },
+  {
+    "word": "GNOM",
+    "clue": "Fabelwesen, oft kleinwüchsig und unterirdisch lebend."
+  },
+  {
+    "word": "GRABMAL",
+    "clue": "Errichtetes Denkmal für Verstorbene."
+  },
+  {
+    "word": "GRAFIK",
+    "clue": "Darstellung durch Linien, Punkte oder Flächen."
+  },
+  {
+    "word": "GRANIT",
+    "clue": "Hartes magmatisches Gestein."
+  },
+  {
+    "word": "GRIFFE",
+    "clue": "Vorrichtungen zum Festhalten oder Bedienen."
+  },
+  {
+    "word": "GRUENDER",
+    "clue": "Person, die ein Unternehmen ins Leben ruft."
+  },
+  {
+    "word": "GRUFT",
+    "clue": "Unterirdische Grabstätte."
+  },
+  {
+    "word": "GUMMI",
+    "clue": "Elastisches Material aus Natur- oder Synthesekautschuk."
+  },
+  {
+    "word": "GUSTO",
+    "clue": "Individueller Geschmack oder Vorliebe."
+  },
+  {
+    "word": "HAENGEMATTE",
+    "clue": "Schaukelndes Liegetuch zum Ausruhen."
+  },
+  {
+    "word": "HAFEN",
+    "clue": "Anlage zum Anlegen von Schiffen."
+  },
+  {
+    "word": "HAHN",
+    "clue": "Männliches Haushuhn."
+  },
+  {
+    "word": "HALDE",
+    "clue": "Aufgeschütteter Hügel aus Abraum."
+  },
+  {
+    "word": "HALM",
+    "clue": "Stängel einer Pflanze."
+  },
+  {
+    "word": "HALSBAND",
+    "clue": "Schmuck oder Riemen um den Hals."
+  },
+  {
+    "word": "HANDSCHUH",
+    "clue": "Kleidung für die Hände."
+  },
+  {
+    "word": "HANGAR",
+    "clue": "Gebäude zur Unterbringung von Luftfahrzeugen."
+  },
+  {
+    "word": "HANDEL",
+    "clue": "Austausch von Waren oder Dienstleistungen."
+  },
+  {
+    "word": "HARFE",
+    "clue": "Zupfinstrument mit vielen Saiten."
+  },
+  {
+    "word": "HARN",
+    "clue": "Flüssiges Ausscheidungsprodukt der Nieren."
+  },
+  {
+    "word": "HASE",
+    "clue": "Schnelles Säugetier mit langen Ohren."
+  },
+  {
+    "word": "HASPEL",
+    "clue": "Gerät zum Auf- und Abwickeln von Seilen oder Kabeln."
+  },
+  {
+    "word": "HEILIGTUM",
+    "clue": "Ort von besonderer religiöser Bedeutung."
+  },
+  {
+    "word": "HELM",
+    "clue": "Schutz für den Kopf."
+  },
+  {
+    "word": "HERING",
+    "clue": "Fischart, oft gesalzen oder eingelegt."
+  },
+  {
+    "word": "HEROLD",
+    "clue": "Amtsperson für Bekanntmachungen im Mittelalter."
+  },
+  {
+    "word": "HERZOG",
+    "clue": "Adelstitel zwischen Fürst und Graf."
+  },
+  {
+    "word": "HINDU",
+    "clue": "Anhänger des Hinduismus."
+  },
+  {
+    "word": "HITZE",
+    "clue": "Hohe Temperatur."
+  },
+  {
+    "word": "HOBEL",
+    "clue": "Werkzeug zum Glätten von Holz."
+  },
+  {
+    "word": "HOF",
+    "clue": "Offene Fläche innerhalb eines Gebäudekomplexes."
+  },
+  {
+    "word": "HOLZ",
+    "clue": "Fester pflanzlicher Werkstoff aus Bäumen."
+  },
+  {
+    "word": "HONIG",
+    "clue": "Süße Substanz aus Nektar, von Bienen erzeugt."
+  },
+  {
+    "word": "HORIZONT",
+    "clue": "Linie, an der Himmel und Erde scheinbar aufeinandertreffen."
+  },
+  {
+    "word": "HORST",
+    "clue": "Großes Nest von Greifvögeln."
+  },
+  {
+    "word": "HOSE",
+    "clue": "Kleidungsstück für die Beine."
+  },
+  {
+    "word": "HUEGEL",
+    "clue": "Erhebung in der Landschaft geringer Höhe."
+  },
+  {
+    "word": "HUETER",
+    "clue": "Wächter oder Beschützer."
+  },
+  {
+    "word": "HUFEISEN",
+    "clue": "Metallbeschlag für Pferdehufe."
+  },
+  {
+    "word": "HUELLE",
+    "clue": "Schützende Abdeckung."
+  },
+  {
+    "word": "HUMOR",
+    "clue": "Fähigkeit, über Dinge lachen zu können."
+  },
+  {
+    "word": "HYDRA",
+    "clue": "Mehrköpfiges Ungeheuer aus der griechischen Mythologie."
+  },
+  {
+    "word": "HYMNE",
+    "clue": "Lobgesang."
+  },
+  {
+    "word": "IDYLLE",
+    "clue": "Friedliche, harmonische Szene."
+  },
+  {
+    "word": "IKONE",
+    "clue": "Verehrtes Bild einer heiligen Person."
+  },
+  {
+    "word": "IMKER",
+    "clue": "Person, die Bienen hält."
+  },
+  {
+    "word": "IMPULS",
+    "clue": "Anstoß zu einer Handlung."
+  },
+  {
+    "word": "INSEL",
+    "clue": "Vom Wasser umgebenes Landstück."
+  },
+  {
+    "word": "INTRIGE",
+    "clue": "Heimliche Machenschaft."
+  },
+  {
+    "word": "IRIS",
+    "clue": "Gefärbter Teil des Auges."
+  },
+  {
+    "word": "ISOLIERUNG",
+    "clue": "Abschirmung gegen Wärme, Kälte oder Schall."
+  },
+  {
+    "word": "JAGD",
+    "clue": "Aufsuchen und Erlegen von Wild."
+  },
+  {
+    "word": "JASPIS",
+    "clue": "Bunte Quarzvarietät."
+  },
+  {
+    "word": "JAUSEN",
+    "clue": "Österreichischer Ausdruck für eine Brotzeit."
+  },
+  {
+    "word": "JEDER",
+    "clue": "Bezeichnung für alle Mitglieder einer Gruppe."
+  },
+  {
+    "word": "JEKAMI",
+    "clue": "Schweizer Ausdruck für eine offene Veranstaltung."
+  },
+  {
+    "word": "JEMEN",
+    "clue": "Staat auf der Arabischen Halbinsel."
+  },
+  {
+    "word": "JERSEY",
+    "clue": "Strickstoff oder britische Kanalinsel."
+  },
+  {
+    "word": "JOCH",
+    "clue": "Holzgestell zum Anspannen von Zugtieren."
+  },
+  {
+    "word": "JOKER",
+    "clue": "Spielkarte mit besonderer Funktion."
+  },
+  {
+    "word": "JOLLE",
+    "clue": "Kleines Segel- oder Ruderboot."
+  },
+  {
+    "word": "JUBILAEUM",
+    "clue": "Feierlicher Jahrestag."
+  },
+  {
+    "word": "JUWEL",
+    "clue": "Kostbarer Edelstein."
+  },
+  {
+    "word": "KABEL",
+    "clue": "Strang aus isolierten Leitungen."
+  },
+  {
+    "word": "KABINE",
+    "clue": "Abgetrennter Raum in einem Fahrzeug oder Schiff."
+  },
+  {
+    "word": "KACHEL",
+    "clue": "Fliese aus Keramik."
+  },
+  {
+    "word": "KAISER",
+    "clue": "Monarch höchster Würde."
+  },
+  {
+    "word": "KALENDER",
+    "clue": "System zur Einteilung des Jahres."
+  },
+  {
+    "word": "KALK",
+    "clue": "Weißes Mineral aus Calciumcarbonat."
+  },
+  {
+    "word": "KAMERA",
+    "clue": "Gerät zur Aufnahme von Bildern."
+  },
+  {
+    "word": "KANU",
+    "clue": "Schmales, leichtes Boot."
+  },
+  {
+    "word": "KANZEL",
+    "clue": "Erhöhter Platz für Predigten in einer Kirche."
+  },
+  {
+    "word": "KAPELLE",
+    "clue": "Kleine Kirche oder Musikgruppe."
+  },
+  {
+    "word": "KARAFFE",
+    "clue": "Bauchige Glasflasche für Getränke."
+  },
+  {
+    "word": "KARAT",
+    "clue": "Maßeinheit für Edelsteingewicht."
+  },
+  {
+    "word": "KARRE",
+    "clue": "Einfache zweirädrige Transportvorrichtung."
+  },
+  {
+    "word": "KASTELL",
+    "clue": "Römisches Militärlager."
+  },
+  {
+    "word": "KATAMARAN",
+    "clue": "Boot mit zwei parallelen Rümpfen."
+  },
+  {
+    "word": "KATHEDRALE",
+    "clue": "Große, bedeutende Kirche, oft Sitz eines Bischofs."
+  },
+  {
+    "word": "KATZE",
+    "clue": "Haus- oder Wildtier mit weichem Fell und scharfen Krallen."
+  },
+  {
+    "word": "KAUFHAUS",
+    "clue": "Großes Geschäft mit verschiedenen Abteilungen."
+  },
+  {
+    "word": "KEGEL",
+    "clue": "Geometrische Form mit kreisförmiger Grundfläche."
+  },
+  {
+    "word": "KEHRBLECH",
+    "clue": "Flaches Blech zum Aufnehmen von Schmutz."
+  },
+  {
+    "word": "KEIM",
+    "clue": "Beginnendes Stadium einer Pflanze."
+  },
+  {
+    "word": "KELCH",
+    "clue": "Pokalartiges Trinkgefäß."
+  },
+  {
+    "word": "KELLER",
+    "clue": "Unterirdischer Raum in einem Gebäude."
+  },
+  {
+    "word": "KERKER",
+    "clue": "Gefängnisraum."
+  },
+  {
+    "word": "KERZE",
+    "clue": "Lichtquelle aus Wachs mit Docht."
+  },
+  {
+    "word": "KESSEL",
+    "clue": "Großes Koch- oder Heizgefäß."
+  },
+  {
+    "word": "KETTE",
+    "clue": "Aneinandergefügte Glieder aus Metall oder anderem Material."
+  },
+  {
+    "word": "KIEL",
+    "clue": "Längsträger am Boden eines Schiffsrumpfs."
+  },
+  {
+    "word": "KIEPE",
+    "clue": "Großer Tragkorb für den Rücken."
+  },
+  {
+    "word": "KIESEL",
+    "clue": "Kleiner, glatter Stein."
+  },
+  {
+    "word": "KINO",
+    "clue": "Ort zur Vorführung von Filmen."
+  },
+  {
+    "word": "KISTE",
+    "clue": "Behältnis aus Holz oder Kunststoff."
+  },
+  {
+    "word": "KLAUE",
+    "clue": "Krallenartiges Körperteil mancher Tiere."
+  },
+  {
+    "word": "KLAVIER",
+    "clue": "Tasteninstrument mit Saiten."
+  },
+  {
+    "word": "KLEID",
+    "clue": "Einteiliges Kleidungsstück für den Körper."
+  },
+  {
+    "word": "KLETTERER",
+    "clue": "Person, die Felswände oder Bäume erklimmt."
+  },
+  {
+    "word": "KLINIK",
+    "clue": "Einrichtung zur medizinischen Behandlung."
+  },
+  {
+    "word": "KLOSTER",
+    "clue": "Gebäude, in dem Ordensmitglieder leben."
+  },
+  {
+    "word": "KNALL",
+    "clue": "Kurzes, lautes Geräusch."
+  },
+  {
+    "word": "KNIE",
+    "clue": "Gelenk zwischen Ober- und Unterschenkel."
+  },
+  {
+    "word": "KNOPF",
+    "clue": "Kleiner Verschluss oder Schalter."
+  },
+  {
+    "word": "KOBOLD",
+    "clue": "Sagenhaftes, oft schelmisches Wesen."
+  },
+  {
+    "word": "KOENIG",
+    "clue": "Monarch eines Königreichs."
+  },
+  {
+    "word": "KOFFER",
+    "clue": "Transportbehälter für Kleidung und Gepäck."
+  },
+  {
+    "word": "KOGGE",
+    "clue": "Mittelalterliches Handelsschiff."
+  },
+  {
+    "word": "KOHLE",
+    "clue": "Brennstoff aus organischem Material."
+  },
+  {
+    "word": "KOMIKER",
+    "clue": "Person, die andere zum Lachen bringt."
+  },
+  {
+    "word": "KOMMANDO",
+    "clue": "Befehl oder militärische Einheit."
+  },
+  {
+    "word": "KOMPASS",
+    "clue": "Gerät zur Bestimmung der Himmelsrichtung."
+  },
+  {
+    "word": "KONZERT",
+    "clue": "Öffentliche Musikaufführung."
+  },
+  {
+    "word": "KORB",
+    "clue": "Geflecht zum Transport oder zur Aufbewahrung."
+  },
+  {
+    "word": "KORALLE",
+    "clue": "Meerestier, das Riffe bildet."
+  },
+  {
+    "word": "KOSTUEM",
+    "clue": "Verkleidung oder Bühnenkleidung."
+  },
+  {
+    "word": "KRAFT",
+    "clue": "Physikalische Einwirkung auf einen Körper."
+  },
+  {
+    "word": "KRALLE",
+    "clue": "Gekrümmtes Hornteil bei Tieren."
+  },
+  {
+    "word": "KRAN",
+    "clue": "Maschine zum Heben schwerer Lasten."
+  },
+  {
+    "word": "KRATER",
+    "clue": "Vertiefung auf der Erdoberfläche, oft vulkanisch."
+  },
+  {
+    "word": "KREIDE",
+    "clue": "Weiches, weißes Schreibmaterial."
+  },
+  {
+    "word": "KREUZ",
+    "clue": "Symbol mit sich kreuzenden Linien."
+  },
+  {
+    "word": "KRIEG",
+    "clue": "Bewaffneter Konflikt zwischen Staaten."
+  },
+  {
+    "word": "KROKODIL",
+    "clue": "Großes Reptil mit kräftigem Kiefer."
+  },
+  {
+    "word": "KRONE",
+    "clue": "Kopfschmuck eines Monarchen."
+  },
+  {
+    "word": "KRUEMEL",
+    "clue": "Kleines Stück von Gebäck oder Brot."
+  },
+  {
+    "word": "KUENSTLER",
+    "clue": "Person, die in einer Kunst tätig ist."
+  },
+  {
+    "word": "KUESTE",
+    "clue": "Grenzbereich zwischen Land und Meer."
+  },
+  {
+    "word": "KUH",
+    "clue": "Weibliches Rind."
+  },
+  {
+    "word": "KULISSE",
+    "clue": "Bühnenhintergrund im Theater."
+  },
+  {
+    "word": "KULTUR",
+    "clue": "Gesamtheit der geistigen und künstlerischen Ausdrucksformen."
+  },
+  {
+    "word": "KUNDE",
+    "clue": "Person, die Waren oder Dienstleistungen kauft."
+  },
+  {
+    "word": "KUPFER",
+    "clue": "Rotes, gut leitfähiges Metall."
+  },
+  {
+    "word": "KURIER",
+    "clue": "Bote für eilige Sendungen."
+  },
+  {
+    "word": "KURORT",
+    "clue": "Ort mit Heilquellen oder besonderem Klima."
+  },
+  {
+    "word": "KURVE",
+    "clue": "Bogenförmiger Verlauf einer Linie."
+  },
+  {
+    "word": "KURZWORT",
+    "clue": "Abgekürzte Form eines längeren Wortes."
+  },
+  {
+    "word": "LADEN",
+    "clue": "Geschäft für den Verkauf von Waren."
+  },
+  {
+    "word": "LAGER",
+    "clue": "Ort zur Aufbewahrung von Vorräten."
+  },
+  {
+    "word": "LAMPE",
+    "clue": "Gerät zur Erzeugung von Licht."
+  },
+  {
+    "word": "LANDEBAHN",
+    "clue": "Fläche zum Starten und Landen von Flugzeugen."
+  },
+  {
+    "word": "LANGBOGEN",
+    "clue": "Historische Bogenwaffe mit großer Reichweite."
+  },
+  {
+    "word": "LANGUSTE",
+    "clue": "Krebstier mit langen Fühlern."
+  },
+  {
+    "word": "LATERNE",
+    "clue": "Tragbare Lichtquelle."
+  },
+  {
+    "word": "LAUB",
+    "clue": "Gesamtheit der Blätter eines Baumes."
+  },
+  {
+    "word": "LAUNE",
+    "clue": "Vorübergehende Gemütsverfassung."
+  },
+  {
+    "word": "LAUTSPRECHER",
+    "clue": "Gerät zur Wiedergabe von Ton."
+  },
+  {
+    "word": "LAVA",
+    "clue": "Geschmolzenes Gestein aus einem Vulkan."
+  },
+  {
+    "word": "LEHRE",
+    "clue": "Vermittlung von Wissen oder Fähigkeiten."
+  },
+  {
+    "word": "LEIM",
+    "clue": "Klebstoff aus natürlichen oder synthetischen Stoffen."
+  },
+  {
+    "word": "LEITER",
+    "clue": "Gerät zum Hinaufsteigen."
+  },
+  {
+    "word": "LEO",
+    "clue": "Männlicher Vorname und lateinisch für 'Löwe'."
+  },
+  {
+    "word": "LEUCHTTURM",
+    "clue": "Turm mit starkem Licht zur Schifffahrtsführung."
+  },
+  {
+    "word": "LICHT",
+    "clue": "Für das Auge sichtbarer Teil der Strahlung."
+  },
+  {
+    "word": "LIDO",
+    "clue": "Strandbad, besonders in Italien."
+  },
+  {
+    "word": "LIMONADE",
+    "clue": "Erfrischungsgetränk mit Zitronen- oder anderen Aromen."
+  },
+  {
+    "word": "LINSE",
+    "clue": "Durchsichtiges optisches Bauelement."
+  },
+  {
+    "word": "LOB",
+    "clue": "Anerkennende Äußerung."
+  },
+  {
+    "word": "LOCHE",
+    "clue": "Öffnung in einer Fläche."
+  },
+  {
+    "word": "LOGE",
+    "clue": "Abgetrennter Zuschauerbereich im Theater."
+  },
+  {
+    "word": "LOKOMOTIVE",
+    "clue": "Fahrzeug zum Ziehen von Eisenbahnwagen."
+  },
+  {
+    "word": "LOTUS",
+    "clue": "Wasserpflanze mit auffälligen Blüten."
+  },
+  {
+    "word": "LUFTSCHIFF",
+    "clue": "Lenkbares, leichter-als-Luft-Fahrzeug."
+  },
+  {
+    "word": "LUFTWAFFE",
+    "clue": "Militärischer Teil für Luftoperationen."
+  },
+  {
+    "word": "LUNGE",
+    "clue": "Atmungsorgan bei Wirbeltieren."
+  },
+  {
+    "word": "LUXUS",
+    "clue": "Großer materieller oder finanzieller Aufwand."
+  },
+  {
+    "word": "LYRA",
+    "clue": "Saiteninstrument der Antike."
+  },
+  {
+    "word": "MACHER",
+    "clue": "Tatkräftige Person."
+  },
+  {
+    "word": "MACHETE",
+    "clue": "Breite, schwere Schneidwaffe."
+  },
+  {
+    "word": "MAGIER",
+    "clue": "Person, die Zauberkunst ausübt."
+  },
+  {
+    "word": "MAGMA",
+    "clue": "Geschmolzenes Gestein unter der Erdoberfläche."
+  },
+  {
+    "word": "MAHL",
+    "clue": "Zubereitete Speise."
+  },
+  {
+    "word": "MAHNUNG",
+    "clue": "Schriftliche Aufforderung zur Erfüllung einer Verpflichtung."
+  },
+  {
+    "word": "MAKEL",
+    "clue": "Kleiner Fehler oder Mangel."
+  },
+  {
+    "word": "MAKRO",
+    "clue": "Vergrößerungsaufnahme in der Fotografie."
+  },
+  {
+    "word": "MALARIA",
+    "clue": "Tropische Infektionskrankheit, übertragen durch Mücken."
+  },
+  {
+    "word": "MALER",
+    "clue": "Person, die Bilder malt oder Wände streicht."
+  },
+  {
+    "word": "MALZ",
+    "clue": "Keimendes und getrocknetes Getreide für Bierherstellung."
+  },
+  {
+    "word": "MAMMUT",
+    "clue": "Ausgestorbenes, pelztragendes Rüsseltier der Eiszeit."
+  },
+  {
+    "word": "MANDAT",
+    "clue": "Offizielle Vertretung oder Befugnis."
+  },
+  {
+    "word": "MANEGE",
+    "clue": "Vorführplatz im Zirkus."
+  },
+  {
+    "word": "MANNSCHAFT",
+    "clue": "Gruppe von Spielern oder Mitwirkenden."
+  },
+  {
+    "word": "MANTEL",
+    "clue": "Ärmelloses oder langes Kleidungsstück zum Überziehen."
+  },
+  {
+    "word": "MARMOR",
+    "clue": "Polierfähiger Naturstein aus Kalk."
+  },
+  {
+    "word": "MARZIPAN",
+    "clue": "Süßware aus Mandeln und Zucker."
+  },
+  {
+    "word": "MASCHINE",
+    "clue": "Gerät zur Ausführung mechanischer Arbeit."
+  },
+  {
+    "word": "MASKE",
+    "clue": "Gesichtsverkleidung aus verschiedenen Materialien."
+  },
+  {
+    "word": "MASSEUR",
+    "clue": "Fachkraft für therapeutische Massagen."
+  },
+  {
+    "word": "MAST",
+    "clue": "Senkrechter Träger, z. B. für Segel oder Antennen."
+  },
+  {
+    "word": "MAUER",
+    "clue": "Wand aus Stein oder Ziegeln."
+  },
+  {
+    "word": "MAUL",
+    "clue": "Mundöffnung bei Tieren."
+  },
+  {
+    "word": "MAULTIER",
+    "clue": "Kreuzung aus Pferd und Esel."
+  },
+  {
+    "word": "MAUS",
+    "clue": "Kleines Nagetier oder Computerzeigegerät."
+  },
+  {
+    "word": "MEDAILLE",
+    "clue": "Metallplakette als Auszeichnung."
+  },
+  {
+    "word": "MEDIEN",
+    "clue": "Kommunikationsmittel zur Informationsverbreitung."
+  },
+  {
+    "word": "MEDIKAMENT",
+    "clue": "Arzneimittel zur Behandlung von Krankheiten."
+  },
+  {
+    "word": "MEER",
+    "clue": "Große Ansammlung von Salzwasser."
+  },
+  {
+    "word": "MEERKATZE",
+    "clue": "Afrikanischer Affe mit markantem Fellmuster."
+  },
+  {
+    "word": "MEHRSCHIFF",
+    "clue": "Kirchenbau mit mehreren parallelen Schiffen."
+  },
+  {
+    "word": "MEILE",
+    "clue": "Längeneinheit mit variabler Definition."
+  },
+  {
+    "word": "MEINUNG",
+    "clue": "Individuelle Ansicht oder Auffassung."
+  },
+  {
+    "word": "MEISE",
+    "clue": "Kleine Singvogelart."
+  },
+  {
+    "word": "MELONE",
+    "clue": "Frucht mit harter Schale und süßem Fruchtfleisch."
+  },
+  {
+    "word": "MEMBRAN",
+    "clue": "Dünne, flexible Trennschicht."
+  },
+  {
+    "word": "MENHIR",
+    "clue": "Aufgerichteter prähistorischer Stein."
+  },
+  {
+    "word": "MENSCH",
+    "clue": "Lebewesen der Gattung Homo sapiens."
+  },
+  {
+    "word": "MENTOR",
+    "clue": "Erfahrener Ratgeber."
+  },
+  {
+    "word": "MERKUR",
+    "clue": "Innerster Planet des Sonnensystems."
+  },
+  {
+    "word": "METHAN",
+    "clue": "Farb- und geruchloses Gas, Hauptbestandteil von Erdgas."
+  },
+  {
+    "word": "METRO",
+    "clue": "Untergrundbahn in Großstädten."
+  },
+  {
+    "word": "METZGER",
+    "clue": "Person, die Fleischwaren herstellt und verkauft."
+  },
+  {
+    "word": "MICHEL",
+    "clue": "Spitzname für den typischen Deutschen."
+  },
+  {
+    "word": "MILCH",
+    "clue": "Nahrungsflüssigkeit von Säugetieren."
+  },
+  {
+    "word": "MILIZ",
+    "clue": "Bürgerwehr oder nichtprofessionelles Militär."
+  },
+  {
+    "word": "MINARETT",
+    "clue": "Turm einer Moschee."
+  },
+  {
+    "word": "MINERAL",
+    "clue": "Natürlich vorkommender, anorganischer Feststoff."
+  },
+  {
+    "word": "MINIATUR",
+    "clue": "Sehr kleine Nachbildung eines Objekts."
+  },
+  {
+    "word": "MINISTER",
+    "clue": "Leitender Politiker in einer Regierung."
+  },
+  {
+    "word": "MINUTE",
+    "clue": "Zeiteinheit mit 60 Sekunden."
+  },
+  {
+    "word": "MIRAGE",
+    "clue": "Luftspiegelung in heißen Regionen."
+  },
+  {
+    "word": "MISCHUNG",
+    "clue": "Zusammenfügung mehrerer Stoffe."
+  },
+  {
+    "word": "MISSION",
+    "clue": "Auftrag mit besonderem Ziel."
+  },
+  {
+    "word": "MITTELMEER",
+    "clue": "Binnenmeer zwischen Europa, Afrika und Asien."
+  },
+  {
+    "word": "MITTELPUNKT",
+    "clue": "Zentraler Punkt eines Kreises oder einer Figur."
+  },
+  {
+    "word": "MITTWOCH",
+    "clue": "Dritter Wochentag nach internationaler Zählung."
+  },
+  {
+    "word": "MOEWE",
+    "clue": "Küstenvogel mit langen Flügeln."
+  },
+  {
+    "word": "MOHN",
+    "clue": "Pflanze mit auffälligen Blüten und ölhaltigen Samen."
+  },
+  {
+    "word": "MOLE",
+    "clue": "Schutzbauwerk im Hafen."
+  },
+  {
+    "word": "MONARCH",
+    "clue": "Herrscher eines Königreichs."
+  },
+  {
+    "word": "MOND",
+    "clue": "Natürlicher Satellit der Erde."
+  },
+  {
+    "word": "MONITOR",
+    "clue": "Bildschirm zur Darstellung von Inhalten."
+  },
+  {
+    "word": "MONOKEL",
+    "clue": "Einzelnes Brillenglas ohne Gestell."
+  },
+  {
+    "word": "MONOPOL",
+    "clue": "Alleinige Kontrolle über ein Gut oder eine Dienstleistung."
+  },
+  {
+    "word": "MONSTER",
+    "clue": "Fabelwesen oder unheimliche Kreatur."
+  },
+  {
+    "word": "MONTUR",
+    "clue": "Uniform oder Arbeitskleidung."
+  },
+  {
+    "word": "MOPED",
+    "clue": "Leichtes motorisiertes Zweirad."
+  },
+  {
+    "word": "MORAL",
+    "clue": "Gesamtheit von ethischen Grundsätzen."
+  },
+  {
+    "word": "MORGEN",
+    "clue": "Tageszeit nach dem Sonnenaufgang."
+  },
+  {
+    "word": "MOSAIC",
+    "clue": "Bild aus vielen kleinen farbigen Steinen oder Glasstücken."
+  },
+  {
+    "word": "MOSCHEE",
+    "clue": "Islamisches Gotteshaus."
+  },
+  {
+    "word": "MOSKAU",
+    "clue": "Hauptstadt Russlands."
+  },
+  {
+    "word": "MOTIV",
+    "clue": "Darstellung oder Thema in Kunst oder Fotografie."
+  },
+  {
+    "word": "MOTOR",
+    "clue": "Maschine zur Umwandlung von Energie in Bewegung."
+  },
+  {
+    "word": "MOTTE",
+    "clue": "Kleiner Schmetterling, der Textilien befällt."
+  },
+  {
+    "word": "MUEHLE",
+    "clue": "Gebäude oder Maschine zum Mahlen von Getreide."
+  },
+  {
+    "word": "MUENZE",
+    "clue": "Geprägtes Metallgeld."
+  },
+  {
+    "word": "MULTIKOPTER",
+    "clue": "Luftfahrzeug mit mehreren Rotoren."
+  },
+  {
+    "word": "MUMIE",
+    "clue": "Konservierter Leichnam aus alter Zeit."
+  },
+  {
+    "word": "MUND",
+    "clue": "Öffnung des Gesichts zum Sprechen und Essen."
+  },
+  {
+    "word": "MUNITION",
+    "clue": "Projektile und Ladungen für Schusswaffen."
+  },
+  {
+    "word": "MURMEL",
+    "clue": "Kleine Glaskugel zum Spielen."
+  },
+  {
+    "word": "MUSCHEL",
+    "clue": "Weichtier mit harter Schale."
+  },
+  {
+    "word": "MUSEUM",
+    "clue": "Gebäude zur Ausstellung von Kunst oder Geschichte."
+  },
+  {
+    "word": "MUSIK",
+    "clue": "Kunstform aus Klängen und Rhythmen."
+  },
+  {
+    "word": "MUSKEL",
+    "clue": "Körpergewebe zur Bewegungserzeugung."
+  },
+  {
+    "word": "MUSTER",
+    "clue": "Wiederkehrende Anordnung von Formen oder Farben."
+  },
+  {
+    "word": "NACHT",
+    "clue": "Dunkle Tageszeit zwischen Abend und Morgen."
+  },
+  {
+    "word": "NACKEN",
+    "clue": "Hinterer Teil des Halses."
+  },
+  {
+    "word": "NADIR",
+    "clue": "Gegenpunkt zum Zenit am Himmel."
+  },
+  {
+    "word": "NAGEL",
+    "clue": "Dünner Metallstift zum Befestigen."
+  },
+  {
+    "word": "NAHRUNG",
+    "clue": "Alles, was der Ernährung dient."
+  },
+  {
+    "word": "NAHT",
+    "clue": "Verbindungslinie beim Nähen."
+  },
+  {
+    "word": "NADEL",
+    "clue": "Feines Werkzeug zum Durchziehen von Fäden." 
+  },
+  {
+    "word": "NARWAL",
+    "clue": "Wal mit langem, spiraligem Stoßzahn."
+  },
+  {
+    "word": "NARZISSMUS",
+    "clue": "Übermäßige Selbstliebe."
+  },
+  {
+    "word": "NAESSE",
+    "clue": "Feuchter Zustand einer Oberfläche."
+  },
+  {
+    "word": "NATRIUM",
+    "clue": "Chemisches Element mit dem Symbol Na."
+  },
+  {
+    "word": "NAUTILUS",
+    "clue": "Meerestier mit kammernder Schale."
+  },
+  {
+    "word": "NAVIGATION",
+    "clue": "Bestimmung und Verfolgung eines Kurses."
+  },
+  {
+    "word": "NEBEL",
+    "clue": "Bodennahes Wolkenfeld mit geringer Sicht."
+  },
+  {
+    "word": "NEKTAR",
+    "clue": "Zuckerhaltige Flüssigkeit von Blüten."
+  },
+  {
+    "word": "NERV",
+    "clue": "Leitung für Reize im Körper."
+  },
+  {
+    "word": "NETZ",
+    "clue": "Geflecht aus Fäden oder Leitungen."
+  },
+  {
+    "word": "NEUGIER",
+    "clue": "Starkes Interesse an Neuem."
+  },
+  {
+    "word": "NEUNECK",
+    "clue": "Polygon mit neun Seiten."
+  },
+  {
+    "word": "NEUTRON",
+    "clue": "Extrem leichtes, elektrisch neutrales Elementarteilchen."
+  },
+  {
+    "word": "NEVADA",
+    "clue": "US-Bundesstaat mit großen Wüstengebieten."
+  },
+  {
+    "word": "NICKEL",
+    "clue": "Silbrig-weißes Metall."
+  },
+  {
+    "word": "NIESEl",
+    "clue": "Sehr feiner Regen."
+  },
+  {
+    "word": "NIETE",
+    "clue": "Metallstift zur dauerhaften Verbindung."
+  },
+  {
+    "word": "NIL",
+    "clue": "Langer Fluss in Afrika."
+  },
+  {
+    "word": "NIMBUS",
+    "clue": "Heiligenschein in der Kunst."
+  },
+  {
+    "word": "NIOB",
+    "clue": "Chemisches Element, Symbol Nb."
+  },
+  {
+    "word": "NIZZA",
+    "clue": "Stadt an der Côte d’Azur."
+  },
+  {
+    "word": "NORDEN",
+    "clue": "Himmelsrichtung nach oben auf Karten."
+  },
+  {
+    "word": "NORDPOL",
+    "clue": "Nördlichster Punkt der Erde."
+  },
+  {
+    "word": "NORM",
+    "clue": "Allgemein gültige Regel."
+  },
+  {
+    "word": "NOTAR",
+    "clue": "Urkundsperson für Beglaubigungen."
+  },
+  {
+    "word": "NOTFALL",
+    "clue": "Situation, die sofortiges Handeln erfordert."
+  },
+  {
+    "word": "NOTIZ",
+    "clue": "Kurze schriftliche Notierung."
+  },
+  {
+    "word": "NOVELLE",
+    "clue": "Kürzere Erzählform der Literatur."
+  },
+  {
+    "word": "NUANCE",
+    "clue": "Feiner Abstufungsunterschied."
+  },
+  {
+    "word": "NUDEL",
+    "clue": "Getrocknete Teigware."
+  },
+  {
+    "word": "NUGGET",
+    "clue": "Natürliches Gold- oder Metallstück."
+  },
+  {
+    "word": "NULPUNKT",
+    "clue": "Ausgangspunkt einer Skala."
+  },
+  {
+    "word": "NUSS",
+    "clue": "Hartschalige Frucht mit Samen."
+  },
+  {
+    "word": "NYLON",
+    "clue": "Synthetische Faser aus Polyamid."
+  },
+  {
+    "word": "OASE",
+    "clue": "Fruchtbarer Ort in einer Wüste."
+  },
+  {
+    "word": "OBELISK",
+    "clue": "Hoher Pfeiler mit pyramidenförmiger Spitze."
+  },
+  {
+    "word": "OBERHAND",
+    "clue": "Vorteilhafte Position in einer Auseinandersetzung."
+  },
+  {
+    "word": "OBERLIPPE",
+    "clue": "Teil des Mundes oberhalb der Zähne."
+  },
+  {
+    "word": "OBJEKTIV",
+    "clue": "Linsensystem einer Kamera."
+  },
+  {
+    "word": "OBLATE",
+    "clue": "Dünnes Gebäck oder Hostie."
+  },
+  {
+    "word": "OBSIDIAN",
+    "clue": "Schwarzes vulkanisches Glas."
+  },
+  {
+    "word": "OZEAN",
+    "clue": "Sehr großes zusammenhängendes Meer."
+  },
+  {
+    "word": "OCTAVE",
+    "clue": "Intervall über acht Tonstufen."
+  },
+  {
+    "word": "ODYSSEE",
+    "clue": "Lange, abenteuerliche Irrfahrt."
+  },
+  {
+    "word": "OFFIZIER",
+    "clue": "Militärischer Führungsrang."
+  },
+  {
+    "word": "OHRFEIGE",
+    "clue": "Schlag mit der flachen Hand ins Gesicht."
+  },
+  {
+    "word": "OHRRING",
+    "clue": "Schmuckstück am Ohrläppchen."
+  },
+  {
+    "word": "OHRWURM",
+    "clue": "Lied, das man nicht mehr aus dem Kopf bekommt."
+  },
+  {
+    "word": "OKTETT",
+    "clue": "Ensemble aus acht Musikern."
+  },
+  {
+    "word": "OKULAR",
+    "clue": "Augenlinse eines optischen Geräts."
+  },
+  {
+    "word": "OLIV",
+    "clue": "Farbe zwischen Grün und Braun."
+  },
+  {
+    "word": "OLIVEN",
+    "clue": "Früchte des Ölbaums."
+  },
+  {
+    "word": "OLYMP",
+    "clue": "Sitz der Götter in der griechischen Mythologie."
+  },
+  {
+    "word": "OMNIBUS",
+    "clue": "Ältere Bezeichnung für Linienbus."
+  },
+  {
+    "word": "ONKOLOGIE",
+    "clue": "Lehre von Krebserkrankungen."
+  },
+  {
+    "word": "ONOLOGIE",
+    "clue": "Wissenschaft vom Wein."
+  },
+  {
+    "word": "OPER",
+    "clue": "Musiktheater mit Gesang und Orchester."
+  },
+  {
+    "word": "OPFER",
+    "clue": "Person oder Sache, die Schaden erleidet."
+  },
+  {
+    "word": "OPIUM",
+    "clue": "Getrockneter Milchsaft des Schlafmohns."
+  },
+  {
+    "word": "OPTIK",
+    "clue": "Lehre vom Licht und seiner Ausbreitung."
+  },
+  {
+    "word": "ORAKEL",
+    "clue": "Weissagungsstätte der Antike."
+  },
+  {
+    "word": "ORANGE",
+    "clue": "Zitrusfrucht mit orangener Schale."
+  },
+  {
+    "word": "ORBIT",
+    "clue": "Umlaufbahn eines Himmelskörpers."
+  },
+  {
+    "word": "ORDEN",
+    "clue": "Religiöse Gemeinschaft oder Ehrenzeichen."
+  },
+  {
+    "word": "ORDNUNG",
+    "clue": "Systematische Anordnung."
+  },
+  {
+    "word": "ORGEL",
+    "clue": "Tasteninstrument mit Pfeifen."
+  },
+  {
+    "word": "ORIENT",
+    "clue": "Historische Bezeichnung für den Osten."
+  },
+  {
+    "word": "ORIENTERUNG",
+    "clue": "Fähigkeit, die eigene Lage zu bestimmen."
+  },
+  {
+    "word": "ORNAMENT",
+    "clue": "Zierendes Muster oder Motiv."
+  },
+  {
+    "word": "ORNITHOLOGIE",
+    "clue": "Vogelkunde."
+  },
+  {
+    "word": "ORTE",
+    "clue": "Mehrzahl von Stelle, Platz oder Gemeinde."
+  },
+  {
+    "word": "ORTUNG",
+    "clue": "Bestimmung der Position eines Objekts."
+  },
+  {
+    "word": "OSMOSE",
+    "clue": "Halbdurchlässiger Stofftransport in Flüssigkeiten."
+  },
+  {
+    "word": "OSTEN",
+    "clue": "Himmelsrichtung des Sonnenaufgangs."
+  },
+  {
+    "word": "OSTSEE",
+    "clue": "Binnenmeer in Nordeuropa."
+  },
+  {
+    "word": "OTTER",
+    "clue": "Fischfressendes Säugetier mit dichtem Fell."
+  },
+  {
+    "word": "OVAL",
+    "clue": "Eiförmige, längliche Form."
+  },
+  {
+    "word": "OVATION",
+    "clue": "Lang anhaltender Applaus."
+  },
+  {
+    "word": "OXIDATION",
+    "clue": "Verbindung eines Elements mit Sauerstoff."
+  },
+  {
+    "word": "OZEAN",
+    "clue": "Sehr großes Weltmeer."
+  },
+  {
+    "word": "PAKT",
+    "clue": "Verbindliche Abmachung zwischen Parteien."
+  },
+  {
+    "word": "PALAST",
+    "clue": "Prunkvolles Wohngebäude für Herrscher."
+  },
+  {
+    "word": "PALETTE",
+    "clue": "Farbmischbrett oder Sortiment."
+  },
+  {
+    "word": "PANDA",
+    "clue": "Bär mit schwarz-weißem Fell."
+  },
+  {
+    "word": "PANIK",
+    "clue": "Plötzliche, unkontrollierte Angst."
+  },
+  {
+    "word": "PANORAMA",
+    "clue": "Rundumsicht über eine Landschaft."
+  },
+  {
+    "word": "PANTER",
+    "clue": "Große Raubkatze, dunkle Farbvariante des Leoparden."
+  },
+  {
+    "word": "PAPYRUS",
+    "clue": "Schreibmaterial aus der Antike."
+  },
+  {
+    "word": "PARADE",
+    "clue": "Feierlicher Aufmarsch."
+  },
+  {
+    "word": "PARADOX",
+    "clue": "Widersprüchliche, aber mögliche Aussage."
+  },
+  {
+    "word": "PARAGRAF",
+    "clue": "Gliederungseinheit in Gesetzen."
+  },
+  {
+    "word": "PARAMETER",
+    "clue": "Bestimmungsgröße in Mathematik und Technik."
+  },
+  {
+    "word": "PARIS",
+    "clue": "Hauptstadt von Frankreich."
+  },
+  {
+    "word": "PARK",
+    "clue": "Grünanlage zur Erholung."
+  },
+  {
+    "word": "PARODIE",
+    "clue": "Humorvolle Nachahmung eines Stils."
+  },
+  {
+    "word": "PARTNER",
+    "clue": "Mitglied einer Zusammenarbeit."
+  },
+  {
+    "word": "PARZELLE",
+    "clue": "Kleines, abgegrenztes Grundstück."
+  },
+  {
+    "word": "PASCH",
+    "clue": "Gleiche Augenzahl auf mehreren Würfeln."
+  },
+  {
+    "word": "PASS",
+    "clue": "Dokument zur Identifikation auf Reisen."
+  },
+  {
+    "word": "PASTELL",
+    "clue": "Weiche Kreidefarbe oder zarte Farbtöne."
+  },
+  {
+    "word": "PATENT",
+    "clue": "Schutzrecht für eine Erfindung."
+  },
+  {
+    "word": "PATHOS",
+    "clue": "Gefühlvolle, pathetische Ausdrucksweise."
+  },
+  {
+    "word": "PATRON",
+    "clue": "Schutzheiliger oder Gönner."
+  },
+  {
+    "word": "PAUKEN",
+    "clue": "Intensiv lernen oder auf Trommeln spielen."
+  },
+  {
+    "word": "PAUSE",
+    "clue": "Unterbrechung zur Erholung."
+  },
+  {
+    "word": "PAVIAN",
+    "clue": "Primat mit markantem Gesicht."
+  },
+  {
+    "word": "PEDAL",
+    "clue": "Fußhebel an Instrumenten oder Maschinen."
+  },
+  {
+    "word": "PEELING",
+    "clue": "Kosmetische Entfernung abgestorbener Hautschuppen."
+  },
+  {
+    "word": "PEITSCHE",
+    "clue": "Flexibles Schlagwerkzeug."
+  },
+  {
+    "word": "PELIKAN",
+    "clue": "Vogel mit großem Kehlsack."
+  },
+  {
+    "word": "PELZ",
+    "clue": "Dichtes Fell von Tieren."
+  },
+  {
+    "word": "PENDEL",
+    "clue": "Schwingendes Gewicht an einer Aufhängung."
+  },
+  {
+    "word": "PENNE",
+    "clue": "Nudelart oder umgangssprachlich Schule."
+  },
+  {
+    "word": "PERGAMENT",
+    "clue": "Dünn bearbeitete Tierhaut als Schreibmaterial."
+  },
+  {
+    "word": "PERGOLA",
+    "clue": "Laubengang aus Holz oder Metall."
+  },
+  {
+    "word": "PERLE",
+    "clue": "Rundes Schmuckstück aus Muscheln."
+  },
+  {
+    "word": "PERSPEKTIVE",
+    "clue": "Tiefenwirkung in der Darstellung."
+  },
+  {
+    "word": "PFAD",
+    "clue": "Schmaler Weg."
+  },
+  {
+    "word": "PFERD",
+    "clue": "Großes Huftier, vom Menschen domestiziert."
+  },
+  {
+    "word": "PFLAUME",
+    "clue": "Steinfrucht mit weichem Fruchtfleisch."
+  },
+  {
+    "word": "PFLICHT",
+    "clue": "Verbindliche Aufgabe oder moralische Verpflichtung."
+  },
+  {
+    "word": "PFLUG",
+    "clue": "Ackergerät zum Aufreißen des Bodens."
+  },
+  {
+    "word": "PFOERTNER",
+    "clue": "Person am Eingang eines Gebäudes."
+  },
+  {
+    "word": "PFUETZE",
+    "clue": "Kleines Wasserbecken nach Regen."
+  },
+  {
+    "word": "PHARAO",
+    "clue": "Titel altägyptischer Herrscher."
+  },
+  {
+    "word": "PHASER",
+    "clue": "Fiktive Strahlenwaffe aus der Science-Fiction."
+  },
+  {
+    "word": "PHILOSOPH",
+    "clue": "Denker, der nach Erkenntnis und Wahrheit strebt."
+  },
+  {
+    "word": "PHOBIE",
+    "clue": "Unangemessene, starke Angst vor bestimmten Situationen."
+  },
+  {
+    "word": "PHOTON",
+    "clue": "Lichtquant in der Physik."
+  },
+  {
+    "word": "PHYSIK",
+    "clue": "Naturwissenschaft von Materie, Raum und Zeit."
+  },
+  {
+    "word": "QUADER",
+    "clue": "Rechteckiger Körper mit sechs Flächen."
+  },
+  {
+    "word": "QUARZ",
+    "clue": "Häufig vorkommendes Mineral aus Siliziumdioxid."
+  },
+  {
+    "word": "QUASTE",
+    "clue": "Zierbündel aus Fäden oder Schnüren."
+  },
+  {
+    "word": "QUELL",
+    "clue": "Ort, an dem Wasser aus dem Boden tritt."
+  },
+  {
+    "word": "QUICHE",
+    "clue": "Herzhafter französischer Kuchen."
+  },
+  {
+    "word": "QUITTUNG",
+    "clue": "Schriftlicher Beleg für eine Zahlung."
+  },
+  {
+    "word": "QUOTE",
+    "clue": "Zahlenmäßiges Verhältnis oder Anteil."
+  },
+  {
+    "word": "RABE",
+    "clue": "Großer schwarzer Singvogel."
+  },
+  {
+    "word": "RADAR",
+    "clue": "Ortungsverfahren mit elektromagnetischen Wellen."
+  },
+  {
+    "word": "RADIO",
+    "clue": "Gerät zum Empfangen von Hörfunksendungen."
+  },
+  {
+    "word": "RAHMEN",
+    "clue": "Umrandung eines Bildes oder Objekts."
+  },
+  {
+    "word": "RAKETE",
+    "clue": "Flugkörper mit eigenem Antrieb."
+  },
+  {
+    "word": "RAMPE",
+    "clue": "Schiefe Ebene zum Überwinden von Höhenunterschieden."
+  },
+  {
+    "word": "RAND",
+    "clue": "Begrenzung einer Fläche oder eines Gegenstandes."
+  },
+  {
+    "word": "RANKEN",
+    "clue": "Lange, dünne Triebe kletternder Pflanzen."
+  },
+  {
+    "word": "RASPEL",
+    "clue": "Werkzeug zum Formen von Holz oder Metall."
+  },
+  {
+    "word": "RATTE",
+    "clue": "Nagetier mit langem Schwanz."
+  },
+  {
+    "word": "RAUPE",
+    "clue": "Larve von Schmetterlingen."
+  },
+  {
+    "word": "RAUSCH",
+    "clue": "Zustand erhöhter Erregung oder Trunkenheit."
+  },
+  {
+    "word": "REBE",
+    "clue": "Weinpflanze mit langen Trieben."
+  },
+  {
+    "word": "RECHTECK",
+    "clue": "Viereck mit vier rechten Winkeln."
+  },
+  {
+    "word": "REGAL",
+    "clue": "Offenes Aufbewahrungsmöbel."
+  },
+  {
+    "word": "REGEN",
+    "clue": "Niederschlag in Form von Wassertropfen."
+  },
+  {
+    "word": "REGENT",
+    "clue": "Herrscher oder Regierungsvertreter."
+  },
+  {
+    "word": "REH",
+    "clue": "Kleines europäisches Wildtier."
+  },
+  {
+    "word": "REIHE",
+    "clue": "Aneinandergeordnete Folge von Dingen."
+  },
+  {
+    "word": "REIM",
+    "clue": "Klangähnlichkeit am Ende von Versen."
+  },
+  {
+    "word": "REISE",
+    "clue": "Fortbewegung von einem Ort zu einem anderen."
+  },
+  {
+    "word": "REIZ",
+    "clue": "Anreiz oder äußerer Einfluss."
+  },
+  {
+    "word": "RENTE",
+    "clue": "Regelmäßige Geldleistung im Ruhestand."
+  },
+  {
+    "word": "RESPEKT",
+    "clue": "Anerkennung und Wertschätzung."
+  },
+  {
+    "word": "REST",
+    "clue": "Übrig gebliebener Teil."
+  },
+  {
+    "word": "REVUE",
+    "clue": "Bühnenshow mit Gesang und Tanz."
+  },
+  {
+    "word": "RHEIN",
+    "clue": "Langer Fluss in Mitteleuropa."
+  },
+  {
+    "word": "RIEGE",
+    "clue": "Gruppe von Personen mit ähnlicher Tätigkeit."
+  },
+  {
+    "word": "RIESE",
+    "clue": "Sehr großer Mensch oder Figur."
+  },
+  {
+    "word": "RING",
+    "clue": "Runde Form oder Schmuckstück."
+  },
+  {
+    "word": "RISIKO",
+    "clue": "Gefahr oder Wagnis."
+  },
+  {
+    "word": "RITTER",
+    "clue": "Mittelalterlicher Krieger."
+  },
+  {
+    "word": "ROBBE",
+    "clue": "Meeressäuger mit Flossen."
+  },
+  {
+    "word": "ROBOTER",
+    "clue": "Automatisch arbeitende Maschine."
+  },
+  {
+    "word": "ROGGEN",
+    "clue": "Getreideart mit dunklem Korn."
+  },
+  {
+    "word": "ROMAN",
+    "clue": "Längere erzählende Prosa."
+  },
+  {
+    "word": "ROSE",
+    "clue": "Blume mit Dornen."
+  },
+  {
+    "word": "ROSINE",
+    "clue": "Getrocknete Weinbeere."
+  },
+  {
+    "word": "ROTOR",
+    "clue": "Drehendes Teil einer Maschine."
+  },
+  {
+    "word": "ROUTE",
+    "clue": "Geplanter Weg zu einem Ziel."
+  },
+  {
+    "word": "RUBIN",
+    "clue": "Roter Edelstein."
+  },
+  {
+    "word": "RUCKSACK",
+    "clue": "Tragetasche für den Rücken."
+  },
+  {
+    "word": "RUHE",
+    "clue": "Zustand ohne Lärm oder Bewegung."
+  },
+  {
+    "word": "RUHM",
+    "clue": "Öffentliche Anerkennung und Ehre."
+  },
+  {
+    "word": "RUMPF",
+    "clue": "Hauptteil eines Schiffes oder Körpers."
+  },
+  {
+    "word": "RUND",
+    "clue": "Kreisförmig."
+  },
+  {
+    "word": "RUNDE",
+    "clue": "Abgeschlossener Durchgang eines Spiels."
+  },
+  {
+    "word": "RUNE",
+    "clue": "Buchstabe der alten germanischen Schrift."
+  },
+  {
+    "word": "RUTE",
+    "clue": "Langer, dünner Stock."
+  },
+  {
+    "word": "SAAL",
+    "clue": "Großer, geschlossener Raum für Veranstaltungen."
+  },
+  {
+    "word": "SACHE",
+    "clue": "Gegenstand oder Angelegenheit."
+  },
+  {
+    "word": "SACK",
+    "clue": "Behältnis aus flexiblem Material."
+  },
+  {
+    "word": "SAEGE",
+    "clue": "Werkzeug zum Schneiden von Holz."
+  },
+  {
+    "word": "SAHNE",
+    "clue": "Fetthaltiger Bestandteil der Milch."
+  },
+  {
+    "word": "SAITE",
+    "clue": "Spannfaden bei Musikinstrumenten."
+  },
+  {
+    "word": "SALAT",
+    "clue": "Gemüsegericht aus Blättern oder anderen Zutaten."
+  },
+  {
+    "word": "SALBE",
+    "clue": "Halbfeste Arzneiform zum Auftragen."
+  },
+  {
+    "word": "SALZ",
+    "clue": "Kristalline Substanz zum Würzen."
+  },
+  {
+    "word": "SAMEN",
+    "clue": "Fortpflanzungseinheit von Pflanzen."
+  },
+  {
+    "word": "SAMMLER",
+    "clue": "Person, die Gegenstände zusammenträgt."
+  },
+  {
+    "word": "SANFT",
+    "clue": "Mild und weich."
+  },
+  {
+    "word": "SANG",
+    "clue": "Poetisches Wort für Gesang."
+  },
+  {
+    "word": "SANITAETER",
+    "clue": "Ersthelfer bei medizinischen Notfällen."
+  },
+  {
+    "word": "SAPHIR",
+    "clue": "Blauer Edelstein."
+  },
+  {
+    "word": "SATELLIT",
+    "clue": "Himmelskörper oder künstlicher Flugkörper in Umlaufbahn."
+  },
+  {
+    "word": "SATIN",
+    "clue": "Glänzender Stoff mit glatter Oberfläche."
+  },
+  {
+    "word": "SATIRE",
+    "clue": "Kunstform, die Missstände humorvoll kritisiert."
+  },
+  {
+    "word": "SAUGER",
+    "clue": "Gerät oder Tier, das Flüssigkeiten aufsaugt."
+  },
+  {
+    "word": "SAUM",
+    "clue": "Genähte Kante eines Stoffes."
+  },
+  {
+    "word": "SAUNA",
+    "clue": "Heißluftbad zur Entspannung."
+  },
+  {
+    "word": "TABELLE",
+    "clue": "Übersichtliche Anordnung von Daten in Zeilen und Spalten."
+  },
+  {
+    "word": "TABU",
+    "clue": "Gesellschaftlich verbotene Handlung oder Äußerung."
+  },
+  {
+    "word": "TAFEL",
+    "clue": "Flache Platte zum Schreiben oder Anbringen von Informationen."
+  },
+  {
+    "word": "TAGUNG",
+    "clue": "Geplantes Treffen von Fachleuten zu einem bestimmten Thema."
+  },
+  {
+    "word": "TAKEL",
+    "clue": "Ausrüstung zum Bedienen der Segel eines Schiffes."
+  },
+  {
+    "word": "TAL",
+    "clue": "Tiefliegendes Gelände zwischen Bergen oder Hügeln."
+  },
+  {
+    "word": "TALER",
+    "clue": "Historische Silbermünze."
+  },
+  {
+    "word": "TALISMAN",
+    "clue": "Gegenstand, dem Glück bringende Kräfte zugeschrieben werden."
+  },
+  {
+    "word": "TANGO",
+    "clue": "Paartanz aus Argentinien."
+  },
+  {
+    "word": "TANK",
+    "clue": "Behälter für Flüssigkeiten oder gepanzertes Militärfahrzeug."
+  },
+  {
+    "word": "TANNE",
+    "clue": "Immergrüner Nadelbaum."
+  },
+  {
+    "word": "TANZ",
+    "clue": "Bewegung im Rhythmus von Musik."
+  },
+  {
+    "word": "TAPETE",
+    "clue": "Wandbekleidung aus Papier oder Textil."
+  },
+  {
+    "word": "TARIF",
+    "clue": "Festgelegter Preis für Waren oder Dienstleistungen."
+  },
+  {
+    "word": "TASCHE",
+    "clue": "Behältnis zum Tragen persönlicher Gegenstände."
+  },
+  {
+    "word": "TASSE",
+    "clue": "Kleines Gefäß zum Trinken."
+  },
+  {
+    "word": "TATZE",
+    "clue": "Pfote eines größeren Tieres."
+  },
+  {
+    "word": "TAUBE",
+    "clue": "Vogel mit kurzem Hals und kleinerem Kopf."
+  },
+  {
+    "word": "TEER",
+    "clue": "Schwarze, zähflüssige Substanz aus Kohle oder Holz."
+  },
+  {
+    "word": "TEICH",
+    "clue": "Kleiner, künstlich angelegter oder natürlicher Wasserspeicher."
+  },
+  {
+    "word": "TEIG",
+    "clue": "Mischung aus Mehl, Wasser und weiteren Zutaten."
+  },
+  {
+    "word": "TELEFON",
+    "clue": "Gerät zur Sprachübertragung über Distanz."
+  },
+  {
+    "word": "TEMPEL",
+    "clue": "Religiöses Gebäude."
+  },
+  {
+    "word": "TENOR",
+    "clue": "Hohe männliche Gesangsstimme."
+  },
+  {
+    "word": "TERMIN",
+    "clue": "Vereinbarter Zeitpunkt für ein Ereignis."
+  },
+  {
+    "word": "TERRASSE",
+    "clue": "Freifläche am Haus zum Sitzen im Freien."
+  },
+  {
+    "word": "TERRITORIUM",
+    "clue": "Abgegrenztes Gebiet."
+  },
+  {
+    "word": "TESLA",
+    "clue": "Maßeinheit für magnetische Flussdichte."
+  },
+  {
+    "word": "TEST",
+    "clue": "Überprüfung von Fähigkeiten oder Eigenschaften."
+  },
+  {
+    "word": "TETRAEDER",
+    "clue": "Körper mit vier dreieckigen Flächen."
+  },
+  {
+    "word": "THEATER",
+    "clue": "Ort für Aufführungen von Schauspiel und Oper."
+  },
+  {
+    "word": "THEMA",
+    "clue": "Inhalt oder Gegenstand einer Diskussion."
+  },
+  {
+    "word": "THERMOMETER",
+    "clue": "Gerät zur Messung der Temperatur."
+  },
+  {
+    "word": "THRON",
+    "clue": "Sitz eines Herrschers."
+  },
+  {
+    "word": "TIGER",
+    "clue": "Große Raubkatze mit gestreiftem Fell."
+  },
+  {
+    "word": "TISCH",
+    "clue": "Möbelstück mit Platte und Beinen."
+  },
+  {
+    "word": "TITEL",
+    "clue": "Bezeichnung oder Überschrift."
+  },
+  {
+    "word": "TOAST",
+    "clue": "Geröstete Brotscheibe."
+  },
+  {
+    "word": "TOCHTER",
+    "clue": "Weibliches Kind in Bezug auf die Eltern."
+  },
+  {
+    "word": "TOD",
+    "clue": "Ende des Lebens."
+  },
+  {
+    "word": "TOKIO",
+    "clue": "Hauptstadt Japans."
+  },
+  {
+    "word": "TON",
+    "clue": "Klang oder Maßeinheit für Masse."
+  },
+  {
+    "word": "TONNE",
+    "clue": "Großes Fass oder Maßeinheit für Masse."
+  },
+  {
+    "word": "TOPF",
+    "clue": "Kochgeschirr mit hohem Rand."
+  },
+  {
+    "word": "TOR",
+    "clue": "Eingang oder Abschlussöffnung."
+  },
+  {
+    "word": "TORTE",
+    "clue": "Aufwendig gestaltetes Kuchenwerk."
+  },
+  {
+    "word": "TOTEM",
+    "clue": "Symboltier oder -objekt einer Gemeinschaft."
+  },
+  {
+    "word": "TRAB",
+    "clue": "Gangart eines Pferdes zwischen Schritt und Galopp."
+  },
+  {
+    "word": "TRAGE",
+    "clue": "Hilfsmittel zum Transport verletzter Personen."
+  },
+  {
+    "word": "TRAUBE",
+    "clue": "Frucht des Weinstocks."
+  },
+  {
+    "word": "TRAUM",
+    "clue": "Erlebnis während des Schlafs."
+  },
+  {
+    "word": "TREPPE",
+    "clue": "Bauteil zum Überwinden von Höhenunterschieden."
+  },
+  {
+    "word": "TRESOR",
+    "clue": "Gesicherter Aufbewahrungsschrank."
+  },
+  {
+    "word": "TRICHTER",
+    "clue": "Gerät zum Einfüllen von Flüssigkeiten oder Pulvern."
+  },
+  {
+    "word": "TRINKER",
+    "clue": "Person, die häufig Alkohol konsumiert."
+  },
+  {
+    "word": "TROPFEN",
+    "clue": "Kleine Menge Flüssigkeit."
+  },
+  {
+    "word": "TROPHAEE",
+    "clue": "Preis für einen sportlichen oder anderen Erfolg."
+  },
+  {
+    "word": "TROST",
+    "clue": "Linderung bei Kummer."
+  },
+  {
+    "word": "TRUPP",
+    "clue": "Kleine Gruppe von Personen."
+  },
+  {
+    "word": "TRUHE",
+    "clue": "Großer Kasten mit Deckel zur Aufbewahrung."
+  },
+  {
+    "word": "TUCH",
+    "clue": "Stück Stoff."
+  },
+  {
+    "word": "TUNNEL",
+    "clue": "Unterirdischer Durchgang."
+  },
+  {
+    "word": "TURM",
+    "clue": "Hohes, schmales Bauwerk."
+  },
+  {
+    "word": "TYP",
+    "clue": "Bestimmte Art oder Person."
+  },
+  {
+    "word": "UEBERGANG",
+    "clue": "Stelle oder Vorgang des Wechsels."
+  },
+  {
+    "word": "UEBERHOLEN",
+    "clue": "An einem anderen vorbeiziehen oder etwas verbessern."
+  },
+  {
+    "word": "UEBERSICHT",
+    "clue": "Zusammenfassende Darstellung."
+  },
+  {
+    "word": "UEBERTRAGUNG",
+    "clue": "Übermittlung von Daten, Bildern oder Sprache."
+  },
+  {
+    "word": "UEBUNG",
+    "clue": "Wiederholte Handlung zum Erlernen einer Fähigkeit."
+  },
+  {
+    "word": "UHREN",
+    "clue": "Geräte zur Anzeige der Zeit."
+  },
+  {
+    "word": "ULME",
+    "clue": "Laubbaum mit gesägten Blättern."
+  },
+  {
+    "word": "UMARMUNG",
+    "clue": "Geste der Zuneigung."
+  },
+  {
+    "word": "UMFRAGE",
+    "clue": "Befragung mehrerer Personen zu einem Thema."
+  },
+  {
+    "word": "UMKREIS",
+    "clue": "Linie, die alle Punkte gleichen Abstands zu einem Mittelpunkt verbindet."
+  },
+  {
+    "word": "UMSCHLAG",
+    "clue": "Hülle für Briefe oder Umschwenken einer Situation."
+  },
+  {
+    "word": "UMZUG",
+    "clue": "Wechsel des Wohnorts oder Festumzug."
+  },
+  {
+    "word": "UNFALL",
+    "clue": "Plötzliches, ungewolltes Ereignis mit Schaden."
+  },
+  {
+    "word": "UNIFORM",
+    "clue": "Einheitliche Kleidung einer Gruppe."
+  },
+  {
+    "word": "UNION",
+    "clue": "Vereinigung mehrerer Staaten oder Gruppen."
+  },
+  {
+    "word": "UNIVERSUM",
+    "clue": "Gesamtheit von Raum, Zeit, Materie und Energie."
+  },
+  {
+    "word": "UNRUHE",
+    "clue": "Zustand innerer oder äußerer Bewegung."
+  },
+  {
+    "word": "UNTERSUCHUNG",
+    "clue": "Prüfung oder Analyse eines Sachverhalts."
+  },
+  {
+    "word": "URAN",
+    "clue": "Radioaktives chemisches Element."
+  },
+  {
+    "word": "URKUNDE",
+    "clue": "Schriftlicher Nachweis einer Tatsache."
+  },
+  {
+    "word": "URNE",
+    "clue": "Gefäß zur Aufbewahrung von Asche."
+  },
+  {
+    "word": "URSACHE",
+    "clue": "Grund für ein Ereignis."
+  },
+  {
+    "word": "VATER",
+    "clue": "Männlicher Elternteil."
+  },
+  {
+    "word": "VENE",
+    "clue": "Blutgefäß, das Blut zum Herzen führt."
+  },
+  {
+    "word": "VENTIL",
+    "clue": "Vorrichtung zur Steuerung des Durchflusses."
+  },
+  {
+    "word": "VERBAND",
+    "clue": "Organisation oder Stoffstreifen zur Wundversorgung."
+  },
+  {
+    "word": "VERBOT",
+    "clue": "Offizielle Untersagung."
+  },
+  {
+    "word": "VERDACHT",
+    "clue": "Annahme einer möglichen Straftat."
+  },
+  {
+    "word": "VERDIENST",
+    "clue": "Einkommen aus Arbeit oder besondere Leistung."
+  },
+  {
+    "word": "VERGABE",
+    "clue": "Zuteilung von Aufgaben oder Preisen."
+  },
+  {
+    "word": "VERHALTEN",
+    "clue": "Handlungsweise einer Person oder eines Tieres."
+  },
+  {
+    "word": "VERKAUF",
+    "clue": "Abgabe von Waren gegen Bezahlung."
+  },
+  {
+    "word": "VERLAG",
+    "clue": "Unternehmen zur Veröffentlichung von Medien."
+  },
+  {
+    "word": "VERLUST",
+    "clue": "Abhandenkommen von etwas."
+  },
+  {
+    "word": "VERMUTUNG",
+    "clue": "Annahme ohne sicheren Beweis."
+  },
+  {
+    "word": "VERS",
+    "clue": "Einzelzeile in einem Gedicht."
+  },
+  {
+    "word": "VERSAMMLUNG",
+    "clue": "Zusammenkunft von Personen."
+  },
+  {
+    "word": "VERSICHERUNG",
+    "clue": "Absicherung gegen Risiken."
+  },
+  {
+    "word": "VERSORGUNG",
+    "clue": "Bereitstellung notwendiger Güter."
+  },
+  {
+    "word": "VERSUCH",
+    "clue": "Prüfende Handlung."
+  },
+  {
+    "word": "VERTRAG",
+    "clue": "Rechtlich bindende Vereinbarung."
+  },
+  {
+    "word": "VERTRETUNG",
+    "clue": "Übernahme von Aufgaben für eine andere Person."
+  },
+  {
+    "word": "VERWALTUNG",
+    "clue": "Organisation und Leitung von Aufgaben."
+  },
+  {
+    "word": "WAAGE",
+    "clue": "Gerät zum Messen von Gewicht."
+  },
+  {
+    "word": "WABE",
+    "clue": "Sechseckige Zelle im Bienenstock."
+  },
+  {
+    "word": "WACHS",
+    "clue": "Weiche, formbare Substanz, oft von Bienen produziert."
+  },
+  {
+    "word": "WAGEN",
+    "clue": "Fahrzeug mit Rädern."
+  },
+  {
+    "word": "WAHL",
+    "clue": "Abstimmung zur Entscheidung über Personen oder Themen."
+  },
+  {
+    "word": "WALD",
+    "clue": "Großflächige Ansammlung von Bäumen."
+  },
+  {
+    "word": "WALZE",
+    "clue": "Zylinderförmiges Werkzeug zum Glätten von Flächen."
+  },
+  {
+    "word": "WANGE",
+    "clue": "Seitlicher Teil des Gesichts."
+  },
+  {
+    "word": "WANZE",
+    "clue": "Kleines Insekt oder Abhörgerät."
+  },
+  {
+    "word": "WARE",
+    "clue": "Handelsgut oder Produkt."
+  },
+  {
+    "word": "WASSER",
+    "clue": "Lebenswichtige, farblose Flüssigkeit."
+  },
+  {
+    "word": "WATTE",
+    "clue": "Weiches Material aus Baumwolle oder Synthetik."
+  },
+  {
+    "word": "WEBER",
+    "clue": "Handwerker, der Stoffe herstellt."
+  },
+  {
+    "word": "WEBERIN",
+    "clue": "Weibliche Person, die Stoffe herstellt."
+  },
+  {
+    "word": "WEDEL",
+    "clue": "Langer Blattteil einer Palme oder Farnpflanze."
+  },
+  {
+    "word": "WEG",
+    "clue": "Befestigte oder natürliche Verbindung zwischen Orten."
+  },
+  {
+    "word": "WEICHE",
+    "clue": "Schienenverbindung zur Richtungsänderung von Zügen."
+  },
+  {
+    "word": "WEIDE",
+    "clue": "Futterfläche für Tiere oder bestimmter Baum."
+  },
+  {
+    "word": "WEIHEN",
+    "clue": "Einem besonderen Zweck oder Gott widmen."
+  },
+  {
+    "word": "WEILE",
+    "clue": "Kurzer Zeitraum."
+  },
+  {
+    "word": "WEIN",
+    "clue": "Alkoholisches Getränk aus Trauben."
+  },
+  {
+    "word": "WEISE",
+    "clue": "Kluger Mensch oder Art und Weise."
+  },
+  {
+    "word": "WEITEN",
+    "clue": "Größer oder weiter machen."
+  },
+  {
+    "word": "WELLE",
+    "clue": "Auf- und Abbewegung von Wasser oder Energie."
+  },
+  {
+    "word": "WELPE",
+    "clue": "Jungtier eines Hundes oder Wolfs."
+  },
+  {
+    "word": "WELT",
+    "clue": "Gesamtheit der Erde und ihrer Bewohner."
+  },
+  {
+    "word": "WERK",
+    "clue": "Arbeitsergebnis oder Fabrik."
+  },
+  {
+    "word": "WERKZEUG",
+    "clue": "Hilfsmittel zur Bearbeitung von Materialien."
+  },
+  {
+    "word": "WERTE",
+    "clue": "Grundlegende Überzeugungen oder Messgrößen."
+  },
+  {
+    "word": "WETTE",
+    "clue": "Abmachung über den Ausgang eines Ereignisses."
+  },
+  {
+    "word": "WETTER",
+    "clue": "Kurzfristiger Zustand der Atmosphäre."
+  },
+  {
+    "word": "WICHT",
+    "clue": "Kleine, meist männliche Sagengestalt."
+  },
+  {
+    "word": "WIDDER",
+    "clue": "Männliches Schaf."
+  },
+  {
+    "word": "WIEGE",
+    "clue": "Bett für Babys oder Wiegevorrichtung."
+  },
+  {
+    "word": "WIESE",
+    "clue": "Grasbewachsene Fläche."
+  },
+  {
+    "word": "WIND",
+    "clue": "Bewegung der Luft."
+  },
+  {
+    "word": "WINTER",
+    "clue": "Kälteste Jahreszeit."
+  },
+  {
+    "word": "WIPPE",
+    "clue": "Spielgerät mit kippbarer Achse."
+  },
+  {
+    "word": "WIRBEL",
+    "clue": "Kreisförmige Bewegung oder Knochen der Wirbelsäule."
+  },
+  {
+    "word": "WITWE",
+    "clue": "Frau, deren Ehepartner verstorben ist."
+  },
+  {
+    "word": "WOCHE",
+    "clue": "Zeitraum von sieben Tagen."
+  },
+  {
+    "word": "WOLKE",
+    "clue": "Kondensierte Wassertröpfchen am Himmel."
+  },
+  {
+    "word": "WOLF",
+    "clue": "Wild lebendes Raubtier aus der Familie der Hunde."
+  },
+  {
+    "word": "WORT",
+    "clue": "Einzelne sprachliche Einheit."
+  },
+  {
+    "word": "WUNSCH",
+    "clue": "Ausdruck eines Begehrens."
+  },
+  {
+    "word": "WURF",
+    "clue": "Bewegung zum Werfen eines Gegenstands."
+  },
+  {
+    "word": "WURZEL",
+    "clue": "Unterirdischer Pflanzenteil zur Nährstoffaufnahme."
+  },
+  {
+    "word": "WUSSTEN",
+    "clue": "Vergangenheitsform von wissen."
+  },
+  {
+    "word": "ZAHL",
+    "clue": "Symbol für eine Menge oder Position."
+  },
+  {
+    "word": "ZAHLUNG",
+    "clue": "Vorgang des Bezahlens."
+  },
+  {
+    "word": "ZANGE",
+    "clue": "Werkzeug zum Greifen oder Schneiden."
+  },
+  {
+    "word": "ZAPFEN",
+    "clue": "Holziger Fruchtstand von Nadelbäumen."
+  },
+  {
+    "word": "ZEBRA",
+    "clue": "Afrikanisches Wildpferd mit Streifenmuster."
+  },
+  {
+    "word": "ZEH",
+    "clue": "Körperteil am Fuß."
+  },
+  {
+    "word": "ZEHN",
+    "clue": "Zahl zwischen neun und elf."
+  },
+  {
+    "word": "ZEICHEN",
+    "clue": "Symbol oder Signal mit Bedeutung."
+  },
+  {
+    "word": "ZEICHNUNG",
+    "clue": "Bild, das mit Stift oder ähnlichem erstellt wurde."
+  },
+  {
+    "word": "ZEILE",
+    "clue": "Horizontale Textreihe."
+  },
+  {
+    "word": "ZEIT",
+    "clue": "Kontinuierlicher Ablauf von Momenten."
+  },
+  {
+    "word": "ZEITUNG",
+    "clue": "Periodisch erscheinendes Druckmedium."
+  },
+  {
+    "word": "ZELT",
+    "clue": "Mobiler Unterschlupf aus Stoff."
+  },
+  {
+    "word": "ZENTRUM",
+    "clue": "Mittelpunkt eines Bereichs."
+  },
+  {
+    "word": "ZEPTER",
+    "clue": "Herrschaftssymbol eines Monarchen."
+  },
+  {
+    "word": "ZETTEL",
+    "clue": "Kleines Stück Papier mit Notiz."
+  },
+  {
+    "word": "ZIEGE",
+    "clue": "Haus- oder Wildtier mit Hörnern."
+  },
+  {
+    "word": "ZIEL",
+    "clue": "Ort oder Zustand, den man erreichen möchte."
+  },
+  {
+    "word": "ZIMMER",
+    "clue": "Raum in einem Gebäude."
+  },
+  {
+    "word": "ZINN",
+    "clue": "Weiches, silberweißes Metall."
+  },
+  {
+    "word": "ZINS",
+    "clue": "Entgelt für geliehenes Geld."
+  },
+  {
+    "word": "ZIRKUS",
+    "clue": "Unterhaltung mit Artisten und Tieren."
+  },
+  {
+    "word": "ZITAT",
+    "clue": "Wörtlich wiedergegebene Aussage."
+  },
+  {
+    "word": "ZITRONE",
+    "clue": "Gelbe Zitrusfrucht."
+  },
+  {
+    "word": "ZOLL",
+    "clue": "Behörde für Grenzkontrollen oder Maßeinheit."
+  },
+  {
+    "word": "ZONE",
+    "clue": "Abgegrenzter Bereich."
+  },
+  {
+    "word": "ZOO",
+    "clue": "Ort zur Haltung und Präsentation von Tieren."
+  },
+  {
+    "word": "ZORN",
+    "clue": "Starker Ärger."
+  },
+  {
+    "word": "ZUG",
+    "clue": "Schienenfahrzeug oder Luftbewegung."
+  },
+  {
+    "word": "ZUCKER",
+    "clue": "Süßungsmittel aus Zuckerrohr oder Zuckerrübe."
+  },
+  {
+    "word": "ZUFALL",
+    "clue": "Ereignis ohne erkennbare Ursache."
+  },
+  {
+    "word": "ZUGANG",
+    "clue": "Möglichkeit, etwas zu betreten oder zu nutzen."
+  },
+  {
+    "word": "ZUKUNFT",
+    "clue": "Zeit, die noch bevorsteht."
+  },
+  {
+    "word": "ZUNGE",
+    "clue": "Bewegliches Muskelorgan im Mund."
+  },
+  {
+    "word": "ZUNFT",
+    "clue": "Historische Vereinigung von Handwerkern."
+  },
+  {
+    "word": "ZUNGE",
+    "clue": "Muskelorgan im Mund, wichtig für Sprache und Geschmack."
+  },
+  {
+    "word": "ZWECK",
+    "clue": "Absicht oder Ziel einer Handlung."
+  },
+  {
+    "word": "ZWEIG",
+    "clue": "Teil eines Baumes oder Strauches."
+  },
+  {
+    "word": "ZWIEBEL",
+    "clue": "Knollenförmiges Gemüse."
+  },
+  {
+    "word": "ZWILLING",
+    "clue": "Eines von zwei gleichzeitig geborenen Geschwistern."
+  }
+]

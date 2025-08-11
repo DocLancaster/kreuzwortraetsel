@@ -1,0 +1,970 @@
+[
+{
+    "word": "EVEREST",
+    "clue": "Höchster Berg der Erde im Himalaya."
+  },
+  {
+    "word": "MARSIANISCHERBERG",
+    "clue": "Olympus Mons ist ein Beispiel für diesen größten Vulkan des Sonnensystems."
+  },
+  {
+    "word": "CHALLENGERTIEF",
+    "clue": "Tiefster bekannter Punkt der Weltmeere."
+  },
+  {
+    "word": "BAIKALSEE",
+    "clue": "Tiefster Süßwassersee der Welt in Sibirien."
+  },
+  {
+    "word": "SAHARA",
+    "clue": "Größte heiße Wüste der Erde."
+  },
+  {
+    "word": "ANTARKTIS",
+    "clue": "Kältester Kontinent der Welt."
+  },
+  {
+    "word": "AMAZONAS",
+    "clue": "Fluss mit dem größten Wasserabfluss der Welt."
+  },
+  {
+    "word": "NIL",
+    "clue": "Einer der längsten Flüsse der Erde, fließt durch mehrere afrikanische Länder."
+  },
+  {
+    "word": "GROSSFUSS",
+    "clue": "Fabelwesen, das angeblich besonders große Spuren hinterlässt."
+  },
+  {
+    "word": "KROKODIL",
+    "clue": "Größtes lebendes Reptil."
+  },
+  {
+    "word": "BLAUWAL",
+    "clue": "Größtes Tier der Welt."
+  },
+  {
+    "word": "STRAUSS",
+    "clue": "Größter lebender Vogel."
+  },
+  {
+    "word": "KOLIBRI",
+    "clue": "Einer der kleinsten Vögel der Welt."
+  },
+  {
+    "word": "REDWOOD",
+    "clue": "Baumart, die zu den höchsten der Welt zählt."
+  },
+  {
+    "word": "MAMMUTBAUM",
+    "clue": "Baumart mit besonders großem Stammvolumen."
+  },
+  {
+    "word": "BURJ",
+    "clue": "Teil des Namens des höchsten Gebäudes der Welt."
+  },
+  {
+    "word": "EIFFELTURM",
+    "clue": "Eines der bekanntesten hohen Bauwerke Europas."
+  },
+  {
+    "word": "CNTOUR",
+    "clue": "Turm in Kanada mit einst höchster Bauwerkstitel."
+  },
+  {
+    "word": "MEGASTADT",
+    "clue": "Stadt mit mehr als 10 Millionen Einwohnern."
+  },
+  {
+    "word": "TOKIO",
+    "clue": "Metropolregion mit der größten Bevölkerung weltweit."
+  },
+  {
+    "word": "SHANGHAI",
+    "clue": "Eine der bevölkerungsreichsten Städte der Welt."
+  },
+  {
+    "word": "VATIKAN",
+    "clue": "Flächenmäßig kleinster Staat der Welt."
+  },
+  {
+    "word": "MONACO",
+    "clue": "Einer der am dichtesten besiedelten Staaten."
+  },
+  {
+    "word": "LUXEMBURG",
+    "clue": "Land mit einem der höchsten Pro-Kopf-Einkommen weltweit."
+  },
+  {
+    "word": "USA",
+    "clue": "Land mit der größten Militärmacht der Welt."
+  },
+  {
+    "word": "CHINA",
+    "clue": "Bevölkerungsreichstes Land der Erde."
+  },
+  {
+    "word": "INDIEN",
+    "clue": "Land mit der zweitgrößten Bevölkerung der Welt."
+  },
+  {
+    "word": "MARIENKAEFER",
+    "clue": "Kleiner Käfer, der als Glücksbringer gilt."
+  },
+  {
+    "word": "FALKE",
+    "clue": "Tier mit der höchsten gemessenen Fluggeschwindigkeit."
+  },
+  {
+    "word": "CHEETAH",
+    "clue": "Schnellstes Landtier."
+  },
+  {
+    "word": "DELFIN",
+    "clue": "Eines der schnellsten Meerestiere."
+  },
+  {
+    "word": "KOMET",
+    "clue": "Himmelskörper mit sehr langen Umlaufbahnen."
+  },
+  {
+    "word": "SONNE",
+    "clue": "Größter Himmelskörper im Sonnensystem."
+  },
+  {
+    "word": "JUPITER",
+    "clue": "Größter Planet im Sonnensystem."
+  },
+  {
+    "word": "SATURNRINGE",
+    "clue": "Auffälligste Planetenschmuckstücke im Sonnensystem."
+  },
+  {
+    "word": "ISS",
+    "clue": "Größtes von Menschen geschaffenes Objekt im Erdorbit."
+  },
+  {
+    "word": "APOLLO",
+    "clue": "Teil des Namens der ersten bemannten Mondmission."
+  },
+  {
+    "word": "SPUTNIK",
+    "clue": "Erster künstlicher Satellit im All."
+  },
+  {
+    "word": "NEANDERTALER",
+    "clue": "Früher Mensch, benannt nach einem Tal in Deutschland."
+  },
+  {
+    "word": "PYRAMIDEN",
+    "clue": "Größte Bauwerke des Alten Ägyptens."
+  },
+  {
+    "word": "MAUER",
+    "clue": "Bauwerk, das Länder oder Städte abgrenzt."
+  },
+  {
+    "word": "PANAMAKANAL",
+    "clue": "Verbindet Atlantik und Pazifik."
+  },
+  {
+    "word": "SUEZKANAL",
+    "clue": "Verbindet Mittelmeer und Rotes Meer."
+  },
+  {
+    "word": "ALPEN",
+    "clue": "Größtes Gebirge Europas."
+  },
+  {
+    "word": "HIMALAYA",
+    "clue": "Gebirgszug mit den höchsten Gipfeln der Erde."
+  },
+  {
+    "word": "URKNALL",
+    "clue": "Theorie zum Ursprung des Universums."
+  },
+  {
+    "word": "GENOM",
+    "clue": "Komplette Erbinformation eines Organismus."
+  },
+  {
+    "word": "MEGABYTE",
+    "clue": "Einheit für Datenmenge, größer als ein Kilobyte."
+  },
+  {
+    "word": "TERABYTE",
+    "clue": "Einheit für Datenmenge, größer als ein Gigabyte."
+  },
+  {
+    "word": "GIGANTOSAURUS",
+    "clue": "Einer der größten bekannten Dinosaurier."
+  },
+  {
+    "word": "TITANIC",
+    "clue": "Eines der größten Passagierschiffe seiner Zeit."
+  },
+  {
+    "word": "QUEENMARY",
+    "clue": "Berühmtes Ozeandampfer-Schiff, das einst Rekorde aufstellte."
+  },
+  {
+    "word": "AIRBUS",
+    "clue": "Hersteller größtes Passagierflugzeug der Welt, Modell aus Europa."
+  },
+  {
+    "word": "CONDOR",
+    "clue": "Vogel mit einer der größten Flügelspannweiten."
+  },
+  {
+    "word": "POLARLICHT",
+    "clue": "Spektakuläres Naturphänomen in hohen Breiten."
+  },
+  {
+    "word": "TORNADO",
+    "clue": "Heftiger Wirbelsturm mit hoher Windgeschwindigkeit."
+  },
+  {
+    "word": "HURRIKAN",
+    "clue": "Tropischer Wirbelsturm mit sehr starker Zerstörungskraft."
+  },
+  {
+    "word": "TSUNAMI",
+    "clue": "Riesige Flutwelle, oft durch Erdbeben ausgelöst."
+  },
+  {
+    "word": "ERDBEBEN",
+    "clue": "Plötzliche Erschütterung der Erdoberfläche."
+  },
+  {
+    "word": "ETNA",
+    "clue": "Einer der aktivsten Vulkane Europas."
+  },
+  {
+    "word": "VESUV",
+    "clue": "Vulkan, bekannt durch den Ausbruch in Pompeji."
+  },
+  {
+    "word": "KRAKATAU",
+    "clue": "Indonesischer Vulkan mit einem der stärksten Ausbrüche der Geschichte."
+  },
+  {
+    "word": "TUNGUSKA",
+    "clue": "Ort einer gewaltigen Explosion in Sibirien 1908."
+  },
+  {
+    "word": "METEORIT",
+    "clue": "Gesteinsbrocken aus dem All, der auf die Erde trifft."
+  },
+  {
+    "word": "KOMETENKRONE",
+    "clue": "Hell leuchtender Teil eines Kometen, sichtbar von der Erde."
+  },
+  {
+    "word": "SCHWARZESLOCH",
+    "clue": "Astronomisches Objekt mit extrem starker Gravitation."
+  },
+  {
+    "word": "NEUTRONENSTERN",
+    "clue": "Sehr dichter Überrest einer Supernova."
+  },
+  {
+    "word": "SUPERNOVA",
+    "clue": "Explosives Ende eines massereichen Sterns."
+  },
+  {
+    "word": "MILCHSTRASSE",
+    "clue": "Galaxie, in der sich unser Sonnensystem befindet."
+  },
+  {
+    "word": "ANDROMEDA",
+    "clue": "Galaxie, die der Milchstraße am nächsten ist."
+  },
+  {
+    "word": "SATURN",
+    "clue": "Planet mit den auffälligsten Ringen im Sonnensystem."
+  },
+  {
+    "word": "NEPTUN",
+    "clue": "Planet mit besonders starken Winden."
+  },
+  {
+    "word": "PLUTO",
+    "clue": "Ehemaliger neunter Planet des Sonnensystems."
+  },
+  {
+    "word": "KZWEI",
+    "clue": "Zweitgrößter Berg der Erde."
+  },
+  {
+    "word": "DENALI",
+    "clue": "Höchster Berg Nordamerikas."
+  },
+  {
+    "word": "ACONCAGUA",
+    "clue": "Höchster Berg Südamerikas."
+  },
+  {
+    "word": "KILIMANDSCHARO",
+    "clue": "Höchster Berg Afrikas."
+  },
+  {
+    "word": "MONTBLANC",
+    "clue": "Höchster Berg der Alpen."
+  },
+  {
+    "word": "ELBRUS",
+    "clue": "Höchster Berg Europas (umstr.)."
+  },
+  {
+    "word": "MONTBLANC",
+    "clue": "Höchster Berg Europas (umstr.)."
+  },
+  {
+    "word": "GROSSGLOCKNER",
+    "clue": "Höchster Berg Österreichs."
+  },
+  {
+    "word": "ZUGSPITZE",
+    "clue": "Höchster Berg Deutschlands."
+  },
+  {
+    "word": "BASECAMP",
+    "clue": "Beliebtes Ziel für Trekking am höchsten Berg der Welt."
+  },
+  {
+    "word": "MARATHON",
+    "clue": "Lauflangstrecke mit olympischer Distanz von 42,195 km."
+  },
+  {
+    "word": "ULTRAMARATHON",
+    "clue": "Laufdistanz, die länger ist als der klassische Marathon."
+  },
+  {
+    "word": "IRONMAN",
+    "clue": "Extrem-Triathlon mit langen Distanzen in Schwimmen, Radfahren und Laufen."
+  },
+  {
+    "word": "FORMELEINS",
+    "clue": "Rennserie mit einigen der schnellsten Autos der Welt."
+  },
+  {
+    "word": "LEMANS",
+    "clue": "Berühmtes Langstrecken-Autorennen in Frankreich."
+  },
+  {
+    "word": "INDYFUENFHUNDERT",
+    "clue": "Bekanntes Autorennen in den USA mit 500 Meilen Distanz."
+  },
+  {
+    "word": "TOURDEFRANCE",
+    "clue": "Berühmtestes Radrennen der Welt."
+  },
+  {
+    "word": "OLYMPIA",
+    "clue": "Wichtigstes sportliches Großereignis der Welt."
+  },
+  {
+    "word": "WELTREKORD",
+    "clue": "Offiziell bestätigte Höchstleistung in einer Disziplin."
+  },
+  {
+    "word": "NOBELPREIS",
+    "clue": "Renommierte internationale Auszeichnung in verschiedenen Kategorien."
+  },
+  {
+    "word": "OSCAR",
+    "clue": "Bekanntester Filmpreis der Welt."
+  },
+  {
+    "word": "GRAMMY",
+    "clue": "Bedeutender Musikpreis in den USA."
+  },
+  {
+    "word": "PULITZER",
+    "clue": "Preis für herausragende journalistische oder literarische Leistungen."
+  },
+  {
+    "word": "BALLON",
+    "clue": "Gefäß, das mit Gas gefüllt schwebt; bei Rekorden oft besonders groß."
+  },
+  {
+    "word": "LUFTSCHIFF",
+    "clue": "Luftfahrzeug, das mit Gas gefüllt schwebt und gesteuert werden kann."
+  },
+  {
+    "word": "SCHACH",
+    "clue": "Brettspiel mit Weltmeisterschaften und berühmten Rekorden."
+  },
+  {
+    "word": "MONOPOLY",
+    "clue": "Brettspiel, das in vielen Sprachen Rekordverkäufe erzielt hat."
+  },
+  {
+    "word": "RUBIKSWUERFEL",
+    "clue": "3D-Puzzle mit Weltrekorden in Schnelligkeit."
+  },
+  {
+    "word": "DOMINO",
+    "clue": "Spielsteine, die in langen Ketten für Rekordversuche aufgestellt werden."
+  },
+  {
+    "word": "PYRAMIDE",
+    "clue": "Bauwerk, das oft als größtes seiner Art in der Antike galt."
+  },
+  {
+    "word": "CHINESISCHEMAUER",
+    "clue": "Längstes von Menschenhand geschaffenes Bauwerk."
+  },
+  {
+    "word": "TAJMAHAL",
+    "clue": "Berühmtes Bauwerk, oft als eines der schönsten bezeichnet."
+  },
+  {
+    "word": "GOLD",
+    "clue": "Edelmetall mit höchstem Wert und Rekordpreisen."
+  },
+  {
+    "word": "DIAMANT",
+    "clue": "Härtester natürlicher Stoff der Erde."
+  },
+  {
+    "word": "PLATIN",
+    "clue": "Seltenes Edelmetall mit hohem Marktwert."
+  },
+  {
+    "word": "URAN",
+    "clue": "Schweres Element mit hoher Energiedichte."
+  },
+  {
+    "word": "WASSERSTOFF",
+    "clue": "Leichtestes chemisches Element."
+  },
+  {
+    "word": "HELIUM",
+    "clue": "Chemisches Element, das leichter ist als die meisten anderen Gase."
+  },
+  {
+    "word": "PFEFFER",
+    "clue": "Gewürz, das einst so wertvoll war wie Gold."
+  },
+  {
+    "word": "CHILI",
+    "clue": "Pflanze, deren Früchte zu den schärfsten gehören."
+  },
+  {
+    "word": "CAROLINAREAPER",
+    "clue": "Sortenname einer der schärfsten Chilis der Welt."
+  },
+  {
+    "word": "KORIANDER",
+    "clue": "Kraut, das in vielen Küchen weltweit verwendet wird."
+  },
+  {
+    "word": "TRUEFFEl",
+    "clue": "Pilz, der zu den teuersten Lebensmitteln zählt."
+  },
+  {
+    "word": "KAVIAR",
+    "clue": "Luxusprodukt aus Fischeiern."
+  },
+  {
+    "word": "HUMMER",
+    "clue": "Meeresbewohner, der als Delikatesse gilt."
+  },
+  {
+    "word": "AUSTER",
+    "clue": "Muschelart, die oft mit Luxus assoziiert wird."
+  },
+  {
+    "word": "LOEWE",
+    "clue": "Große Raubkatze, Symbol für Stärke."
+  },
+  {
+    "word": "ELEFANT",
+    "clue": "Größtes landlebendes Säugetier."
+  },
+  {
+    "word": "NASHORN",
+    "clue": "Großes Säugetier mit charakteristischem Horn."
+  },
+  {
+    "word": "FLAMINGO",
+    "clue": "Vogel mit auffälliger rosa Färbung."
+  },
+  {
+    "word": "PAPAGEI",
+    "clue": "Vogel, der menschliche Sprache imitieren kann."
+  },
+  {
+    "word": "HAI",
+    "clue": "Raubfisch mit mehreren Rekordhaltern in Größe und Geschwindigkeit."
+  },
+  {
+    "word": "ORCA",
+    "clue": "Großes Meeressäugetier, auch Schwertwal genannt."
+  },
+  {
+    "word": "ROCHEN",
+    "clue": "Meerestier mit flachem Körper und langen Flossen."
+  },
+  {
+    "word": "QUALLE",
+    "clue": "Weichtier mit oft rekordverdächtiger Langlebigkeit."
+  },
+  {
+    "word": "SEEANEMONE",
+    "clue": "Meerestier mit tentakelartigen Fortsätzen."
+  },
+  {
+    "word": "KORALLE",
+    "clue": "Kalkbildendes Meerestier, das Riffe bildet."
+  },
+  {
+    "word": "GREATBARRIER",
+    "clue": "Größtes Korallenriff der Erde."
+  },
+  {
+    "word": "SCHNEELEOPARD",
+    "clue": "Seltene Großkatze aus Hochgebirgsregionen."
+  },
+  {
+    "word": "POLARBAER",
+    "clue": "Großes Raubtier der Arktis."
+  },
+  {
+    "word": "PINGUIN",
+    "clue": "Flugunfähiger Vogel aus der Antarktis."
+  },
+  {
+    "word": "KAMEL",
+    "clue": "Tier, das lange ohne Wasser auskommt."
+  },
+  {
+    "word": "ALPAKA",
+    "clue": "Südamerikanisches Tier, bekannt für weiches Fell."
+  },
+  {
+    "word": "LAMA",
+    "clue": "Haustierart aus den Anden."
+  },
+  {
+    "word": "GAZELLE",
+    "clue": "Schnelles, graziles Herdentier."
+  },
+  {
+    "word": "ANTILOPE",
+    "clue": "Horntragendes Tier aus Savannenregionen."
+  },
+  {
+    "word": "ELCH",
+    "clue": "Größtes Mitglied der Hirschfamilie."
+  },
+  {
+    "word": "REH",
+    "clue": "Kleines Mitglied der Hirschfamilie."
+  },
+  {
+    "word": "HIRSCH",
+    "clue": "Säugetier mit Geweih."
+  },
+  {
+    "word": "WAPITI",
+    "clue": "Große Hirschart aus Nordamerika."
+  },
+  {
+    "word": "BISON",
+    "clue": "Großes Wildrind Nordamerikas."
+  },
+  {
+    "word": "YAK",
+    "clue": "Hausrind aus Hochgebirgsregionen."
+  },
+  {
+    "word": "WASSERBUEFFEL",
+    "clue": "Großes Nutztier aus Asien."
+  },
+  {
+    "word": "PETRONASTUERME",
+    "clue": "Zwillingstürme in Malaysia, die lange die höchsten der Welt waren."
+  },
+  {
+    "word": "BURJKHALIFA",
+    "clue": "Derzeit höchstes Gebäude der Welt in Dubai."
+  },
+  {
+    "word": "EMPIRESTATEBUILDING",
+    "clue": "Einst höchstes Gebäude der Welt in New York."
+  },
+  {
+    "word": "EIFFELTURM",
+    "clue": "Wahrzeichen von Paris und ehemals höchstes Bauwerk der Welt."
+  },
+  {
+    "word": "CNTOUR",
+    "clue": "Höchster freistehender Turm Kanadas."
+  },
+  {
+    "word": "TOKIOTURM",
+    "clue": "Fernsehturm in Japan, inspiriert vom Eiffelturm."
+  },
+  {
+    "word": "GROSSERWALL",
+    "clue": "Längstes von Menschenhand geschaffenes Bauwerk."
+  },
+  {
+    "word": "PANAMAKANAL",
+    "clue": "Wichtige Wasserstraße zwischen Atlantik und Pazifik."
+  },
+  {
+    "word": "SUEZKANAL",
+    "clue": "Schifffahrtsweg, der Mittelmeer und Rotmeer verbindet."
+  },
+  {
+    "word": "HOOVERDAMM",
+    "clue": "Bedeutendes Bauwerk zur Stromerzeugung und Wasserregulierung."
+  },
+  {
+    "word": "THREEGORGESDAMM",
+    "clue": "Größtes Wasserkraftwerk der Welt in China."
+  },
+  {
+    "word": "PENTAGON",
+    "clue": "Eines der größten Bürogebäude der Welt."
+  },
+  {
+    "word": "VATICAN",
+    "clue": "Kleinster anerkannter Staat der Welt."
+  },
+  {
+    "word": "MONACO",
+    "clue": "Zweitkleinster Staat der Welt, bekannt für Luxus."
+  },
+  {
+    "word": "RUSSLAND",
+    "clue": "Flächenmäßig größtes Land der Erde."
+  },
+  {
+    "word": "KANADA",
+    "clue": "Zweitgrößtes Land der Welt."
+  },
+  {
+    "word": "CHINA",
+    "clue": "Land mit der höchsten Bevölkerungszahl."
+  },
+  {
+    "word": "INDIEN",
+    "clue": "Land mit der zweitgrößten Bevölkerung der Welt."
+  },
+  {
+    "word": "TOKIO",
+    "clue": "Metropolregion mit der größten Einwohnerzahl weltweit."
+  },
+  {
+    "word": "SHANGHAI",
+    "clue": "Bevölkerungsreichste Stadt Chinas."
+  },
+  {
+    "word": "MUMBAI",
+    "clue": "Eine der größten Städte Indiens."
+  },
+  {
+    "word": "SAOPAULO",
+    "clue": "Größte Stadt Brasiliens."
+  },
+  {
+    "word": "RIODEJANEIRO",
+    "clue": "Berühmte brasilianische Stadt mit dem Zuckerhut."
+  },
+  {
+    "word": "NEWYORK",
+    "clue": "US-Metropole mit weltbekannten Wahrzeichen."
+  },
+  {
+    "word": "LOSANGELES",
+    "clue": "Großstadt in den USA, Zentrum der Filmindustrie."
+  },
+  {
+    "word": "MEXIKOSTADT",
+    "clue": "Bevölkerungsreiche Hauptstadt von Mexiko."
+  },
+  {
+    "word": "KAIRO",
+    "clue": "Hauptstadt Ägyptens, nahe der Pyramiden von Gizeh."
+  },
+  {
+    "word": "KAPSTADT",
+    "clue": "Südafrikanische Stadt am Tafelberg."
+  },
+  {
+    "word": "SYDNEY",
+    "clue": "Australische Metropole mit weltbekannter Oper."
+  },
+  {
+    "word": "MELBOURNE",
+    "clue": "Australische Stadt, oft in Rankings der lebenswertesten Städte."
+  },
+  {
+    "word": "AUCKLAND",
+    "clue": "Größte Stadt Neuseelands."
+  },
+  {
+    "word": "EVEREST",
+    "clue": "Höchster Berg der Erde."
+  },
+  {
+    "word": "MAUNAKEA",
+    "clue": "Berg auf Hawaii, vom Meeresgrund gemessen der höchste der Welt."
+  },
+  {
+    "word": "MARIANENGRABEN",
+    "clue": "Tiefster bekannter Punkt der Weltmeere."
+  },
+  {
+    "word": "HAMBURG",
+    "clue": "Größter Seehafen Deutschlands."
+  },
+  {
+    "word": "ROTESMEER",
+    "clue": "Salzreiches Meer zwischen Afrika und Asien."
+  },
+  {
+    "word": "TOTESMEER",
+    "clue": "Salzreichstes Gewässer der Erde."
+  },
+  {
+    "word": "KASPISCHESMEER",
+    "clue": "Größter Binnensee der Welt."
+  },
+  {
+    "word": "BAIKALSEE",
+    "clue": "Tiefster Süßwassersee der Welt."
+  },
+  {
+    "word": "VICTORIASEE",
+    "clue": "Größter See Afrikas."
+  },
+  {
+    "word": "SUPERIORSEE",
+    "clue": "Größter See Nordamerikas."
+  },
+  {
+    "word": "TITICACASEE",
+    "clue": "Höchster schiffbarer See der Welt."
+  },
+  {
+    "word": "AMAZONAS",
+    "clue": "Wasserreichster Fluss der Erde."
+  },
+  {
+    "word": "NIL",
+    "clue": "Längster Fluss Afrikas."
+  },
+  {
+    "word": "MISSISSIPPI",
+    "clue": "Langer Fluss in den USA."
+  },
+  {
+    "word": "YANGTSE",
+    "clue": "Längster Fluss Asiens."
+  },
+  {
+    "word": "DONAU",
+    "clue": "Langer Fluss, der durch viele europäische Länder fließt."
+  },
+  {
+    "word": "ELBE",
+    "clue": "Fluss, der durch Tschechien und Deutschland fließt."
+  },
+  {
+    "word": "RHEIN",
+    "clue": "Einer der verkehrsreichsten Flüsse Europas."
+  },
+  {
+    "word": "CHINESISCHEMAUER",
+    "clue": "Längstes von Menschen geschaffenes Bauwerk."
+  },
+  {
+    "word": "MOUNTWHITNEY",
+    "clue": "Höchster Berg der zusammenhängenden USA."
+  },
+  {
+    "word": "SAHARA",
+    "clue": "Größte heiße Wüste der Erde."
+  },
+  {
+    "word": "ANTARKTIS",
+    "clue": "Kältester Kontinent der Erde."
+  },
+  {
+    "word": "GOBI",
+    "clue": "Große Kältewüste in Asien."
+  },
+  {
+    "word": "OLYMPUSMONS",
+    "clue": "Größter Vulkan im Sonnensystem, auf dem Mars."
+  },
+  {
+    "word": "GROSSBARRIERERIFF",
+    "clue": "Größtes Korallenriff der Welt."
+  },
+  {
+    "word": "ANGKORWAT",
+    "clue": "Größte religiöse Tempelanlage der Welt."
+  },
+  {
+    "word": "MEKKA",
+    "clue": "Ort der größten jährlichen Pilgerfahrt der Welt."
+  },
+  {
+    "word": "PAPST",
+    "clue": "Amt mit der längsten ununterbrochenen Nachfolge in der Weltgeschichte."
+  },
+  {
+    "word": "METHUSALEM",
+    "clue": "Einer der ältesten bekannten Bäume der Welt."
+  },
+  {
+    "word": "REDWOOD",
+    "clue": "Baumart, die zu den höchsten der Welt gehört."
+  },
+  {
+    "word": "BAOBAB",
+    "clue": "Baum mit besonders dickem Stamm."
+  },
+  {
+    "word": "MURMELTIER",
+    "clue": "Tier, das monatelang Winterschlaf hält."
+  },
+  {
+    "word": "BLAUWAL",
+    "clue": "Größtes Tier, das je auf der Erde lebte."
+  },
+  {
+    "word": "LEDERLAUS",
+    "clue": "Kleinstes bekannte Insekt der Welt."
+  },
+  {
+    "word": "KOLIBRI",
+    "clue": "Kleinster Vogel der Welt."
+  },
+  {
+    "word": "STRAUSS",
+    "clue": "Größter Vogel der Welt."
+  },
+  {
+    "word": "GROENLAND",
+    "clue": "Insel mit der größten Fläche der Welt."
+  },
+  {
+    "word": "KUBA",
+    "clue": "Größte Insel in der Karibik."
+  },
+  {
+    "word": "BORNEO",
+    "clue": "Größte Insel Asiens."
+  },
+  {
+    "word": "SUMATRA",
+    "clue": "Große indonesische Insel mit Regenwald."
+  },
+  {
+    "word": "JAVA",
+    "clue": "Eine der am dichtesten besiedelten Inseln der Welt."
+  },
+  {
+    "word": "ISLAND",
+    "clue": "Land mit besonders aktiven Vulkanen und Geysiren."
+  },
+  {
+    "word": "NAMIB",
+    "clue": "Älteste Wüste der Welt."
+  },
+  {
+    "word": "YELLOWSTONE",
+    "clue": "Erster offiziell anerkannter Nationalpark der Welt."
+  },
+  {
+    "word": "SERENGETI",
+    "clue": "Großes Naturschutzgebiet in Tansania."
+  },
+  {
+    "word": "KRUGERPARK",
+    "clue": "Berühmtester Nationalpark Südafrikas."
+  },
+  {
+    "word": "GALAPAGOS",
+    "clue": "Inselgruppe mit einzigartiger Tierwelt."
+  },
+  {
+    "word": "KAIROMUSEUM",
+    "clue": "Museum mit einer der größten Sammlungen altägyptischer Artefakte."
+  },
+  {
+    "word": "LOUVRE",
+    "clue": "Meistbesuchtes Museum der Welt."
+  },
+  {
+    "word": "BRITISCHESMUSEUM",
+    "clue": "Bedeutendes Museum in London mit weltweiter Sammlung."
+  },
+  {
+    "word": "METROPOLITANMUSEUM",
+    "clue": "Großes Kunstmuseum in New York."
+  },
+  {
+    "word": "PRADO",
+    "clue": "Wichtige Kunstsammlung in Madrid."
+  },
+  {
+    "word": "HUBBLE",
+    "clue": "Weltraumteleskop, das weit entfernte Galaxien sichtbar macht."
+  },
+  {
+    "word": "VOYAGER",
+    "clue": "Raumsonde, die am weitesten von der Erde entfernt ist."
+  },
+  {
+    "word": "APOLLOELF",
+    "clue": "Mission, die die ersten Menschen auf den Mond brachte."
+  },
+  {
+    "word": "SPUTNIK",
+    "clue": "Erster künstlicher Satellit der Erde."
+  },
+  {
+    "word": "CONCORDE",
+    "clue": "Passagierflugzeug mit Überschallgeschwindigkeit."
+  },
+  {
+    "word": "FERNMELDETURM",
+    "clue": "Hoher Turm zur Übertragung von Signalen."
+  },
+  {
+    "word": "UNESCO",
+    "clue": "Auszeichnung für besonders schützenswerte Orte."
+  },
+  {
+    "word": "GUINNESSBUCH",
+    "clue": "Sammlung außergewöhnlicher Rekorde."
+  },
+  {
+    "word": "HONIG",
+    "clue": "Lebensmittel, das praktisch unbegrenzt haltbar ist."
+  },
+  {
+    "word": "ERDNUSS",
+    "clue": "Botanisch betrachtet eine Hülsenfrucht, keine Nuss."
+  },
+  {
+    "word": "PAPAGEI",
+    "clue": "Vogel, der menschliche Sprache nachahmen kann."
+  },
+  {
+    "word": "KAMELE",
+    "clue": "Tiere, die Fett in ihren Höckern speichern."
+  },
+  {
+    "word": "KAROTTE",
+    "clue": "Gemüse, das ursprünglich violett war."
+  }
+]
