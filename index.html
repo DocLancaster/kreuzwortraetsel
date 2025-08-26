@@ -196,7 +196,7 @@
         </a>
       </li>
       <li>
-        <a id="specialLink" href="raetsel.html?themes=history" class="btn btn-ghost">
+        <a id="specialLink" href="raetsel.html?themes=records" class="btn btn-ghost">
           <span class="left"><span class="icon">✨</span><span><strong>Special der Woche</strong><span id="specialThemeLabel" class="sublabel">Geschichte</span></span></span>
           <span class="badge-week">NEU</span>
         </a>
@@ -206,13 +206,13 @@
   </div>
   <script>
     // Aktuelles Wochenspecial hier steuern – einfach den Wert anpassen
-    const CURRENT_SPECIAL_THEME = 'history';
+    const CURRENT_SPECIAL_THEME = 'records';
     const specialLink = document.getElementById('specialLink');
     const specialThemeLabel = document.getElementById('specialThemeLabel');
 
     function labelizeTheme(key){
       if (!key) return '';
-      const map = { history: 'Geschichte', reise: 'Reise', jura: 'Jura' };
+      const map = { records: 'Rekorde', history: 'Geschichte', reise: 'Reise', jura: 'Jura' };
       if (map[key]) return map[key];
       return key.replace(/[-_]+/g,' ').replace(/\b\w/g, c => c.toUpperCase());
     }
@@ -250,7 +250,7 @@
         el.hidden = false;
         // Toggle weekly special badge (NEU ↔︎ ✔︎) based on this week's completion
         const badge = document.querySelector('#specialLink .badge-week');
-        const sp = data.special && data.special.history;
+        const sp = data.special && data.special.records;
         if (badge) {
           if (sp && sp.thisWeek) {
             badge.textContent = '✔︎';
