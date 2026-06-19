@@ -938,20 +938,18 @@ fetch(`/${BASE_WORDS_FILE}`)
                   }
                   internalRenderUI();
                 } else {
-  // 1. Berechne den Abstand vom Wortanfang auf der Achse des AKTIVEN Wortes (w)
-  const currentOffset = w.horizontal ? (c - w.x) : (r - w.y);
-  
-  // 2. Bestimme die Koordinaten des nächsten Feldes strikt entlang dieses Wortes
-  const nextR = w.horizontal ? r : w.y + currentOffset + 1;
-  const nextC = w.horizontal ? w.x + currentOffset + 1 : c;
-  
-  // 3. Fokussiere das nächste Feld direkt über die Geometrie, ohne Inhaltsprüfungen
-  const next = document.querySelector(`input.cell[data-row="${nextR}"][data-col="${nextC}"]`);
-  if (next) {
-    next.focus();
-    lastFocusedCell = next;
-  }
-}
+                  let next;
+                  if (currentDirection === 'horizontal') {
+                    c++;
+                    next = document.querySelector(`input.cell[data-row="${r}"][data-col="${c}"]`);
+                  } else {
+                    r++;
+                    next = document.querySelector(`input.cell[data-row="${r}"][data-col="${c}"]`);
+                  }
+                  if (next && next.classList.contains("highlight")) {
+                    next.focus();
+                  }
+                }
                 saveState();
                 checkAutoSuccess();
               });
