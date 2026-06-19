@@ -129,7 +129,6 @@
   <h1>Kreuzworträtsel</h1>
   <div id="userHud" class="user-hud" aria-live="polite"></div>
 
-  <!-- Prev/Next + Hinweis -->
   <div class="navigation">
     <button id="prevWord" title="Vorheriges Wort">
       <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 16 16" fill="currentColor">
@@ -144,10 +143,8 @@
     </button>
   </div>
 
-  <!-- Grid mit Inline-Hinweisen -->
   <div class="grid" id="grid"></div>
 
-  <!-- Controls -->
   <div class="controls">
     <button class="control check" onclick="checkSolution()">Lösung prüfen</button>
     <button class="control hint" id="revealBtn">Hinweis (3)</button>
@@ -157,7 +154,6 @@
   </div>
 
   </div>
-  <!-- Rating Modal -->
   <div id="ratingModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="ratingTitle">
     <div class="modal">
       <h2 id="ratingTitle">🎉 Rätsel gelöst!</h2>
@@ -449,24 +445,16 @@ async function handlePuzzleCompleted() {
       return shuffleArray([...wordList]).slice(0, count);
     }
 
-    // Intelligente Platzierung von Wörtern
-    function generateWords() {
-      // Randomize word list
-      const shuffled = shuffleArray([...wordList]);
-      // Prepare unplaced words
-      let unplaced = shuffled.slice();
-      // Initialize empty test grid
+    // Führt einen einzelnen Generierungsversuch auf einem leeren Gitter aus
+    function tryGenerateSinglePuzzle(preparedList) {
+      let unplaced = preparedList.slice();
       const testGrid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(null));
       const placed = [];
 
-      // Place first word centered horizontally, ensure it fits within grid
-      // Find the first word whose length does not exceed gridSize
+      // Erstes langes Wort suchen, das ins Gitter passt, und zentrieren
       const firstIdx = unplaced.findIndex(item => item.word.length <= gridSize);
-      if (firstIdx === -1) {
-        // No fitting word found; abort generation
-        words = [];
-        return;
-      }
+      if (firstIdx === -1) return null;
+
       const first = unplaced.splice(firstIdx, 1)[0];
       const sx = Math.floor((gridSize - first.word.length) / 2);
       const sy = Math.floor(gridSize / 2);
@@ -474,35 +462,29 @@ async function handlePuzzleCompleted() {
         testGrid[sy][sx + i] = first.word[i];
       }
       placed.push({ id: first.id, word: first.word, x: sx, y: sy, horizontal: true, clue: first.clue });
-      // Block cells directly before and after the first word
+      
       const firstEndX = sx + first.word.length - 1;
       const barrierPositionsFirst = [
         { r: sy, c: sx - 1 },
         { r: sy, c: firstEndX + 1 }
       ];
       barrierPositionsFirst.forEach(pos => {
-        if (
-          pos.r >= 0 && pos.r < gridSize &&
-          pos.c >= 0 && pos.c < gridSize &&
-          testGrid[pos.r][pos.c] === null
-        ) {
+        if (pos.r >= 0 && pos.r < gridSize && pos.c >= 0 && pos.c < gridSize && testGrid[pos.r][pos.c] === null) {
           testGrid[pos.r][pos.c] = "*";
         }
       });
 
-      // Place remaining words by choosing the one with highest overlaps
+      // Weitere Wörter einsortieren basierend auf maximalen Kreuzungspunkten
       while (true) {
         let bestPlacement = null;
         let bestScore = 0;
         let bestWordIndex = -1;
 
-        // Evaluate each unplaced word
         for (let wIdx = 0; wIdx < unplaced.length; wIdx++) {
-          const { word, clue } = unplaced[wIdx];
+          const { word } = unplaced[wIdx];
           let localBestScore = 0;
           let localBestPlacement = null;
 
-          // Try both orientations
           for (const hor of [true, false]) {
             for (let row = 0; row < gridSize; row++) {
               for (let col = 0; col < gridSize; col++) {
@@ -510,7 +492,6 @@ async function handlePuzzleCompleted() {
                 const startY = row;
                 const endX = hor ? col + word.length - 1 : col;
                 const endY = hor ? row : row + word.length - 1;
-                // Bounds
                 if (endX >= gridSize || endY >= gridSize) continue;
 
                 let collision = false;
@@ -525,20 +506,11 @@ async function handlePuzzleCompleted() {
                 }
                 if (collision || score === 0) continue;
 
-                // Adjacency before/after
-                const before = hor
-                  ? { r: startY, c: startX - 1 }
-                  : { r: startY - 1, c: startX };
-                const after = hor
-                  ? { r: startY, c: endX + 1 }
-                  : { r: endY + 1, c: startX };
+                const before = hor ? { r: startY, c: startX - 1 } : { r: startY - 1, c: startX };
+                const after = hor ? { r: startY, c: endX + 1 } : { r: endY + 1, c: startX };
                 if (
-                  (before.r >= 0 && before.r < gridSize && before.c >= 0 && before.c < gridSize &&
-                    testGrid[before.r][before.c] !== null && testGrid[before.r][before.c] !== '*'
-                  ) ||
-                  (after.r  >= 0 && after.r  < gridSize && after.c  >= 0 && after.c  < gridSize &&
-                    testGrid[after.r][after.c] !== null && testGrid[after.r][after.c] !== '*'
-                  )
+                  (before.r >= 0 && before.r < gridSize && before.c >= 0 && before.c < gridSize && testGrid[before.r][before.c] !== null && testGrid[before.r][before.c] !== '*') ||
+                  (after.r  >= 0 && after.r  < gridSize && after.c  >= 0 && after.c  < gridSize && testGrid[after.r][after.c] !== null && testGrid[after.r][after.c] !== '*')
                 ) continue;
 
                 if (score > localBestScore) {
@@ -556,10 +528,8 @@ async function handlePuzzleCompleted() {
           }
         }
 
-        // Stop if no valid placement remains
         if (!bestPlacement) break;
 
-        // Commit best placement
         const { id, word, clue } = unplaced[bestWordIndex];
         const { startX, startY, horizontal: hor } = bestPlacement;
         for (let k = 0; k < word.length; k++) {
@@ -569,32 +539,57 @@ async function handlePuzzleCompleted() {
         }
         placed.push({ id, word, x: startX, y: startY, horizontal: hor, clue });
 
-        // Barrier before/after
         const endX = hor ? startX + word.length - 1 : startX;
         const endY = hor ? startY : startY + word.length - 1;
         const barrierPositions = hor
           ? [ { r: startY, c: startX - 1 }, { r: startY, c: endX + 1 } ]
           : [ { r: startY - 1, c: startX }, { r: endY + 1, c: startX } ];
         barrierPositions.forEach(pos => {
-          if (
-            pos.r >= 0 && pos.r < gridSize &&
-            pos.c >= 0 && pos.c < gridSize &&
-            testGrid[pos.r][pos.c] === null
-          ) {
+          if (pos.r >= 0 && pos.r < gridSize && pos.c >= 0 && pos.c < gridSize && testGrid[pos.r][pos.c] === null) {
             testGrid[pos.r][pos.c] = "*";
           }
         });
 
-        // Remove placed word from unplaced
         unplaced.splice(bestWordIndex, 1);
       }
 
-      // Commit testGrid to real grid
-      for (let r = 0; r < gridSize; r++) {
-        grid[r] = testGrid[r].slice();
+      return { testGrid, placed };
+    }
+
+    // Hauptfunktion zur Generierung: Nutzt Multi-Try im Hintergrund
+    function generateWords() {
+      // 1. Wortliste primär nach Länge (absteigend) sortieren, sekundär nach Server-Rank/Score
+      const preparedList = [...wordList].sort((a, b) => {
+        if (b.word.length !== a.word.length) {
+          return b.word.length - a.word.length;
+        }
+        return (b.rank || 0) - (a.rank || 0);
+      });
+
+      let bestResult = null;
+      let maxWordsCount = -1;
+      const ATTEMPTS = 50;
+
+      // 2. Multi-Try-Schleife: Finde die dichteste Kombination
+      for (let i = 0; i < ATTEMPTS; i++) {
+        // Liste für etwas Entropie bei jeder Iteration leicht shuffeln innerhalb gleicher Längengruppen
+        const shuffledCopy = shuffleArray([...preparedList].slice(0, 40)).concat(preparedList.slice(40));
+        const result = tryGenerateSinglePuzzle(shuffledCopy);
+        
+        if (result && result.placed.length > maxWordsCount) {
+          maxWordsCount = result.placed.length;
+          bestResult = result;
+        }
       }
-      words = placed;
-      // Stats for scoring
+
+      // 3. Bestes Ergebnis festschreiben
+      if (bestResult) {
+        grid = bestResult.testGrid;
+        words = bestResult.placed;
+      } else {
+        words = [];
+      }
+
       wordsCount = words.length;
       lettersCount = 0;
       for (let r = 0; r < gridSize; r++) {
@@ -605,7 +600,7 @@ async function handlePuzzleCompleted() {
     }
 
 
-    // Lade externe Wortliste und initialisiere das Rätsel
+    // Wortliste wird extern geladen
     // (wird nach generateWords() eingefügt)
 
     // Beispiel für die Verwendung von shuffleArray an anderer Stelle:
@@ -837,7 +832,6 @@ fetch(`/${BASE_WORDS_FILE}`)
           generateWords();
           // einmalig Appearances zählen und per-user Cooldown setzen (24h)
           try {
-            const unique = [...new Set(words.map(w => w.word))];
             const uniqueIds   = [...new Set(words.map(w => w.id))];
             const uniqueWords = [...new Set(words.map(w => w.word))];
             fetch('/api/appearance', {
@@ -925,13 +919,11 @@ fetch(`/${BASE_WORDS_FILE}`)
               input.addEventListener("mousedown", () => {
                 userClicked = true;
               });
-              // (Optional, für Zuverlässigkeit auf allen Browsern) - oldValue-Update
               input.addEventListener("focus", () => { input.oldValue = input.value; });
               input.addEventListener("blur", () => { input.oldValue = ""; });
               input.addEventListener("input", () => { input.oldValue = input.value; });
 
               input.addEventListener("input", (e) => {
-                // Immer NUR das zuletzt getippte Zeichen als Großbuchstabe übernehmen
                 if (e.data && e.data.length > 0) {
                   input.value = e.data.slice(-1).toUpperCase();
                 } else if (input.value) {
@@ -939,7 +931,6 @@ fetch(`/${BASE_WORDS_FILE}`)
                 }
                 let r = parseInt(input.dataset.row), c = parseInt(input.dataset.col);
 
-                // Bestimme die Zellen im aktuellen Wort (damit wir wissen, ob es das letzte Feld ist)
                 const w = words[currentWordIndex];
                 let isLast = false;
                 if (w.horizontal) {
@@ -949,7 +940,6 @@ fetch(`/${BASE_WORDS_FILE}`)
                 }
 
                 if (isLast) {
-                  // Gehe automatisch zum nächsten Wort (erstes Feld)
                   currentWordIndex = (currentWordIndex + 1) % words.length;
                   const nw = words[currentWordIndex];
                   const first = document.querySelector(`input.cell[data-row="${nw.y}"][data-col="${nw.x}"]`);
@@ -959,7 +949,6 @@ fetch(`/${BASE_WORDS_FILE}`)
                   }
                   internalRenderUI();
                 } else {
-                  // Weiter wie bisher zum nächsten Buchstaben im Wort springen
                   let next;
                   if (currentDirection === 'horizontal') {
                     c++;
@@ -973,15 +962,12 @@ fetch(`/${BASE_WORDS_FILE}`)
                   }
                 }
                 saveState();
-
-                // Automatische Erfolgsmeldung wenn alles korrekt ausgefüllt ist
                 checkAutoSuccess();
               });
               input.addEventListener("keydown", e => {
                 if (e.key === "Backspace") {
                   let r = parseInt(input.dataset.row), c = parseInt(input.dataset.col);
                   if (input.value === "") {
-                    // Gehe ein Feld zurück und leere es
                     if (currentDirection === "horizontal") { c--; } else { r--; }
                     const prev = document.querySelector(`input.cell[data-row="${r}"][data-col="${c}"]`);
                     if (prev) {
@@ -990,39 +976,40 @@ fetch(`/${BASE_WORDS_FILE}`)
                       e.preventDefault();
                     }
                   } else {
-                    // Nur das aktuelle Feld leeren (nicht springen)
                     input.value = "";
                     e.preventDefault();
                   }
                   saveState();
                 }
               });
-              // Nur auf echten Benutzerversuch reagieren: Wort wechseln bei Klick/Tab
               input.addEventListener("focus", event => {
-                // Only respond to real user clicks
                 if (!userClicked) return;
                 userClicked = false;
-                lastFocusedCell = input;
+
                 const r = parseInt(input.dataset.row);
                 const c = parseInt(input.dataset.col);
-                // Finde alle Wörter, die diese Zelle enthalten
                 const candidates = words.map((w, i) => {
                   if (w.horizontal && w.y === r && c >= w.x && c < w.x + w.word.length) return i;
                   if (!w.horizontal && w.x === c && r >= w.y && r < w.y + w.word.length) return i;
                   return null;
                 }).filter(i => i !== null);
+
                 if (candidates.length > 0) {
-                  // Wähle das Wort passend zur aktuellen Richtung oder das erste
+                  // Richtung toggeln, wenn der Fokus bereits auf diesem Element lag (Klick-Toggle)
+                  if (lastFocusedCell === input) {
+                    currentDirection = currentDirection === 'horizontal' ? 'vertical' : 'horizontal';
+                  }
+                  
                   const preferred = candidates.find(i => words[i].horizontal === currentDirection);
                   currentWordIndex = preferred !== undefined ? preferred : candidates[0];
+                  
+                  lastFocusedCell = input;
                   internalRenderUI();
                 }
               });
-              // Leertaste im Eingabefeld: Nur bei Schnittpunkten Wort wechseln
               input.addEventListener("keydown", e => {
                 if ((e.code === "Space" || e.key === " ") && !e.ctrlKey && !e.metaKey && !e.altKey) {
                   e.preventDefault();
-                  // Wechsel nur, wenn Feld Teil von zwei Wörtern ist
                   const r = parseInt(input.dataset.row);
                   const c = parseInt(input.dataset.col);
                   const candidates = words.map((w, i) => {
@@ -1031,7 +1018,6 @@ fetch(`/${BASE_WORDS_FILE}`)
                     return null;
                   }).filter(i => i !== null);
                   if (candidates.length > 1) {
-                    // Wechsel zum anderen Wort
                     const other = candidates.find(i => i !== currentWordIndex);
                     if (other !== undefined) {
                       currentWordIndex = other;
@@ -1047,7 +1033,6 @@ fetch(`/${BASE_WORDS_FILE}`)
           }
         }
 
-        // Prev/Next & Leertaste zur Navigation
         document.getElementById("prevWord").addEventListener("click", () => {
           currentWordIndex = (currentWordIndex - 1 + words.length) % words.length;
           internalRenderUI();
@@ -1062,7 +1047,6 @@ fetch(`/${BASE_WORDS_FILE}`)
           if (e.code === "Space") {
             e.preventDefault();
             currentDirection = currentDirection === 'horizontal' ? 'vertical' : 'horizontal';
-            // Wechsle Wort, falls die aktuelle Zelle zwei Optionen bietet
             if (lastFocusedCell) {
               const r = parseInt(lastFocusedCell.dataset.row);
               const c = parseInt(lastFocusedCell.dataset.col);
@@ -1080,23 +1064,19 @@ fetch(`/${BASE_WORDS_FILE}`)
           } else if (e.code === "ArrowRight") {
             currentWordIndex = (currentWordIndex + 1) % words.length;
             internalRenderUI();
-            // Fokus auf das erste Feld des neuen Wortes setzen
             const wRight = words[currentWordIndex];
             const startRight = document.querySelector(`input.cell[data-row="${wRight.y}"][data-col="${wRight.x}"]`);
             if (startRight) startRight.focus();
           } else if (e.code === "ArrowLeft") {
             currentWordIndex = (currentWordIndex - 1 + words.length) % words.length;
             internalRenderUI();
-            // Fokus auf das erste Feld des neuen Wortes setzen
             const wLeft = words[currentWordIndex];
             const startLeft = document.querySelector(`input.cell[data-row="${wLeft.y}"][data-col="${wLeft.x}"]`);
             if (startLeft) startLeft.focus();
           }
         });
 
-        // Initial
         internalRenderUI();
-        // Auto-Fokus auf das erste Wort
         const w0 = words[currentWordIndex];
         const start0 = document.querySelector(`input.cell[data-row="${w0.y}"][data-col="${w0.x}"]`);
         if (start0) {
@@ -1105,7 +1085,6 @@ fetch(`/${BASE_WORDS_FILE}`)
         }
         puzzleStart = performance.now();
         updateUserHud();
-        // Flag button handler
         document.getElementById('flagBtn').addEventListener('click', () => {
           if (!currentWordIndex && currentWordIndex !== 0) return;
           const w = words[currentWordIndex];
