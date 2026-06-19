@@ -270,13 +270,11 @@ function getUserId() {
     (window.crypto || window.msCrypto).getRandomValues(arr);
     id = Array.from(arr, b => b.toString(16).padStart(2,'0')).join('');
   }
-  // persist to both keys for cross-page compatibility
   try { localStorage.setItem(KEY_NEW, id); } catch(_) {}
   try { localStorage.setItem(KEY_OLD, id); } catch(_) {}
   return id;
 }
 const USER_ID = getUserId();
-// --- stable IDs for words (fallback if JSON has no id) ---
 function fnv1a(str){
   let h = 0x811c9dc5;
   for (let i = 0; i < str.length; i++) {
@@ -292,8 +290,7 @@ function makeWordId(word){
 function ensureIds(list){
   return list.map(w => ({ ...w, id: w.id || makeWordId(w.word) }));
 }
-// --- end id helpers ---
-// --- Rating modal helpers ---
+
 let ratingSelected = 0;
 let completionHandled = false;
 
@@ -393,11 +390,10 @@ function showResultModal(){
 }
 
 async function handlePuzzleCompleted() {
-  if (completionHandled) return; // prevent double-trigger
+  if (completionHandled) return;
   completionHandled = true;
   const chk = document.querySelector('.control.check');
   if (chk) { chk.disabled = true; chk.textContent = 'Gelöst 🎉'; }
-  // Disable hint & reset and lock all inputs to prevent further edits
   const hintBtn = document.getElementById('revealBtn');
   if (hintBtn) { hintBtn.disabled = true; hintBtn.textContent = 'Hinweis (0)'; }
   const resetBtn = document.getElementById('resetBtn');
@@ -412,9 +408,7 @@ async function handlePuzzleCompleted() {
     showResultModal();
   }, 600);
 }
-// --- end rating modal helpers ---
 
-    // Wortliste wird extern geladen
     let wordList = [];
     function saveState() {
       const userInputs = {};
@@ -431,7 +425,6 @@ async function handlePuzzleCompleted() {
     return s ? JSON.parse(s) : null;
     }
 
-    // Fisher–Yates shuffle for unbiased randomization
     function shuffleArray(arr) {
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -440,49 +433,58 @@ async function handlePuzzleCompleted() {
       return arr;
     }
 
-    // Wählt `count` zufällige Einträge aus
     function getRandomWords(count) {
       return shuffleArray([...wordList]).slice(0, count);
     }
 
-    // Führt einen einzelnen Generierungsversuch auf einem leeren Gitter aus
+    // Führt einen einzelnen Generierungsversuch aus
     function tryGenerateSinglePuzzle(preparedList) {
       let unplaced = preparedList.slice();
       const testGrid = Array(gridSize).fill(null).map(() => Array(gridSize).fill(null));
       const placed = [];
 
-      // Erstes langes Wort suchen, das ins Gitter passt, und zentrieren
+      // Erstes langes Wort bestimmen
       const firstIdx = unplaced.findIndex(item => item.word.length <= gridSize);
       if (firstIdx === -1) return null;
 
       const first = unplaced.splice(firstIdx, 1)[0];
-      const sx = Math.floor((gridSize - first.word.length) / 2);
-      const sy = Math.floor(gridSize / 2);
-      for (let i = 0; i < first.word.length; i++) {
-        testGrid[sy][sx + i] = first.word[i];
-      }
-      placed.push({ id: first.id, word: first.word, x: sx, y: sy, horizontal: true, clue: first.clue });
       
-      const firstEndX = sx + first.word.length - 1;
-      const barrierPositionsFirst = [
-        { r: sy, c: sx - 1 },
-        { r: sy, c: firstEndX + 1 }
-      ];
+      // OPTIMIERUNG 1: Startrichtung zufällig bestimmen, um vertikalen Überhang zu brechen
+      const startHorizontal = Math.random() < 0.5;
+      
+      const sx = startHorizontal ? Math.floor((gridSize - first.word.length) / 2) : Math.floor(gridSize / 2);
+      const sy = startHorizontal ? Math.floor(gridSize / 2) : Math.floor((gridSize - first.word.length) / 2);
+      
+      for (let i = 0; i < first.word.length; i++) {
+        const r = startHorizontal ? sy : sy + i;
+        const c = startHorizontal ? sx + i : sx;
+        testGrid[r][c] = first.word[i];
+      }
+      placed.push({ id: first.id, word: first.word, x: sx, y: sy, horizontal: startHorizontal, clue: first.clue });
+      
+      const barrierPositionsFirst = startHorizontal 
+        ? [ { r: sy, c: sx - 1 }, { r: sy, c: sx + first.word.length } ]
+        : [ { r: sy - 1, c: sx }, { r: sy + first.word.length, c: sx } ];
+
       barrierPositionsFirst.forEach(pos => {
         if (pos.r >= 0 && pos.r < gridSize && pos.c >= 0 && pos.c < gridSize && testGrid[pos.r][pos.c] === null) {
           testGrid[pos.r][pos.c] = "*";
         }
       });
 
-      // Weitere Wörter einsortieren basierend auf maximalen Kreuzungspunkten
+      // Weitere Wörter einsortieren
       while (true) {
         let bestPlacement = null;
-        let bestScore = 0;
+        let bestScore = -9999;
         let bestWordIndex = -1;
+
+        // Zähle aktuelle Verteilung für das Richtungsbalancing
+        let horizontalCount = placed.filter(w => w.horizontal).length;
+        let verticalCount = placed.filter(w => !w.horizontal).length;
 
         for (let wIdx = 0; wIdx < unplaced.length; wIdx++) {
           const { word } = unplaced[wIdx];
-          let localBestScore = 0;
+          let localBestScore = -9999;
           let localBestPlacement = null;
 
           for (const hor of [true, false]) {
@@ -495,16 +497,16 @@ async function handlePuzzleCompleted() {
                 if (endX >= gridSize || endY >= gridSize) continue;
 
                 let collision = false;
-                let score = 0;
+                let overlapCount = 0;
                 for (let k = 0; k < word.length; k++) {
                   const r = hor ? startY : startY + k;
                   const c = hor ? startX + k : startX;
                   const cell = testGrid[r][c];
                   if (cell === "*") { collision = true; break; }
-                  if (cell === word[k]) score++;
+                  if (cell === word[k]) overlapCount++;
                   else if (cell !== null) { collision = true; break; }
                 }
-                if (collision || score === 0) continue;
+                if (collision || overlapCount === 0) continue;
 
                 const before = hor ? { r: startY, c: startX - 1 } : { r: startY - 1, c: startX };
                 const after = hor ? { r: startY, c: endX + 1 } : { r: endY + 1, c: startX };
@@ -513,8 +515,17 @@ async function handlePuzzleCompleted() {
                   (after.r  >= 0 && after.r  < gridSize && after.c  >= 0 && after.c  < gridSize && testGrid[after.r][after.c] !== null && testGrid[after.r][after.c] !== '*')
                 ) continue;
 
-                if (score > localBestScore) {
-                  localBestScore = score;
+                // OPTIMIERUNG 2: Directional Balancing Score berechnen
+                // Gibt einen massiven Bonus für die Richtung, die im Rätsel gerade unterrepräsentiert ist
+                let baseScore = overlapCount * 10;
+                if (hor && horizontalCount < verticalCount) {
+                  baseScore += 15; 
+                } else if (!hor && verticalCount < horizontalCount) {
+                  baseScore += 15;
+                }
+
+                if (baseScore > localBestScore) {
+                  localBestScore = baseScore;
                   localBestPlacement = { startX, startY, horizontal: hor };
                 }
               }
@@ -556,9 +567,7 @@ async function handlePuzzleCompleted() {
       return { testGrid, placed };
     }
 
-    // Hauptfunktion zur Generierung: Nutzt Multi-Try im Hintergrund
     function generateWords() {
-      // 1. Wortliste primär nach Länge (absteigend) sortieren, sekundär nach Server-Rank/Score
       const preparedList = [...wordList].sort((a, b) => {
         if (b.word.length !== a.word.length) {
           return b.word.length - a.word.length;
@@ -567,22 +576,30 @@ async function handlePuzzleCompleted() {
       });
 
       let bestResult = null;
-      let maxWordsCount = -1;
+      let bestEvaluationScore = -1000;
       const ATTEMPTS = 50;
 
-      // 2. Multi-Try-Schleife: Finde die dichteste Kombination
       for (let i = 0; i < ATTEMPTS; i++) {
-        // Liste für etwas Entropie bei jeder Iteration leicht shuffeln innerhalb gleicher Längengruppen
         const shuffledCopy = shuffleArray([...preparedList].slice(0, 40)).concat(preparedList.slice(40));
         const result = tryGenerateSinglePuzzle(shuffledCopy);
         
-        if (result && result.placed.length > maxWordsCount) {
-          maxWordsCount = result.placed.length;
-          bestResult = result;
+        if (result) {
+          // Evaluiere das Gitter: Gesamtwortzahl ist wichtig, aber ein extremes Richtungsungleichgewicht gibt Punktabzug
+          const hCount = result.placed.filter(w => w.horizontal).length;
+          const vCount = result.placed.filter(w => !w.horizontal).length;
+          const totalWords = result.placed.length;
+          
+          // Bestraft Abweichungen vom idealen 50:50 Verhältnis
+          const balancePenalty = Math.abs(hCount - vCount) * 2;
+          const evaluationScore = (totalWords * 10) - balancePenalty;
+
+          if (evaluationScore > bestEvaluationScore) {
+            bestEvaluationScore = evaluationScore;
+            bestResult = result;
+          }
         }
       }
 
-      // 3. Bestes Ergebnis festschreiben
       if (bestResult) {
         grid = bestResult.testGrid;
         words = bestResult.placed;
@@ -598,14 +615,6 @@ async function handlePuzzleCompleted() {
         }
       }
     }
-
-
-    // Wortliste wird extern geladen
-    // (wird nach generateWords() eingefügt)
-
-    // Beispiel für die Verwendung von shuffleArray an anderer Stelle:
-    // In einer Funktion wie findeLoesungswort (falls vorhanden):
-    // const worte = shuffleArray([...wordList]);
 
     function msToMMSS(ms){
       const s = Math.floor(ms/1000); const m = Math.floor(s/60); const r = s%60;
@@ -639,7 +648,7 @@ async function handlePuzzleCompleted() {
           }
         }
         lastCoinsShown = nowCoins;
-            }catch(_){ /* noop */ }
+            }catch(_){ }
     }
 
     function popCoinGain(amount){
@@ -672,7 +681,6 @@ async function handlePuzzleCompleted() {
       }catch(_){ }
       return null;
     }
-    // Lösungsprüfung
     function checkSolution() {
       checksCount++;
       let wrongNow = 0;
@@ -684,13 +692,12 @@ async function handlePuzzleCompleted() {
         const expected = ('' + grid[r][c]).toUpperCase();
         const actual = input.value.toUpperCase();
         if (input.value === "") {
-          // Leere Zellen unmarkiert lassen
           input.style.backgroundColor = "";
           allCorrect = false;
         } else if (actual === expected) {
-          input.style.backgroundColor = "#c8f7c5"; // correct = green
+          input.style.backgroundColor = "#c8f7c5";
         } else {
-          input.style.backgroundColor = "#f7c5c5"; // incorrect = red
+          input.style.backgroundColor = "#f7c5c5";
           wrongNow++;
           allCorrect = false;
         }
@@ -724,19 +731,16 @@ async function handlePuzzleCompleted() {
       return false;
     }
 
-// Lade externe Wortliste und initialisiere das Rätsel
 fetch(`/${BASE_WORDS_FILE}`)
       .then(res => res.json())
       .then(async data => {
         wordList = ensureIds(data);
-        // Remove duplicate words (keep first occurrence)
         const seenWords = new Set();
         wordList = wordList.filter(item => {
           if (seenWords.has(item.word)) return false;
           seenWords.add(item.word);
           return true;
         });
-        // --- Theme-Filter anwenden ---
         const normThemes = (w) => Array.isArray(w.themes) ? w.themes.map(s => String(s).toLowerCase()) : [];
 
         if (includeThemes && includeThemes.length) {
@@ -744,7 +748,6 @@ fetch(`/${BASE_WORDS_FILE}`)
             const t = normThemes(w);
             return t.length && t.some(tag => includeThemes.includes(tag));
           });
-          // Falls zu wenige übrig bleiben (z. B. neues Special), auf alle Wörter zurückfallen
           if (filtered.length >= 10) {
             wordList = filtered;
           } else {
@@ -757,8 +760,6 @@ fetch(`/${BASE_WORDS_FILE}`)
             return !t.some(tag => excludeThemes.includes(tag));
           });
         }
-        // --- Ende Theme-Filter ---
-        // --- Fetch feedback metrics from server and compute scores ---
         try {
           const resMetrics = await fetch('/api/metrics', {
             method: 'POST',
@@ -771,25 +772,22 @@ fetch(`/${BASE_WORDS_FILE}`)
           });
           if (resMetrics.ok) {
             const metrics = await resMetrics.json();
-            const prior = 4.0;      // Grundannahme: gutes Wort (0..5)
-            const weight = 10;      // Stärke der Vorannahme
+            const prior = 4.0;
+            const weight = 10;
             wordList.forEach(w => {
               const m        = metrics[w.word] || {};
               const sum      = Number(m.ratingSum   || 0);
               const count    = Number(m.ratingCount || 0);
               const appear   = Number(m.appear      || 0);
               const flags    = Number(m.flags       || 0);
-              const flagRate = appear > 0 ? (flags / appear) : 0; // 0..1
-              const trust    = Math.min(count / 50, 1); // 0..1
-              const bayesAvg = (prior * weight + sum) / (weight + count); // 0..5
-              // Score: Bayes-Ø gewichtet mit Vertrauen, Flag-Rate zieht ab
+              const flagRate = appear > 0 ? (flags / appear) : 0;
+              const trust    = Math.min(count / 50, 1);
+              const bayesAvg = (prior * weight + sum) / (weight + count);
               w.score = bayesAvg * (0.6 + 0.2 * trust) - 2.0 * flagRate;
-              // Exploration: etwas Zufall, stärker bei wenig Vertrauen
-              const exploreBase = 0.15;                 // immer etwas Variabilität
-              const explore = exploreBase + (1 - trust) * 0.35; // 0.15..0.5
+              const exploreBase = 0.15;
+              const explore = exploreBase + (1 - trust) * 0.35;
               w.rank = (w.score || 0) + explore * Math.random();
             });
-            // Demote words currently in per-user cooldown, then sort by rank
             try {
               const resCd = await fetch('/api/cooldown-get', {
                 method: 'POST',
@@ -812,7 +810,6 @@ fetch(`/${BASE_WORDS_FILE}`)
                 wordList = available.concat(cooled);
               }
             } catch(_) {}
-            // final sort by rank among the merged list
             wordList.sort((a, b) => (b.rank || 0) - (a.rank || 0));
           } else {
             console.warn('metrics endpoint failed', resMetrics.status);
@@ -820,7 +817,6 @@ fetch(`/${BASE_WORDS_FILE}`)
         } catch (err) {
           console.warn('metrics fetch error', err);
         }
-        // --- end metrics scoring ---
         const saved = loadState();
         if (saved) {
           saved.grid.forEach((row, i) => { grid[i] = saved.grid[i]; });
@@ -830,7 +826,6 @@ fetch(`/${BASE_WORDS_FILE}`)
           currentDirection = saved.currentDirection;
         } else {
           generateWords();
-          // einmalig Appearances zählen und per-user Cooldown setzen (24h)
           try {
             const uniqueIds   = [...new Set(words.map(w => w.id))];
             const uniqueWords = [...new Set(words.map(w => w.word))];
@@ -874,18 +869,14 @@ fetch(`/${BASE_WORDS_FILE}`)
 
         const resetBtn = document.getElementById('resetBtn');
         resetBtn.addEventListener('click', () => {
-          // Clear saved state
           localStorage.removeItem(RAEETSEL_STORAGE_KEY);
-          // Reset all input cells
           document.querySelectorAll('input.cell:not(.black)').forEach(input => {
             input.value = '';
             input.style.backgroundColor = '';
           });
-          // Save cleared state
           saveState();
         });
 
-        // Rendert das Highlight und den Hinweis
         function internalRenderUI() {
           document.querySelectorAll("input.cell").forEach(i => i.classList.remove("highlight"));
           const w = words[currentWordIndex];
@@ -899,7 +890,6 @@ fetch(`/${BASE_WORDS_FILE}`)
           document.getElementById("currentClue").textContent = w.clue;
         }
 
-        // Erzeuge die Eingabefelder
         for (let row = 0; row < gridSize; row++) {
           for (let col = 0; col < gridSize; col++) {
             const input = document.createElement("input");
@@ -915,7 +905,6 @@ fetch(`/${BASE_WORDS_FILE}`)
               if (saved && saved.userInputs && saved.userInputs[key]) {
                 input.value = saved.userInputs[key];
               }
-              // Mark user click
               input.addEventListener("mousedown", () => {
                 userClicked = true;
               });
@@ -995,7 +984,6 @@ fetch(`/${BASE_WORDS_FILE}`)
                 }).filter(i => i !== null);
 
                 if (candidates.length > 0) {
-                  // Richtung toggeln, wenn der Fokus bereits auf diesem Element lag (Klick-Toggle)
                   if (lastFocusedCell === input) {
                     currentDirection = currentDirection === 'horizontal' ? 'vertical' : 'horizontal';
                   }
