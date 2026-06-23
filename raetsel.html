@@ -946,21 +946,32 @@ fetch(`/${BASE_WORDS_FILE}`)
                   for (let offset = 1; offset <= words.length; offset++) {
                     const idx = (currentWordIndex + offset) % words.length;
                     const cand = words[idx];
-                    let found = false;
+                    let foundEmpty = false;
+                    let firstCell = null;
                     for (let nk = 0; nk < cand.word.length; nk++) {
                       const rr = cand.horizontal ? cand.y : cand.y + nk;
                       const cc = cand.horizontal ? cand.x + nk : cand.x;
                       const cell = document.querySelector(`input.cell[data-row="${rr}"][data-col="${cc}"]`);
+                      if (!firstCell && cell) firstCell = cell;
                       if (cell && cell.value === "") {
                         currentWordIndex = idx;
                         cell.focus();
                         lastFocusedCell = cell;
                         internalRenderUI();
-                        found = true;
+                        foundEmpty = true;
                         break;
                       }
                     }
-                    if (found) { moved = true; break; }
+                    if (foundEmpty) { moved = true; break; }
+                    if (firstCell) {
+                      // no empty cell in this word, still switch to it and focus its first cell
+                      currentWordIndex = idx;
+                      firstCell.focus();
+                      lastFocusedCell = firstCell;
+                      internalRenderUI();
+                      moved = true;
+                      break;
+                    }
                   }
                 } else {
                   internalRenderUI();
@@ -981,7 +992,15 @@ fetch(`/${BASE_WORDS_FILE}`)
                 saveState();
                 checkAutoSuccess();
               });
+              // ensure printable keys overwrite existing char without visually selecting (avoids blue highlight)
               input.addEventListener("keydown", e => {
+                if (e.key && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                  if (input.value !== "") {
+                    input.value = "";
+                  }
+                  // allow the key to proceed and trigger input event
+                  return;
+                }
                 if (e.key === "Backspace") {
                   let r = parseInt(input.dataset.row), c = parseInt(input.dataset.col);
                   if (input.value === "") {
