@@ -921,14 +921,49 @@ fetch(`/${BASE_WORDS_FILE}`)
                 let r = parseInt(input.dataset.row), c = parseInt(input.dataset.col);
 
                 const w = words[currentWordIndex];
-                let isLast = false;
-                if (w.horizontal) {
-                  isLast = (r === w.y && c === w.x + w.word.length - 1);
-                } else {
-                  isLast = (c === w.x && r === w.y + w.word.length - 1);
+                const posIndex = w.horizontal ? (c - w.x) : (r - w.y);
+
+                // Try to move to the next empty cell in the SAME word
+                let moved = false;
+                for (let nk = posIndex + 1; nk < w.word.length; nk++) {
+                  const rr = w.horizontal ? w.y : w.y + nk;
+                  const cc = w.horizontal ? w.x + nk : w.x;
+                  const nextCell = document.querySelector(`input.cell[data-row="${rr}"][data-col="${cc}"]`);
+                  if (nextCell && !nextCell.classList.contains('black') && nextCell.value === "") {
+                    nextCell.focus();
+                    lastFocusedCell = nextCell;
+                    moved = true;
+                    break;
+                  }
                 }
 
-                if (isLast) {
+                // If none free in current word, try to find the next word that has a free cell
+                if (!moved) {
+                  for (let offset = 1; offset <= words.length; offset++) {
+                    const idx = (currentWordIndex + offset) % words.length;
+                    const cand = words[idx];
+                    let found = false;
+                    for (let nk = 0; nk < cand.word.length; nk++) {
+                      const rr = cand.horizontal ? cand.y : cand.y + nk;
+                      const cc = cand.horizontal ? cand.x + nk : cand.x;
+                      const cell = document.querySelector(`input.cell[data-row="${rr}"][data-col="${cc}"]`);
+                      if (cell && cell.value === "") {
+                        currentWordIndex = idx;
+                        cell.focus();
+                        lastFocusedCell = cell;
+                        internalRenderUI();
+                        found = true;
+                        break;
+                      }
+                    }
+                    if (found) { moved = true; break; }
+                  }
+                } else {
+                  internalRenderUI();
+                }
+
+                // Fallback: if nothing moved focus to the next word's first cell
+                if (!moved) {
                   currentWordIndex = (currentWordIndex + 1) % words.length;
                   const nw = words[currentWordIndex];
                   const first = document.querySelector(`input.cell[data-row="${nw.y}"][data-col="${nw.x}"]`);
@@ -937,19 +972,8 @@ fetch(`/${BASE_WORDS_FILE}`)
                     lastFocusedCell = first;
                   }
                   internalRenderUI();
-                } else {
-                  let next;
-                  if (currentDirection === 'horizontal') {
-                    c++;
-                    next = document.querySelector(`input.cell[data-row="${r}"][data-col="${c}"]`);
-                  } else {
-                    r++;
-                    next = document.querySelector(`input.cell[data-row="${r}"][data-col="${c}"]`);
-                  }
-                  if (next && next.classList.contains("highlight")) {
-                    next.focus();
-                  }
                 }
+
                 saveState();
                 checkAutoSuccess();
               });
