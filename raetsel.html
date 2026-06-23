@@ -929,8 +929,12 @@ fetch(`/${BASE_WORDS_FILE}`)
                   const rr = w.horizontal ? w.y : w.y + nk;
                   const cc = w.horizontal ? w.x + nk : w.x;
                   const nextCell = document.querySelector(`input.cell[data-row="${rr}"][data-col="${cc}"]`);
-                  if (nextCell && !nextCell.classList.contains('black') && nextCell.value === "") {
-                    nextCell.focus();
+                  if (nextCell && !nextCell.classList.contains('black')) {
+                    try {
+                      nextCell.focus();
+                      if (typeof nextCell.select === 'function') nextCell.select();
+                      else if (typeof nextCell.setSelectionRange === 'function') nextCell.setSelectionRange(0, nextCell.value.length || 1);
+                    } catch (_) {}
                     lastFocusedCell = nextCell;
                     moved = true;
                     break;
