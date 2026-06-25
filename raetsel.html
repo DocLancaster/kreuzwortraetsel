@@ -567,6 +567,40 @@ async function handlePuzzleCompleted() {
       return { testGrid, placed };
     }
 
+    function buildCandidatePool(preparedList, poolSize = 120) {
+      const byLength = new Map();
+
+      for (const item of preparedList) {
+        const len = item.word.length;
+        if (!byLength.has(len)) byLength.set(len, []);
+        byLength.get(len).push(item);
+      }
+
+      const lengths = [...byLength.keys()].sort((a, b) => b - a);
+      const pool = [];
+      let round = 0;
+
+      while (pool.length < poolSize) {
+        let added = false;
+
+        for (const len of lengths) {
+          const bucket = byLength.get(len);
+
+          if (bucket && bucket[round]) {
+            pool.push(bucket[round]);
+            added = true;
+
+            if (pool.length >= poolSize) break;
+          }
+        }
+
+        if (!added) break;
+        round++;
+      }
+
+      return pool;
+    }
+
     function generateWords() {
       const preparedList = [...wordList].sort((a, b) => {
         if (b.word.length !== a.word.length) {
@@ -577,27 +611,35 @@ async function handlePuzzleCompleted() {
 
       let bestResult = null;
       let bestEvaluationScore = -1000;
-      const ATTEMPTS = 50;
+      const ATTEMPTS = 20;
+      const MIN_WORDS = 6;
+      const POOL_SIZES = [120, 200, preparedList.length];
 
-      for (let i = 0; i < ATTEMPTS; i++) {
-        const shuffledCopy = shuffleArray([...preparedList].slice(0, 40)).concat(preparedList.slice(40));
-        const result = tryGenerateSinglePuzzle(shuffledCopy);
-        
-        if (result) {
-          // Evaluiere das Gitter: Gesamtwortzahl ist wichtig, aber ein extremes Richtungsungleichgewicht gibt Punktabzug
-          const hCount = result.placed.filter(w => w.horizontal).length;
-          const vCount = result.placed.filter(w => !w.horizontal).length;
-          const totalWords = result.placed.length;
-          
-          // Bestraft Abweichungen vom idealen 50:50 Verhältnis
-          const balancePenalty = Math.abs(hCount - vCount) * 2;
-          const evaluationScore = (totalWords * 10) - balancePenalty;
+      for (const poolSize of POOL_SIZES) {
+        const candidatePool = buildCandidatePool(preparedList, poolSize);
 
-          if (evaluationScore > bestEvaluationScore) {
-            bestEvaluationScore = evaluationScore;
-            bestResult = result;
+        for (let i = 0; i < ATTEMPTS; i++) {
+          const shuffledCopy = shuffleArray([...candidatePool]);
+          const result = tryGenerateSinglePuzzle(shuffledCopy);
+
+          if (result) {
+            // Evaluiere das Gitter: Gesamtwortzahl ist wichtig, aber ein extremes Richtungsungleichgewicht gibt Punktabzug
+            const hCount = result.placed.filter(w => w.horizontal).length;
+            const vCount = result.placed.filter(w => !w.horizontal).length;
+            const totalWords = result.placed.length;
+
+            // Bestraft Abweichungen vom idealen 50:50 Verhältnis
+            const balancePenalty = Math.abs(hCount - vCount) * 2;
+            const evaluationScore = (totalWords * 10) - balancePenalty;
+
+            if (evaluationScore > bestEvaluationScore) {
+              bestEvaluationScore = evaluationScore;
+              bestResult = result;
+            }
           }
         }
+
+        if (bestResult && bestResult.placed.length >= MIN_WORDS) break;
       }
 
       if (bestResult) {
