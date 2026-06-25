@@ -567,7 +567,7 @@ async function handlePuzzleCompleted() {
       return { testGrid, placed };
     }
 
-    function buildCandidatePool(preparedList, poolSize = 120) {
+    function buildCandidatePool(preparedList, poolSize = 180) {
       const byLength = new Map();
 
       for (const item of preparedList) {
@@ -576,6 +576,9 @@ async function handlePuzzleCompleted() {
         byLength.get(len).push(item);
       }
 
+      // Wichtig: nicht nur die längsten Wörter nehmen.
+      // Der Pool wird nach Wortlängen gestaffelt aufgebaut, damit kurze
+      // Verbindungswörter erhalten bleiben und das Raster dichter wird.
       const lengths = [...byLength.keys()].sort((a, b) => b - a);
       const pool = [];
       let round = 0;
@@ -601,6 +604,28 @@ async function handlePuzzleCompleted() {
       return pool;
     }
 
+    function countFilledCells(testGrid) {
+      let count = 0;
+      for (let r = 0; r < gridSize; r++) {
+        for (let c = 0; c < gridSize; c++) {
+          if (testGrid[r][c] !== null && testGrid[r][c] !== '*') count++;
+        }
+      }
+      return count;
+    }
+
+    function evaluatePuzzleResult(result) {
+      const hCount = result.placed.filter(w => w.horizontal).length;
+      const vCount = result.placed.filter(w => !w.horizontal).length;
+      const totalWords = result.placed.length;
+      const filledCells = countFilledCells(result.testGrid);
+
+      // Ziel: nicht nur schnell generieren, sondern ein sichtbar gut belegtes Raster.
+      // Wörterzahl bleibt wichtig, aber belegte Zellen werden zusätzlich belohnt.
+      const balancePenalty = Math.abs(hCount - vCount) * 2;
+      return (totalWords * 10) + (filledCells * 0.8) - balancePenalty;
+    }
+
     function generateWords() {
       const preparedList = [...wordList].sort((a, b) => {
         if (b.word.length !== a.word.length) {
@@ -611,26 +636,26 @@ async function handlePuzzleCompleted() {
 
       let bestResult = null;
       let bestEvaluationScore = -1000;
-      const ATTEMPTS = 20;
-      const MIN_WORDS = 6;
-      const POOL_SIZES = [120, 200, preparedList.length];
 
-      for (const poolSize of POOL_SIZES) {
-        const candidatePool = buildCandidatePool(preparedList, poolSize);
+      // Performance/Qualität-Kompromiss:
+      // Erst mittelgroßer Pool, dann größerer Pool, am Ende als Fallback die volle Liste.
+      const TARGET_WORDS = 10;
+      const TARGET_FILLED_CELLS = 45;
+      const SEARCH_STEPS = [
+        { poolSize: 180, attempts: 24 },
+        { poolSize: 320, attempts: 28 },
+        { poolSize: preparedList.length, attempts: 16 }
+      ];
 
-        for (let i = 0; i < ATTEMPTS; i++) {
+      for (const step of SEARCH_STEPS) {
+        const candidatePool = buildCandidatePool(preparedList, step.poolSize);
+
+        for (let i = 0; i < step.attempts; i++) {
           const shuffledCopy = shuffleArray([...candidatePool]);
           const result = tryGenerateSinglePuzzle(shuffledCopy);
 
           if (result) {
-            // Evaluiere das Gitter: Gesamtwortzahl ist wichtig, aber ein extremes Richtungsungleichgewicht gibt Punktabzug
-            const hCount = result.placed.filter(w => w.horizontal).length;
-            const vCount = result.placed.filter(w => !w.horizontal).length;
-            const totalWords = result.placed.length;
-
-            // Bestraft Abweichungen vom idealen 50:50 Verhältnis
-            const balancePenalty = Math.abs(hCount - vCount) * 2;
-            const evaluationScore = (totalWords * 10) - balancePenalty;
+            const evaluationScore = evaluatePuzzleResult(result);
 
             if (evaluationScore > bestEvaluationScore) {
               bestEvaluationScore = evaluationScore;
@@ -639,7 +664,13 @@ async function handlePuzzleCompleted() {
           }
         }
 
-        if (bestResult && bestResult.placed.length >= MIN_WORDS) break;
+        if (
+          bestResult &&
+          bestResult.placed.length >= TARGET_WORDS &&
+          countFilledCells(bestResult.testGrid) >= TARGET_FILLED_CELLS
+        ) {
+          break;
+        }
       }
 
       if (bestResult) {
