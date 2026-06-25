@@ -1,11 +1,15 @@
+const MAX_COOLDOWN_LOOKUP = 250;
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   const { userId, puzzle, words, ids } = req.body || {};
   if (!userId) return res.status(400).json({ error: 'userId required' });
 
-  const listW = Array.isArray(words) ? words : [];
-  const listI = Array.isArray(ids) ? ids : [];
+  const rawW = Array.isArray(words) ? words : [];
+  const rawI = Array.isArray(ids) ? ids : [];
+  const listW = rawW.slice(0, MAX_COOLDOWN_LOOKUP);
+  const listI = rawI.slice(0, MAX_COOLDOWN_LOOKUP);
   if (listW.length === 0 && listI.length === 0) {
     return res.status(400).json({ error: 'ids[] or words[] required' });
   }
@@ -17,6 +21,8 @@ export default async function handler(req, res) {
   const ns = puzzle || 'classic';
 
   // ID-first keys (separate namespace), plus legacy word keys for fallback.
+  // The client can send the complete dictionary. Limit the lookup window to
+  // avoid huge Upstash /mget URLs before puzzle generation.
   const keysId = listI.map(id => `cdId:${userId}:${ns}:${id}`);
   const keysW = listW.map(w => `cd:${userId}:${ns}:${w}`);
   const allKeys = [...keysId, ...keysW];
