@@ -577,11 +577,13 @@ async function handlePuzzleCompleted() {
 
       let bestResult = null;
       let bestEvaluationScore = -1000;
-      const ATTEMPTS = 50;
+      const ATTEMPTS = 20;
+      const CANDIDATE_POOL_SIZE = 80;
+      const candidatePool = preparedList.slice(0, CANDIDATE_POOL_SIZE);
 
-      for (let i = 0; i < ATTEMPTS; i++) {
-        const shuffledCopy = shuffleArray([...preparedList].slice(0, 40)).concat(preparedList.slice(40));
-        const result = tryGenerateSinglePuzzle(shuffledCopy);
+    for (let i = 0; i < ATTEMPTS; i++) {
+      const shuffledCopy = shuffleArray([...candidatePool]);
+      const result = tryGenerateSinglePuzzle(shuffledCopy);
         
         if (result) {
           // Evaluiere das Gitter: Gesamtwortzahl ist wichtig, aber ein extremes Richtungsungleichgewicht gibt Punktabzug
