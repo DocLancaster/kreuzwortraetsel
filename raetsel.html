@@ -457,6 +457,24 @@ async function handlePuzzleCompleted() {
       return ranked.slice(0, poolSize);
     }
 
+    function preselectCandidateWords(list, maxCount = 700) {
+      const eligible = list.filter(w => (w.word || '').length <= gridSize);
+      const source = eligible.length >= 25 ? eligible : list;
+      if (source.length <= maxCount) return source;
+
+      return source
+        .map(word => {
+          const len = Math.min((word.word || '').length, gridSize);
+          const difficulty = Number(word.baseDifficulty || 0);
+          const adminBonus = word.source === 'admin' ? 1.5 : 0;
+          const score = len * 0.45 + difficulty * 0.15 + adminBonus + Math.random() * 5;
+          return { word, score };
+        })
+        .sort((a, b) => b.score - a.score)
+        .slice(0, maxCount)
+        .map(item => item.word);
+    }
+
     async function fetchBlockedWords(puzzle, list, chunkSize = 300) {
       const blockedIds = new Set();
       const blockedWords = new Set();
@@ -808,6 +826,7 @@ fetch('/api/words')
             return !t.some(tag => excludeThemes.includes(tag));
           });
         }
+        wordList = preselectCandidateWords(wordList);
         try {
           const { blockedIds, blockedWords } = await fetchBlockedWords(puzzleType, wordList);
           wordList = wordList.filter(w => !blockedIds.has(w.id) && !blockedWords.has(w.word));
