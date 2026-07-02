@@ -1,18 +1,14 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "api/*.js",      "use": "@vercel/node" },
-    { "src": "*.html",       "use": "@vercel/static" },
-    { "src": "style.css",     "use": "@vercel/static" },
-    { "src": "*.json",       "use": "@vercel/static" }
+  "rewrites": [
+    { "source": "/admin.html", "destination": "/api/admin-auth" },
+    { "source": "/", "destination": "/index.html" }
   ],
-  "routes": [
-    { "src": "/api/(.*)",      "dest": "/api/$1.js" },
-    { "src": "/admin.html",    "dest": "/api/admin-auth" },
-    { "src": "/(.*).html",     "dest": "/$1.html" },
-    { "src": "/(.*\\.json)",   "dest": "/$1" },
-    { "src": "/",              "dest": "/index.html" }
-  ],
+  "functions": {
+    "api/admin-auth.js": {
+      "includeFiles": "admin.html"
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",
