@@ -10,12 +10,22 @@
     .admin-controls select, .admin-controls button { padding:8px 12px; font-size:14px; }
     .tables { display:grid; grid-template-columns: 1fr; gap:18px; }
     @media(min-width: 900px){ .tables { grid-template-columns: 1fr 1fr; } }
+    .table-wide { grid-column: 1 / -1; }
     table { width:100%; border-collapse: collapse; font-size:14px; }
     th, td { padding:8px 10px; border-bottom:1px solid #e5e5e5; text-align:left; }
     th { background:#f7f7f7; position:sticky; top:0; z-index:1; }
     .num { text-align:right; font-variant-numeric: tabular-nums; }
     .search { margin-left:auto; }
     .muted { color:#666; font-size:12px; }
+    .review-badges { display:flex; flex-wrap:wrap; gap:6px; }
+    .review-badge { display:inline-flex; align-items:center; border-radius:999px; padding:3px 8px; font-size:12px; line-height:1.3; background:#eef2ff; color:#3730a3; border:1px solid #c7d2fe; }
+    .review-badge.high { background:#fee2e2; color:#991b1b; border-color:#fecaca; }
+    .review-badge.medium { background:#ffedd5; color:#9a3412; border-color:#fed7aa; }
+    .review-badge.low { background:#ecfeff; color:#155e75; border-color:#a5f3fc; }
+    .severity { display:inline-flex; justify-content:center; min-width:2.4em; border-radius:999px; padding:3px 8px; font-weight:700; background:#f3f4f6; color:#374151; }
+    .severity.high { background:#fee2e2; color:#991b1b; }
+    .severity.medium { background:#ffedd5; color:#9a3412; }
+    .severity.low { background:#ecfeff; color:#155e75; }
 
     .mini-charts { margin: 10px 0 18px; display:grid; grid-template-columns: 1fr; gap:12px; }
     .mini-charts .row { display:grid; grid-template-columns: 1fr 1fr; gap:12px; align-items:center; }
@@ -33,6 +43,16 @@
     .spark-meta .big { font-size:18px; font-variant-numeric: tabular-nums; }
     @media (prefers-color-scheme: dark){
       .mini-charts .cardish { background:#0f1729; border-color:#1f2937; }
+      th { background:#111827; }
+      tbody tr.row-word:hover { background: #111827; }
+      .review-badge { background:#1e1b4b; color:#c7d2fe; border-color:#3730a3; }
+      .review-badge.high { background:#450a0a; color:#fecaca; border-color:#7f1d1d; }
+      .review-badge.medium { background:#431407; color:#fed7aa; border-color:#9a3412; }
+      .review-badge.low { background:#083344; color:#a5f3fc; border-color:#155e75; }
+      .severity { background:#1f2937; color:#e5e7eb; }
+      .severity.high { background:#450a0a; color:#fecaca; }
+      .severity.medium { background:#431407; color:#fed7aa; }
+      .severity.low { background:#083344; color:#a5f3fc; }
     }
 
     /* Force scrolling on admin page */
@@ -115,6 +135,15 @@
         <option value="classic">Classic</option>
         <option value="history">Geschichte-Special</option>
       </select>
+      <label for="reviewSel">Review:</label>
+      <select id="reviewSel">
+        <option value="all">Alle Kandidaten</option>
+        <option value="high">Dringend</option>
+        <option value="flags">Flags</option>
+        <option value="clue">Hinweise</option>
+        <option value="short">Sehr kurze Wörter</option>
+        <option value="data">Zu wenig Daten</option>
+      </select>
       <button id="reloadBtn">Neu laden</button>
       <input id="search" class="search" type="search" placeholder="Suchen… (Wort oder Hinweis)" />
     </div>
@@ -122,6 +151,20 @@
     <p class="muted" id="summary">Lade…</p>
 
     <div class="tables">
+      <div class="table-wide">
+        <h3>Review-Kandidaten</h3>
+        <table id="tblReview">
+          <thead>
+            <tr>
+              <th>Wort</th>
+              <th>Hinweis</th>
+              <th>Warum prüfen?</th>
+              <th class="num">Priorität</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
       <div>
         <h3>⭐ Top-Ratings (Bayes)</h3>
         <table id="tblRatings">
@@ -188,6 +231,7 @@
     };
 
     const sel = document.getElementById('puzzleSel');
+    const reviewSel = document.getElementById('reviewSel');
     const btn = document.getElementById('reloadBtn');
     const search = document.getElementById('search');
     const summary = document.getElementById('summary');
@@ -308,6 +352,7 @@
     }
     sel.addEventListener('change', () => load(sel.value));
     search.addEventListener('input', () => render(currentData));
+    if (reviewSel) reviewSel.addEventListener('change', () => render(currentData));
     if (tsDaysEl) tsDaysEl.addEventListener('change', () => loadTimeseries());
 
     let wordsData = [];
@@ -368,6 +413,69 @@
     }
 
     function fmt(n, digits=2){ return Number(n).toFixed(digits); }
+    function esc(value){
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({
+        '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+      }[ch]));
+    }
+
+    function getReviewSignals(row){
+      const signals = [];
+      const word = String(row.word || '');
+      const clue = String(row.clue || '').trim();
+      const appear = Number(row.appear || 0);
+      const flags = Number(row.flags || 0);
+      const flagRate = Number(row.flagRate || 0);
+      const count = Number(row.ratingCount || 0);
+      const bayesAvg = Number(row.bayesAvg || 0);
+
+      if (flags >= 3 || (appear >= 5 && flagRate >= 0.12)) {
+        signals.push({ key:'flags', label:'hohe Flag-Rate', level:'high', weight:5 });
+      } else if (flags > 0 || (appear >= 5 && flagRate >= 0.05)) {
+        signals.push({ key:'flags', label:'Flags vorhanden', level:'medium', weight:3 });
+      }
+
+      if (count >= 5 && bayesAvg < 3.2) {
+        signals.push({ key:'rating', label:'schwaches Rating', level:'high', weight:4 });
+      } else if (count > 0 && bayesAvg < 3.6) {
+        signals.push({ key:'rating', label:'Rating beobachten', level:'medium', weight:2 });
+      }
+
+      if (word.length <= 2 || /^[A-ZÄÖÜ]{2,3}$/.test(word) && /initialen|abkürzung|kurzform/i.test(clue)) {
+        signals.push({ key:'short', label:'sehr kurz/Abkürzung', level:'medium', weight:3 });
+      } else if (word.length === 3) {
+        signals.push({ key:'short', label:'kurzes Wort', level:'low', weight:1 });
+      }
+
+      if (!clue || clue.length < 10) {
+        signals.push({ key:'clue', label:'Hinweis zu knapp', level:'medium', weight:3 });
+      } else if (/^(ein|eine|der|die|das|abkürzung|initialen)\b/i.test(clue) || clue === word) {
+        signals.push({ key:'clue', label:'Hinweis wirkt schwach', level:'medium', weight:2 });
+      }
+
+      if (appear >= 40 && count === 0) {
+        signals.push({ key:'data', label:'oft gezeigt, nie bewertet', level:'medium', weight:2 });
+      }
+
+      return signals;
+    }
+
+    function reviewPriority(row){
+      return (row.reviewSignals || []).reduce((sum, s) => sum + s.weight, 0);
+    }
+
+    function reviewLevel(row){
+      const signals = row.reviewSignals || [];
+      if (signals.some(s => s.level === 'high')) return 'high';
+      if (signals.some(s => s.level === 'medium')) return 'medium';
+      return 'low';
+    }
+
+    function reviewBadges(row){
+      return `<div class="review-badges">${(row.reviewSignals || []).map(s =>
+        `<span class="review-badge ${esc(s.level)}">${esc(s.label)}</span>`
+      ).join('')}</div>`;
+    }
 
     function render(data){
       const q = (search.value || '').trim().toLowerCase();
@@ -376,14 +484,39 @@
         filtered = data.filter(row => row.word.toLowerCase().includes(q) || (row.clue || '').toLowerCase().includes(q));
       }
 
+      const reviewMode = reviewSel ? reviewSel.value : 'all';
+      const reviewRows = filtered
+        .filter(row => {
+          const signals = row.reviewSignals || [];
+          if (!signals.length) return false;
+          if (reviewMode === 'all') return true;
+          if (reviewMode === 'high') return reviewLevel(row) === 'high';
+          return signals.some(s => s.key === reviewMode);
+        })
+        .sort((a,b) => reviewPriority(b) - reviewPriority(a)
+                        || Number(b.flags||0) - Number(a.flags||0)
+                        || Number(b.appear||0) - Number(a.appear||0)
+                        || a.word.localeCompare(b.word))
+        .slice(0, 80);
+      fillTable('tblReview', reviewRows, row => {
+        const level = reviewLevel(row);
+        return `
+        <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
+          <td>${esc(row.word)}</td>
+          <td>${esc(row.clue || '')}</td>
+          <td>${reviewBadges(row)}</td>
+          <td class="num"><span class="severity ${esc(level)}">${reviewPriority(row)}</span></td>
+        </tr>
+      `});
+
       // Ratings
       const topRatings = [...filtered]
         .sort((a,b) => b.bayesAvg - a.bayesAvg)
         .slice(0, 50);
       fillTable('tblRatings', topRatings, row => `
-        <tr class="row-word" data-id="${row.id||''}" data-word="${row.word}" title="Details anzeigen">
-          <td>${row.word}</td>
-          <td>${row.clue || ''}</td>
+        <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
+          <td>${esc(row.word)}</td>
+          <td>${esc(row.clue || '')}</td>
           <td class="num">${fmt(row.bayesAvg,2)}</td>
           <td class="num">${row.ratingCount}</td>
         </tr>
@@ -396,9 +529,9 @@
         .sort((a,b) => b.flagRate - a.flagRate)
         .slice(0, 50);
       fillTable('tblFlags', topFlags, row => `
-        <tr class="row-word" data-id="${row.id||''}" data-word="${row.word}" title="Details anzeigen">
-          <td>${row.word}</td>
-          <td>${row.clue || ''}</td>
+        <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
+          <td>${esc(row.word)}</td>
+          <td>${esc(row.clue || '')}</td>
           <td class="num">${row.flags}</td>
           <td class="num">${row.appear}</td>
           <td class="num">${fmt(row.flagRate,3)}</td>
@@ -411,9 +544,9 @@
         .sort((a,b) => b.flags - a.flags)
         .slice(0, 50);
       fillTable('tblFlagsAll', flaggedAll, row => `
-        <tr class="row-word" data-id="${row.id||''}" data-word="${row.word}" title="Details anzeigen">
-          <td>${row.word}</td>
-          <td>${row.clue || ''}</td>
+        <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
+          <td>${esc(row.word)}</td>
+          <td>${esc(row.clue || '')}</td>
           <td class="num">${row.flags}</td>
           <td class="num">${row.appear}</td>
         </tr>
@@ -426,9 +559,9 @@
                         || a.word.localeCompare(b.word))
         .slice(0, 50);
       fillTable('tblAppear', topAppear, row => `
-        <tr class="row-word" data-id="${row.id||''}" data-word="${row.word}" title="Details anzeigen">
-          <td>${row.word}</td>
-          <td>${row.clue || ''}</td>
+        <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
+          <td>${esc(row.word)}</td>
+          <td>${esc(row.clue || '')}</td>
           <td class="num">${row.appear}</td>
         </tr>
       `);
@@ -438,7 +571,7 @@
       const totalAppear = filtered.reduce((s,r)=>s+(r.appear||0),0);
       const rated = filtered.filter(r => r.ratingCount>0);
       const avgOfAvg = rated.length ? (rated.reduce((s,r)=>s+r.avgRating,0)/rated.length) : 0;
-      summary.textContent = `${filtered.length} Wörter · Flags: ${totalFlags} · Einblendungen: ${totalAppear} · Ø Rating (nur bewertete): ${fmt(avgOfAvg,2)}`;
+      summary.textContent = `${filtered.length} Wörter · Review-Kandidaten: ${reviewRows.length} · Flags: ${totalFlags} · Einblendungen: ${totalAppear} · Ø Rating (nur bewertete): ${fmt(avgOfAvg,2)}`;
     }
 
     function fillTable(id, rows, rowTmpl){
@@ -488,6 +621,8 @@
             flags,
             flagRate
           };
+          row.reviewSignals = getReviewSignals(row);
+          return row;
         });
 
         render(currentData);
@@ -525,6 +660,7 @@
         const s = computePlacementScore(row);
         document.getElementById('dScore').textContent = fmt(s.score, 3);
         document.getElementById('dFormula').textContent = `1 + 0.6*lenNorm(${fmt(s.breakdown.lenNorm,2)}) + 1.2*rating(${fmt(s.breakdown.ratingNorm,2)}) - 1.0*flags(${fmt(s.breakdown.flagPenalty,2)}) - 0.8*usage(${fmt(s.breakdown.usagePenalty,2)})`;
+        document.getElementById('dReview').innerHTML = row.reviewSignals?.length ? reviewBadges(row) : 'Keine Auffälligkeiten';
         // Open
         modal.hidden = false;
         // close handlers
@@ -542,7 +678,6 @@
     loadTimeseries();
     load(sel.value);
   </script>
-</body>
   <div id="detailModal" class="modal" hidden>
     <div class="modal-backdrop"></div>
     <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
@@ -561,7 +696,9 @@
         <div class="label">Rating-Ø (Bayes)</div><div class="value" id="dBayes"></div>
         <div class="label">Live-Score</div><div class="value" id="dScore"></div>
         <div class="label">Formel</div><div class="value" id="dFormula"></div>
+        <div class="label">Review</div><div class="value" id="dReview"></div>
       </div>
     </div>
   </div>
+</body>
 </html>
