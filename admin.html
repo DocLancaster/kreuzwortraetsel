@@ -63,6 +63,12 @@
     .mini-charts .cardish { border:1px solid #e5e5e5; border-radius:10px; padding:10px 12px; background:#fff; }
     .mini-charts h4 { margin:0 0 6px; font-size:14px; font-weight:600; }
     .mini-charts select { padding:6px 8px; font-size:12px; }
+    .quality-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:10px; }
+    @media(min-width: 760px){ .quality-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+    .quality-metric { border:1px solid #e5e7eb; border-radius:10px; padding:10px 12px; background:#fff; }
+    .quality-metric .label { color:#6b7280; font-size:12px; margin-bottom:4px; }
+    .quality-metric .value { font-size:22px; line-height:1.1; font-weight:800; font-variant-numeric: tabular-nums; }
+    .quality-note { margin-top:10px; }
     .spark-wrap { display:flex; align-items:center; gap:10px; }
     .spark-wrap canvas {
       max-width: 100%;
@@ -82,6 +88,8 @@
       th, td { border-bottom-color:#1f2937; }
       .table-card h3 { background:#0f1729; border-bottom-color:#334155; }
       .mini-charts .cardish { background:#0f1729; border-color:#1f2937; }
+      .quality-metric { background:#0f1729; border-color:#1f2937; }
+      .quality-metric .label { color:#9ca3af; }
       th { background:#111827; color:#e5e7eb; }
       td { background:transparent; }
       tbody tr.row-word:hover { background: #111827; }
@@ -184,6 +192,41 @@
           <button id="addWordBtn" type="submit">Wort hinzufügen</button>
         </div>
       </form>
+    </section>
+
+    <section class="admin-section">
+      <div class="section-head">
+        <div>
+          <h2>Rätselqualität</h2>
+          <p class="muted">Gemessen bei generierten Rätseln: mehr Wörter, mehr Kreuzungen, gute Balance und sinnvolle Dichte.</p>
+        </div>
+        <label class="muted">Modus:
+          <select id="qualityPuzzleSel">
+            <option value="classic">Classic</option>
+            <option value="history">Geschichte-Special</option>
+          </select>
+        </label>
+      </div>
+      <div class="quality-grid">
+        <div class="quality-metric"><div class="label">Messungen</div><div id="qualityCount" class="value">–</div></div>
+        <div class="quality-metric"><div class="label">Ø Qualität</div><div id="qualityScore" class="value">–</div></div>
+        <div class="quality-metric"><div class="label">Ø Wörter</div><div id="qualityWords" class="value">–</div></div>
+        <div class="quality-metric"><div class="label">Ø Kreuzungen</div><div id="qualityCrossings" class="value">–</div></div>
+        <div class="quality-metric"><div class="label">Ø Balance-Lücke</div><div id="qualityBalance" class="value">–</div></div>
+      </div>
+      <div class="mini-charts quality-note">
+        <div class="cardish">
+          <h4>Qualitätsverlauf</h4>
+          <div class="spark-wrap">
+            <div class="spark-meta">
+              <div class="muted">Letztes Rätsel</div>
+              <div id="qualityLast" class="big">–</div>
+              <div id="qualityDensity" class="muted">Dichte: –</div>
+            </div>
+            <canvas id="qualitySpark" width="600" height="100"></canvas>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="admin-section">
@@ -354,6 +397,17 @@
     const compCanvas = document.getElementById('compSpark');
     const genSumEl = document.getElementById('genSum');
     const compSumEl = document.getElementById('compSum');
+    const qualityPuzzleSel = document.getElementById('qualityPuzzleSel');
+    const qualityCanvas = document.getElementById('qualitySpark');
+    const qualityEls = {
+      count: document.getElementById('qualityCount'),
+      score: document.getElementById('qualityScore'),
+      words: document.getElementById('qualityWords'),
+      crossings: document.getElementById('qualityCrossings'),
+      balance: document.getElementById('qualityBalance'),
+      last: document.getElementById('qualityLast'),
+      density: document.getElementById('qualityDensity')
+    };
     const FLAG_REASON_LABELS = {
       unclear_clue: 'Hinweis unklar',
       wrong_answer: 'Antwort falsch',
@@ -393,6 +447,7 @@
     async function loadTimeseries(){
       try{
         const days = Number(tsDaysEl?.value || 7);
+        const qualityPuzzle = qualityPuzzleSel?.value || 'classic';
         const r = await fetch('/api/user-score', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -406,6 +461,8 @@
         const comp = Array.isArray(ts.completed?.total) ? ts.completed.total : [];
         drawSparkline(genCanvas, gen);
         drawSparkline(compCanvas, comp);
+        const q = data?.timeseries?.quality?.generated?.[qualityPuzzle]?.avgScore || [];
+        drawSparkline(qualityCanvas, q);
         const sum = arr => arr.reduce((s,v)=>s+Number(v||0),0);
         genSumEl.textContent = sum(gen).toLocaleString('de-DE');
         compSumEl.textContent = sum(comp).toLocaleString('de-DE');
@@ -414,6 +471,21 @@
         if (genSumEl) genSumEl.textContent = '—';
         if (compSumEl) compSumEl.textContent = '—';
       }
+    }
+
+    function renderQuality(globalData){
+      const puzzle = qualityPuzzleSel?.value || 'classic';
+      const q = globalData?.quality?.[puzzle] || {};
+      const last = q.last || {};
+      qualityEls.count.textContent = Number(q.count || 0).toLocaleString('de-DE');
+      qualityEls.score.textContent = q.avgScore ? fmt(q.avgScore, 1) : '–';
+      qualityEls.words.textContent = q.avgWords ? fmt(q.avgWords, 1) : '–';
+      qualityEls.crossings.textContent = q.avgCrossings ? fmt(q.avgCrossings, 1) : '–';
+      qualityEls.balance.textContent = q.count ? fmt(q.avgBalanceGap || 0, 1) : '–';
+      qualityEls.last.textContent = last.score !== undefined ? `${last.score}/100` : '–';
+      qualityEls.density.textContent = last.density !== undefined
+        ? `Dichte: ${fmt(Number(last.density) * 100, 1)}% · Wörter: ${last.words || 0} · ${last.horizontal || 0}/${last.vertical || 0}`
+        : 'Dichte: –';
     }
 
     // --- stable IDs for words (fallback if JSON has no id) ---
@@ -465,6 +537,7 @@
         const cComp = Number(g.byPuzzle?.classic?.completed || 0);
         const hGen = Number(g.byPuzzle?.history?.generated || 0);
         const hComp = Number(g.byPuzzle?.history?.completed || 0);
+        renderQuality(g);
         el.textContent =
           `Gesamt: ${gen.toLocaleString('de-DE')} generiert · ${comp.toLocaleString('de-DE')} abgeschlossen — ` +
           `Classic: ${cGen.toLocaleString('de-DE')} / ${cComp.toLocaleString('de-DE')} — ` +
@@ -474,6 +547,7 @@
         if (el) el.textContent = 'Globale Zähler derzeit nicht verfügbar.';
       }
     }
+    if (qualityPuzzleSel) qualityPuzzleSel.addEventListener('change', () => { loadGlobalCounters(); loadTimeseries(); });
     sel.addEventListener('change', () => load(sel.value));
     search.addEventListener('input', () => render(currentData));
     if (reviewSel) reviewSel.addEventListener('change', () => render(currentData));

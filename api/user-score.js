@@ -23,7 +23,9 @@ export default async function handler(req, res) {
         'games:generated:classic',
         'games:completed:classic',
         'games:generated:history',
-        'games:completed:history'
+        'games:completed:history',
+        ...qualityKeys('classic'),
+        ...qualityKeys('history')
       ];
       const mgetUrl = `${base}/mget/${keys.map(encodeURIComponent).join('/')}`;
       const r = await fetch(mgetUrl, { headers: { Authorization: `Bearer ${token}` } });
@@ -35,6 +37,10 @@ export default async function handler(req, res) {
       const arr = Array.isArray(payload) ? payload : payload.result;
 
       const g = (i) => toPosInt(arr?.[i], 0);
+      const quality = {
+        classic: readQuality(arr, 6),
+        history: readQuality(arr, 13)
+      };
 
       // Optional timeseries for admin mini-charts
       const wantsTs = !!(req.body && req.body.timeseries === true);
@@ -72,18 +78,29 @@ export default async function handler(req, res) {
         const compAllKeys     = dayStrings.map(d => `games:completed:${d}`);
         const compClassicKeys = dayStrings.map(d => `games:completed:classic:${d}`);
         const compHistoryKeys = dayStrings.map(d => `games:completed:history:${d}`);
+        const qClassicCountKeys = dayStrings.map(d => `quality:generated:count:classic:${d}`);
+        const qClassicScoreKeys = dayStrings.map(d => `quality:generated:score:classic:${d}`);
+        const qHistoryCountKeys = dayStrings.map(d => `quality:generated:count:history:${d}`);
+        const qHistoryScoreKeys = dayStrings.map(d => `quality:generated:score:history:${d}`);
         // Fetch in parallel (6 mget calls)
         const [
           genAll, genClassic, genHistory,
-          compAll, compClassic, compHistory
+          compAll, compClassic, compHistory,
+          qClassicCount, qClassicScore, qHistoryCount, qHistoryScore
         ] = await Promise.all([
           mgetSeries(genAllKeys),
           mgetSeries(genClassicKeys),
           mgetSeries(genHistoryKeys),
           mgetSeries(compAllKeys),
           mgetSeries(compClassicKeys),
-          mgetSeries(compHistoryKeys)
+          mgetSeries(compHistoryKeys),
+          mgetSeries(qClassicCountKeys),
+          mgetSeries(qClassicScoreKeys),
+          mgetSeries(qHistoryCountKeys),
+          mgetSeries(qHistoryScoreKeys)
         ]);
+        const qClassicAvg = qClassicScore.map((sum, i) => avgInt(sum, qClassicCount[i]));
+        const qHistoryAvg = qHistoryScore.map((sum, i) => avgInt(sum, qHistoryCount[i]));
         return res.status(200).json({
           ok: true,
           global: {
@@ -92,12 +109,19 @@ export default async function handler(req, res) {
             byPuzzle: {
               classic: { generated: g(2), completed: g(3) },
               history: { generated: g(4), completed: g(5) }
-            }
+            },
+            quality
           },
           timeseries: {
             days: dayStrings,
             generated: { total: genAll, classic: genClassic, history: genHistory },
-            completed: { total: compAll, classic: compClassic, history: compHistory }
+            completed: { total: compAll, classic: compClassic, history: compHistory },
+            quality: {
+              generated: {
+                classic: { count: qClassicCount, avgScore: qClassicAvg },
+                history: { count: qHistoryCount, avgScore: qHistoryAvg }
+              }
+            }
           }
         });
       }
@@ -110,7 +134,8 @@ export default async function handler(req, res) {
           byPuzzle: {
             classic: { generated: g(2), completed: g(3) },
             history: { generated: g(4), completed: g(5) }
-          }
+          },
+          quality
         }
       });
     }
@@ -186,6 +211,46 @@ function toPosInt(v, dflt){
   return Math.floor(n);
 }
 function round2(x){ return Math.round((x + Number.EPSILON) * 100) / 100; }
+function avgInt(sum, count){
+  const c = toPosInt(count, 0);
+  return c > 0 ? Math.round(toPosInt(sum, 0) / c) : 0;
+}
+function qualityKeys(puzzle){
+  return [
+    `quality:generated:count:${puzzle}`,
+    `quality:generated:score:${puzzle}`,
+    `quality:generated:words:${puzzle}`,
+    `quality:generated:crossings:${puzzle}`,
+    `quality:generated:balanceGap:${puzzle}`,
+    `quality:generated:densityPermille:${puzzle}`,
+    `quality:generated:last:${puzzle}`
+  ];
+}
+function readQuality(arr, offset){
+  const count = toPosInt(arr?.[offset], 0);
+  const last = parseQualityLast(arr?.[offset + 6]);
+  return {
+    count,
+    avgScore: count ? round2(toPosInt(arr?.[offset + 1], 0) / count) : 0,
+    avgWords: count ? round2(toPosInt(arr?.[offset + 2], 0) / count) : 0,
+    avgCrossings: count ? round2(toPosInt(arr?.[offset + 3], 0) / count) : 0,
+    avgBalanceGap: count ? round2(toPosInt(arr?.[offset + 4], 0) / count) : 0,
+    avgDensity: count ? round2((toPosInt(arr?.[offset + 5], 0) / count) / 10) : 0,
+    last
+  };
+}
+function parseQualityLast(value){
+  if (!value) return null;
+  try {
+    return JSON.parse(String(value));
+  } catch (_) {
+    try {
+      return JSON.parse(decodeURIComponent(String(value)));
+    } catch (_err) {
+      return null;
+    }
+  }
+}
 
 const DAY_MS = 24*60*60*1000;
 function isoWeekKeyBerlin(t){

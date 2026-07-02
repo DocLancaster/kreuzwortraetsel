@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   // Accept id-first, fallback to word (both allowed)
-  const { action, id, word, puzzle, reason } = req.body || {};
+  const { action, id, word, puzzle, reason, reasons } = req.body || {};
   if (!id && !word) return res.status(400).json({ error: 'id or word required' });
 
   const base = process.env.UPSTASH_REDIS_REST_URL;
@@ -56,7 +56,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: true, reasons });
     }
 
-    const safeReason = normalizeReason(reason);
+    const safeReasons = normalizeReasons(reasons || reason);
     const tasks = [];
 
     // New: ID-based key
@@ -66,10 +66,12 @@ export default async function handler(req, res) {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       }));
-      tasks.push(fetch(`${base}/incr/${encodeURIComponent(reasonKeyId(ns, id, safeReason))}`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
-      }));
+      for (const safeReason of safeReasons) {
+        tasks.push(fetch(`${base}/incr/${encodeURIComponent(reasonKeyId(ns, id, safeReason))}`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` }
+        }));
+      }
     }
 
     // Legacy: word-based key for backward compatibility
@@ -79,10 +81,12 @@ export default async function handler(req, res) {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       }));
-      tasks.push(fetch(`${base}/incr/${encodeURIComponent(reasonKeyWord(ns, word, safeReason))}`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
-      }));
+      for (const safeReason of safeReasons) {
+        tasks.push(fetch(`${base}/incr/${encodeURIComponent(reasonKeyWord(ns, word, safeReason))}`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` }
+        }));
+      }
     }
 
     const results = await Promise.all(tasks);
@@ -100,6 +104,16 @@ export default async function handler(req, res) {
 
 function normalizeReason(reason) {
   return FLAG_REASONS.includes(reason) ? reason : 'other';
+}
+
+function normalizeReasons(input) {
+  const raw = Array.isArray(input) ? input : [input];
+  const out = [];
+  for (const item of raw) {
+    const reason = normalizeReason(item);
+    if (!out.includes(reason)) out.push(reason);
+  }
+  return out.length ? out : ['other'];
 }
 
 function reasonKeyId(ns, id, reason) {

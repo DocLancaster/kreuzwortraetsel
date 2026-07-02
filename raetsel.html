@@ -43,6 +43,13 @@
   .modal { background:#fff; max-width: 420px; width: calc(100% - 32px); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.2); padding: 18px; max-height: 90vh; overflow:auto; }
   .modal h2 { margin: 0 0 8px; font-size: 20px; }
   .modal p { margin: 0 0 12px; color:#555; }
+  .flag-context { border:1px solid #e5e7eb; border-radius:10px; padding:10px 12px; margin:10px 0 12px; background:#f8fafc; }
+  .flag-context .meta { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; color:#6b7280; font-size:13px; }
+  .flag-options { display:grid; gap:8px; margin:10px 0; }
+  .flag-option { display:flex; gap:9px; align-items:flex-start; padding:9px 10px; border:1px solid #e5e7eb; border-radius:9px; background:#fff; cursor:pointer; }
+  .flag-option input { margin-top:2px; }
+  .flag-option span { line-height:1.35; }
+  .flag-status { min-height:1.2em; font-size:13px; color:#b91c1c; }
   .stars { display:flex; gap:8px; justify-content:center; padding: 8px 0 12px; }
   .stars button { appearance:none; border:none; background:none; cursor:pointer; font-size: 28px; line-height:1; padding:4px; min-width:44px; min-height:44px; }
   .star { color:#ccc; transition: transform .08s ease, color .08s ease; }
@@ -65,6 +72,12 @@
     .stars button { font-size: 36px; padding: 8px; }
     .modal .actions { flex-direction: column; }
     .modal .actions button { width: 100%; padding: 12px; font-size: 16px; }
+  }
+  @media (prefers-color-scheme: dark) {
+    .modal { background:#0f1729; color:#e5e7eb; }
+    .modal p { color:#cbd5e1; }
+    .flag-context, .flag-option { background:#111827; border-color:#334155; }
+    .flag-context .meta { color:#94a3b8; }
   }
   /* Personal Score HUD */
   .user-hud { text-align:center; margin:.35rem 0 .2rem; font-size:.95rem; color: var(--muted); position: relative; }
@@ -181,6 +194,26 @@
     </div>
   </div>
 </div>
+  <div id="flagModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="flagTitle" style="display:none">
+    <div class="modal">
+      <h2 id="flagTitle">Wort melden</h2>
+      <p>Was ist an diesem Eintrag auffällig?</p>
+      <div class="flag-context">
+        <strong>Aktueller Hinweis</strong>
+        <div id="flagClue">–</div>
+        <div class="meta">
+          <span id="flagDirection">–</span>
+          <span id="flagLength">–</span>
+        </div>
+      </div>
+      <div id="flagOptions" class="flag-options"></div>
+      <div id="flagStatus" class="flag-status"></div>
+      <div class="actions">
+        <button id="flagCancel" class="btn-secondary" type="button">Abbrechen</button>
+        <button id="flagSubmit" class="btn-primary enabled" type="button">Melden</button>
+      </div>
+    </div>
+  </div>
   <script>
     function showConfetti() {
       const container = document.getElementById('confetti-container');
@@ -467,7 +500,7 @@ async function handlePuzzleCompleted() {
         fetch('/api/appearance', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ puzzle: puzzleType, ids: uniqueIds, words: uniqueWords, gameStart: true })
+          body: JSON.stringify({ puzzle: puzzleType, ids: uniqueIds, words: uniqueWords, gameStart: true, puzzleQuality: lastPuzzleQuality })
         }).catch(() => {});
         fetch('/api/cooldown-set', {
           method: 'POST',
@@ -553,7 +586,8 @@ async function handlePuzzleCompleted() {
       return list
         .map(word => {
           const len = Math.min((word.word || '').length, gridSize);
-          return { word, score: len * 0.8 + Number(word.rank || 0) + Math.random() * 3.5 };
+          const compactLengthBonus = Math.min(len, 7) * 0.25;
+          return { word, score: crossingPotential(word) * 1.2 + compactLengthBonus + Number(word.rank || 0) + Math.random() * 4.5 };
         })
         .sort((a, b) => b.score - a.score)
         .map(item => item.word);
@@ -865,10 +899,10 @@ async function handlePuzzleCompleted() {
 
       const density = filledCells / (gridSize * gridSize);
       const balanceGap = Math.abs(horizontalCount - verticalCount);
-      const wordScore = Math.min(wordTotal / 16, 1) * 30;
-      const crossingScore = Math.min(crossingCells / Math.max(1, wordTotal - 1), 1) * 25;
+      const wordScore = Math.min(wordTotal / 20, 1) * 36;
+      const crossingScore = Math.min(crossingCells / Math.max(1, wordTotal - 1), 1) * 22;
       const balanceScore = wordTotal ? (1 - (balanceGap / wordTotal)) * 20 : 0;
-      const densityScore = Math.min(density / 0.42, 1) * 15;
+      const densityScore = Math.min(density / 0.44, 1) * 12;
       const connectivityScore = wordTotal ? (components === 1 ? 10 : Math.max(0, 10 - ((components - 1) * 4))) : 0;
       const score = Math.round(wordScore + crossingScore + balanceScore + densityScore + connectivityScore);
 
@@ -901,7 +935,8 @@ async function handlePuzzleCompleted() {
         
         if (result) {
           const quality = evaluatePuzzleQuality(result);
-          const evaluationScore = quality.score + (quality.words * 0.8) + (quality.crossingLinks * 0.6);
+          const balanceOutlierPenalty = Math.max(0, quality.balanceGap - 2) * 4;
+          const evaluationScore = quality.score + (quality.words * 1.8) + (quality.crossingLinks * 0.7) - balanceOutlierPenalty;
           if (evaluationScore > bestEvaluationScore) {
             bestEvaluationScore = evaluationScore;
             bestResult = result;
@@ -1045,6 +1080,66 @@ async function handlePuzzleCompleted() {
         return true;
       }
       return false;
+    }
+
+    const FLAG_REASONS = [
+      ['unclear_clue', 'Hinweis unklar'],
+      ['wrong_answer', 'Antwort passt nicht'],
+      ['spelling', 'Schreibweise problematisch'],
+      ['too_hard', 'Zu schwer'],
+      ['too_easy', 'Zu leicht/langweilig'],
+      ['abbreviation', 'Abkürzung/Initialen stören'],
+      ['inappropriate', 'Unpassender Inhalt'],
+      ['other', 'Sonstiges']
+    ];
+
+    function openFlagDialog(wordEntry) {
+      return new Promise(resolve => {
+        const modal = document.getElementById('flagModal');
+        const options = document.getElementById('flagOptions');
+        const status = document.getElementById('flagStatus');
+        const submit = document.getElementById('flagSubmit');
+        const cancel = document.getElementById('flagCancel');
+        document.getElementById('flagClue').textContent = wordEntry.clue || 'Kein Hinweis hinterlegt';
+        document.getElementById('flagDirection').textContent = wordEntry.horizontal ? 'Waagerecht' : 'Senkrecht';
+        document.getElementById('flagLength').textContent = `${wordEntry.word.length} Buchstaben`;
+        status.textContent = '';
+        options.innerHTML = FLAG_REASONS.map(([key, label]) => `
+          <label class="flag-option">
+            <input type="checkbox" value="${key}">
+            <span>${label}</span>
+          </label>
+        `).join('');
+
+        const close = (value) => {
+          modal.style.display = 'none';
+          submit.removeEventListener('click', onSubmit);
+          cancel.removeEventListener('click', onCancel);
+          modal.removeEventListener('click', onBackdrop);
+          document.removeEventListener('keydown', onEsc);
+          resolve(value);
+        };
+        const onSubmit = () => {
+          const selected = [...options.querySelectorAll('input:checked')].map(input => input.value);
+          if (!selected.length) {
+            status.textContent = 'Bitte mindestens einen Grund auswählen.';
+            return;
+          }
+          close(selected);
+        };
+        const onCancel = () => close(null);
+        const onBackdrop = (event) => {
+          if (event.target === modal) close(null);
+        };
+        const onEsc = (event) => {
+          if (event.key === 'Escape') close(null);
+        };
+        submit.addEventListener('click', onSubmit);
+        cancel.addEventListener('click', onCancel);
+        modal.addEventListener('click', onBackdrop);
+        document.addEventListener('keydown', onEsc);
+        modal.style.display = 'flex';
+      });
     }
 
 fetch('/api/words')
@@ -1423,27 +1518,15 @@ fetch('/api/words')
         }
         puzzleStart = performance.now();
         updateUserHud();
-        document.getElementById('flagBtn').addEventListener('click', () => {
+        document.getElementById('flagBtn').addEventListener('click', async () => {
           if (!currentWordIndex && currentWordIndex !== 0) return;
           const w = words[currentWordIndex];
-          const reasons = [
-            ['unclear_clue', 'Hinweis unklar'],
-            ['wrong_answer', 'Antwort falsch'],
-            ['spelling', 'Schreibweise problematisch'],
-            ['too_hard', 'Zu schwer'],
-            ['too_easy', 'Zu leicht/langweilig'],
-            ['abbreviation', 'Abkürzung/Initialen stören'],
-            ['inappropriate', 'Unpassendes Wort'],
-            ['other', 'Sonstiges']
-          ];
-          const choice = prompt(`Warum möchtest du "${w.word}" melden?\n\n${reasons.map((r, i) => `${i + 1}. ${r[1]}`).join('\n')}`);
-          if (choice === null) return;
-          const index = Math.max(0, Math.min(reasons.length - 1, Number(choice || reasons.length) - 1));
-          const reason = reasons[index]?.[0] || 'other';
+          const reasons = await openFlagDialog(w);
+          if (!reasons) return;
           fetch('/api/flag', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ puzzle: puzzleType, word: w.word, id: w.id, reason })
+            body: JSON.stringify({ puzzle: puzzleType, id: w.id, reasons })
           })
           .then(() => alert('Dieses Wort wurde gemeldet.'))
           .catch(() => alert('Fehler beim Melden des Wortes.'));
