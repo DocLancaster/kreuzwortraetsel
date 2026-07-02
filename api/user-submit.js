@@ -23,6 +23,7 @@ export default async function handler(req, res) {
   const wrongCells = toPosInt(body.wrongCells, 0);
   const wordsCount = toPosInt(body.wordsCount, 0);
   const lettersCount = toPosInt(body.lettersCount, 0);
+  const puzzleQuality = sanitizeQuality(body.puzzleQuality);
   const clientScore = toPosInt(body.puzzleScore, -1);
   const completedAt = isFinite(body.completedAt) ? Number(body.completedAt) : Date.now();
 
@@ -108,6 +109,14 @@ export default async function handler(req, res) {
     // Monotonic totals
     tasks.push(post(`${base}/incrby/${encodeURIComponent(P('scoreTotal'))}/${scoreRounded}`));
     if (coinsEarned) tasks.push(post(`${base}/incrby/${encodeURIComponent(P('coins'))}/${coinsEarned}`));
+    if (puzzleQuality) {
+      tasks.push(post(`${base}/incr/${encodeURIComponent(`quality:count:${puzzle}`)}`));
+      tasks.push(post(`${base}/incrby/${encodeURIComponent(`quality:score:${puzzle}`)}/${puzzleQuality.score}`));
+      tasks.push(post(`${base}/incrby/${encodeURIComponent(`quality:crossings:${puzzle}`)}/${puzzleQuality.crossingCells}`));
+      tasks.push(post(`${base}/incrby/${encodeURIComponent(`quality:balanceGap:${puzzle}`)}/${puzzleQuality.balanceGap}`));
+      tasks.push(post(`${base}/incrby/${encodeURIComponent(`quality:densityPermille:${puzzle}`)}/${puzzleQuality.densityPermille}`));
+      tasks.push(post(`${base}/set/${encodeURIComponent(`quality:last:${puzzle}`)}/${encodeURIComponent(JSON.stringify(puzzleQuality))}`));
+    }
 
     // Best time & streak
     if (isBest) tasks.push(post(`${base}/set/${encodeURIComponent(P('best'))}/${durationMs}`));
@@ -184,6 +193,23 @@ function toPosInt(v, dflt){
   return Math.floor(n);
 }
 function clamp(x, a, b){ return Math.max(a, Math.min(b, x)); }
+function sanitizeQuality(input){
+  if (!input || typeof input !== 'object') return null;
+  const score = clamp(toPosInt(input.score, 0), 0, 100);
+  const density = typeof input.density === 'number' ? input.density : parseFloat(input.density || '0');
+  return {
+    score,
+    words: toPosInt(input.words, 0),
+    horizontal: toPosInt(input.horizontal, 0),
+    vertical: toPosInt(input.vertical, 0),
+    balanceGap: toPosInt(input.balanceGap, 0),
+    filledCells: toPosInt(input.filledCells, 0),
+    densityPermille: clamp(Math.round((isFinite(density) ? density : 0) * 1000), 0, 1000),
+    crossingCells: toPosInt(input.crossingCells, 0),
+    crossingLinks: toPosInt(input.crossingLinks, 0),
+    components: toPosInt(input.components, 0)
+  };
+}
 function computeScore({ durationMs=0, revealsUsed=0, wrongCells=0, lettersCount=0 }){
   const timePenalty = Math.min(40, (durationMs||0) / 3000);     // ~ -1 per 3s, capped 40
   const revealPenalty = 8 * (revealsUsed||0);                   // -8 per reveal

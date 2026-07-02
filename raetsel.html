@@ -211,6 +211,7 @@ let wrongCellsChecked = 0;     // Summe falsch markierter Felder über alle Chec
 let puzzleStart = performance.now();
 let wordsCount = 0;
 let lettersCount = 0;
+let lastPuzzleQuality = null;
 let lastSubmitResult = null;
 let lastCoinsShown = null;
 let revealsLeft = 3;
@@ -417,7 +418,7 @@ async function handlePuzzleCompleted() {
         const c = input.dataset.col;
         userInputs[`${r},${c}`] = input.value.toUpperCase();
       });
-      const state = { grid, words, revealsLeft, currentWordIndex, currentDirection, userInputs };
+      const state = { grid, words, revealsLeft, currentWordIndex, currentDirection, userInputs, puzzleQuality: lastPuzzleQuality };
       localStorage.setItem(RAEETSEL_STORAGE_KEY, JSON.stringify(state));    }
 
     function loadState() {
@@ -453,6 +454,7 @@ async function handlePuzzleCompleted() {
     function applyPuzzleState(state) {
       state.grid.forEach((row, i) => { grid[i] = row; });
       words = state.words;
+      lastPuzzleQuality = state.puzzleQuality || evaluatePuzzleQuality({ testGrid: grid, placed: words });
       revealsLeft = typeof state.revealsLeft === 'number' ? state.revealsLeft : 3;
       currentWordIndex = state.currentWordIndex || 0;
       currentDirection = state.currentDirection || 'horizontal';
@@ -482,6 +484,7 @@ async function handlePuzzleCompleted() {
         wordList,
         wordsCount,
         lettersCount,
+        lastPuzzleQuality,
         currentWordIndex,
         currentDirection,
         revealsLeft
@@ -497,6 +500,7 @@ async function handlePuzzleCompleted() {
         revealsLeft: 3,
         currentWordIndex: 0,
         currentDirection: 'horizontal',
+        puzzleQuality: lastPuzzleQuality,
         userInputs: {}
       };
       grid = previous.grid;
@@ -504,6 +508,7 @@ async function handlePuzzleCompleted() {
       wordList = previous.wordList;
       wordsCount = previous.wordsCount;
       lettersCount = previous.lettersCount;
+      lastPuzzleQuality = previous.lastPuzzleQuality;
       currentWordIndex = previous.currentWordIndex;
       currentDirection = previous.currentDirection;
       revealsLeft = previous.revealsLeft;
@@ -804,10 +809,88 @@ async function handlePuzzleCompleted() {
       return { testGrid, placed };
     }
 
+    function evaluatePuzzleQuality(result) {
+      const placed = Array.isArray(result?.placed) ? result.placed : [];
+      const testGrid = result?.testGrid || [];
+      const wordTotal = placed.length;
+      const horizontalCount = placed.filter(w => w.horizontal).length;
+      const verticalCount = wordTotal - horizontalCount;
+      const filledCells = testGrid.reduce((sum, row) => (
+        sum + row.filter(cell => cell !== null && cell !== '*').length
+      ), 0);
+
+      const cellToWords = new Map();
+      placed.forEach((w, wordIndex) => {
+        for (let k = 0; k < w.word.length; k++) {
+          const r = w.y + (w.horizontal ? 0 : k);
+          const c = w.x + (w.horizontal ? k : 0);
+          const key = `${r},${c}`;
+          if (!cellToWords.has(key)) cellToWords.set(key, []);
+          cellToWords.get(key).push(wordIndex);
+        }
+      });
+
+      let crossingCells = 0;
+      let crossingLinks = 0;
+      const graph = Array.from({ length: wordTotal }, () => new Set());
+      for (const indexes of cellToWords.values()) {
+        if (indexes.length < 2) continue;
+        crossingCells++;
+        crossingLinks += indexes.length - 1;
+        for (let i = 0; i < indexes.length; i++) {
+          for (let j = i + 1; j < indexes.length; j++) {
+            graph[indexes[i]].add(indexes[j]);
+            graph[indexes[j]].add(indexes[i]);
+          }
+        }
+      }
+
+      let components = 0;
+      const seen = new Set();
+      for (let i = 0; i < wordTotal; i++) {
+        if (seen.has(i)) continue;
+        components++;
+        const stack = [i];
+        seen.add(i);
+        while (stack.length) {
+          const current = stack.pop();
+          graph[current].forEach(next => {
+            if (!seen.has(next)) {
+              seen.add(next);
+              stack.push(next);
+            }
+          });
+        }
+      }
+
+      const density = filledCells / (gridSize * gridSize);
+      const balanceGap = Math.abs(horizontalCount - verticalCount);
+      const wordScore = Math.min(wordTotal / 16, 1) * 30;
+      const crossingScore = Math.min(crossingCells / Math.max(1, wordTotal - 1), 1) * 25;
+      const balanceScore = wordTotal ? (1 - (balanceGap / wordTotal)) * 20 : 0;
+      const densityScore = Math.min(density / 0.42, 1) * 15;
+      const connectivityScore = wordTotal ? (components === 1 ? 10 : Math.max(0, 10 - ((components - 1) * 4))) : 0;
+      const score = Math.round(wordScore + crossingScore + balanceScore + densityScore + connectivityScore);
+
+      return {
+        score: Math.max(0, Math.min(100, score)),
+        words: wordTotal,
+        horizontal: horizontalCount,
+        vertical: verticalCount,
+        balanceGap,
+        filledCells,
+        density: Number(density.toFixed(3)),
+        crossingCells,
+        crossingLinks,
+        components
+      };
+    }
+
     function generateWords() {
       const generationPool = buildGenerationPool();
 
       let bestResult = null;
+      let bestQuality = null;
       let bestEvaluationScore = -1000;
       const ATTEMPTS = 50;
 
@@ -817,20 +900,12 @@ async function handlePuzzleCompleted() {
         const result = tryGenerateSinglePuzzle(shuffledCopy);
         
         if (result) {
-          // Evaluiere das Gitter: Gesamtwortzahl ist wichtig, aber ein extremes Richtungsungleichgewicht gibt Punktabzug
-          const hCount = result.placed.filter(w => w.horizontal).length;
-          const vCount = result.placed.filter(w => !w.horizontal).length;
-          const totalWords = result.placed.length;
-          
-          // Bestraft Abweichungen vom idealen 50:50 Verhältnis
-          const balanceGap = Math.abs(hCount - vCount);
-          const balancedPairs = Math.min(hCount, vCount);
-          const balancePenalty = balanceGap * 12;
-          const evaluationScore = (totalWords * 10) + (balancedPairs * 4) - balancePenalty;
-
+          const quality = evaluatePuzzleQuality(result);
+          const evaluationScore = quality.score + (quality.words * 0.8) + (quality.crossingLinks * 0.6);
           if (evaluationScore > bestEvaluationScore) {
             bestEvaluationScore = evaluationScore;
             bestResult = result;
+            bestQuality = quality;
           }
         }
       }
@@ -838,8 +913,10 @@ async function handlePuzzleCompleted() {
       if (bestResult) {
         grid = bestResult.testGrid;
         words = bestResult.placed;
+        lastPuzzleQuality = bestQuality || evaluatePuzzleQuality(bestResult);
       } else {
         words = [];
+        lastPuzzleQuality = evaluatePuzzleQuality({ testGrid: grid, placed: words });
       }
 
       wordsCount = words.length;
@@ -848,6 +925,9 @@ async function handlePuzzleCompleted() {
         for (let c = 0; c < gridSize; c++) {
           if (grid[r][c] !== null && grid[r][c] !== '*') lettersCount++;
         }
+      }
+      if (params.get('debug') === 'quality') {
+        console.table([lastPuzzleQuality]);
       }
     }
 
@@ -907,6 +987,7 @@ async function handlePuzzleCompleted() {
         wrongCells: wrongCellsChecked,
         wordsCount,
         lettersCount,
+        puzzleQuality: lastPuzzleQuality,
         puzzleScore: computeClientScore(),
         completedAt: Date.now()
       };
