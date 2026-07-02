@@ -3,6 +3,8 @@
 // Request: POST { userId }
 // Response: { ok, totals: {completed, bestTimeMs, avgTimeMs, streak, maxStreak, totalScore, coins}, recent: { lastScores: number[], avgScore }, special: { history: { thisWeek: boolean, weekKey: string, lastWeek: string|null } } }
 
+import { requireAdmin } from './_lib/admin-auth.js';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
@@ -10,6 +12,7 @@ export default async function handler(req, res) {
     // --- global counters branch ---
     const isGlobal = !!(req.body && req.body.global === true);
     if (isGlobal) {
+      if (!requireAdmin(req, res)) return;
       const base = process.env.UPSTASH_REDIS_REST_URL;
       const token = process.env.UPSTASH_REDIS_REST_TOKEN;
       if (!base || !token) return res.status(500).json({ error: 'missing redis env vars' });

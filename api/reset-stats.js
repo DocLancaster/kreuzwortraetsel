@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { requireAdmin } from './_lib/admin-auth.js';
 
 const FILE_LIST = [
   'words.json',
@@ -9,6 +10,7 @@ const FILE_LIST = [
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
+  if (!requireAdmin(req, res)) return;
 
   for (const fname of FILE_LIST) {
     const filePath = path.join(process.cwd(), fname);

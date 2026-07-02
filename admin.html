@@ -26,6 +26,14 @@
     .severity.high { background:#fee2e2; color:#991b1b; }
     .severity.medium { background:#ffedd5; color:#9a3412; }
     .severity.low { background:#ecfeff; color:#155e75; }
+    .word-main { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .status-pill { display:inline-flex; align-items:center; border-radius:999px; padding:2px 7px; font-size:11px; font-weight:700; line-height:1.3; background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
+    .status-pill.blocked { background:#fee2e2; color:#991b1b; border-color:#fecaca; }
+    .modal-actions { display:flex; flex-wrap:wrap; gap:10px; justify-content:flex-end; margin-top:16px; }
+    .modal-actions button { border:none; border-radius:8px; padding:8px 12px; cursor:pointer; font-weight:600; }
+    .modal-actions .danger { background:#ef4444; color:#fff; }
+    .modal-actions .secondary { background:#e5e7eb; color:#111827; }
+    .modal-actions button:disabled { opacity:.6; cursor:not-allowed; }
 
     .mini-charts { margin: 10px 0 18px; display:grid; grid-template-columns: 1fr; gap:12px; }
     .mini-charts .row { display:grid; grid-template-columns: 1fr 1fr; gap:12px; align-items:center; }
@@ -53,6 +61,9 @@
       .severity.high { background:#450a0a; color:#fecaca; }
       .severity.medium { background:#431407; color:#fed7aa; }
       .severity.low { background:#083344; color:#a5f3fc; }
+      .status-pill { background:#1f2937; color:#e5e7eb; border-color:#334155; }
+      .status-pill.blocked { background:#450a0a; color:#fecaca; border-color:#7f1d1d; }
+      .modal-actions .secondary { background:#1f2937; color:#e5e7eb; }
     }
 
     /* Force scrolling on admin page */
@@ -143,6 +154,7 @@
         <option value="clue">Hinweise</option>
         <option value="short">Sehr kurze Wörter</option>
         <option value="data">Zu wenig Daten</option>
+        <option value="blocked">Gesperrt</option>
       </select>
       <button id="reloadBtn">Neu laden</button>
       <input id="search" class="search" type="search" placeholder="Suchen… (Wort oder Hinweis)" />
@@ -159,6 +171,7 @@
               <th>Wort</th>
               <th>Hinweis</th>
               <th>Warum prüfen?</th>
+              <th>Status</th>
               <th class="num">Priorität</th>
             </tr>
           </thead>
@@ -357,6 +370,7 @@
 
     let wordsData = [];
     let metricsMap = {};
+    let moderationMap = { byId: {}, byWord: {} };
     let currentData = [];
 
     function findRowBy(word, id){
@@ -406,6 +420,26 @@
         Object.assign(map, part);
       }
       return map;
+    }
+
+    async function fetchModerationChunked(puzzle, words, ids, chunkSize=300){
+      const byId = {};
+      const byWord = {};
+      for (let i=0; i<words.length; i += chunkSize){
+        const wslice = words.slice(i, i+chunkSize);
+        const islice = Array.isArray(ids) ? ids.slice(i, i+chunkSize) : undefined;
+        const body = { action:'status', puzzle, words: wslice };
+        if (islice && islice.length === wslice.length) body.ids = islice;
+        const r = await fetch('/api/moderation', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(body)
+        });
+        if (!r.ok){ console.warn('moderation status failed', i, r.status); continue; }
+        const part = await r.json();
+        Object.assign(byId, part.byId || {});
+        Object.assign(byWord, part.byWord || {});
+      }
+      return { byId, byWord };
     }
 
     function bayes(sum, count, prior=4.0, weight=10){
@@ -460,6 +494,14 @@
       return signals;
     }
 
+    function moderationStatus(row){
+      return row.blocked ? '<span class="status-pill blocked">Gesperrt</span>' : '<span class="status-pill">Aktiv</span>';
+    }
+
+    function wordCell(row){
+      return `<span class="word-main"><span>${esc(row.word)}</span>${row.blocked ? '<span class="status-pill blocked">Gesperrt</span>' : ''}</span>`;
+    }
+
     function reviewPriority(row){
       return (row.reviewSignals || []).reduce((sum, s) => sum + s.weight, 0);
     }
@@ -488,7 +530,8 @@
       const reviewRows = filtered
         .filter(row => {
           const signals = row.reviewSignals || [];
-          if (!signals.length) return false;
+          if (reviewMode === 'blocked') return !!row.blocked;
+          if (!signals.length && !row.blocked) return false;
           if (reviewMode === 'all') return true;
           if (reviewMode === 'high') return reviewLevel(row) === 'high';
           return signals.some(s => s.key === reviewMode);
@@ -502,9 +545,10 @@
         const level = reviewLevel(row);
         return `
         <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
-          <td>${esc(row.word)}</td>
+          <td>${wordCell(row)}</td>
           <td>${esc(row.clue || '')}</td>
           <td>${reviewBadges(row)}</td>
+          <td>${moderationStatus(row)}</td>
           <td class="num"><span class="severity ${esc(level)}">${reviewPriority(row)}</span></td>
         </tr>
       `});
@@ -515,7 +559,7 @@
         .slice(0, 50);
       fillTable('tblRatings', topRatings, row => `
         <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
-          <td>${esc(row.word)}</td>
+          <td>${wordCell(row)}</td>
           <td>${esc(row.clue || '')}</td>
           <td class="num">${fmt(row.bayesAvg,2)}</td>
           <td class="num">${row.ratingCount}</td>
@@ -530,7 +574,7 @@
         .slice(0, 50);
       fillTable('tblFlags', topFlags, row => `
         <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
-          <td>${esc(row.word)}</td>
+          <td>${wordCell(row)}</td>
           <td>${esc(row.clue || '')}</td>
           <td class="num">${row.flags}</td>
           <td class="num">${row.appear}</td>
@@ -545,7 +589,7 @@
         .slice(0, 50);
       fillTable('tblFlagsAll', flaggedAll, row => `
         <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
-          <td>${esc(row.word)}</td>
+          <td>${wordCell(row)}</td>
           <td>${esc(row.clue || '')}</td>
           <td class="num">${row.flags}</td>
           <td class="num">${row.appear}</td>
@@ -560,7 +604,7 @@
         .slice(0, 50);
       fillTable('tblAppear', topAppear, row => `
         <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
-          <td>${esc(row.word)}</td>
+          <td>${wordCell(row)}</td>
           <td>${esc(row.clue || '')}</td>
           <td class="num">${row.appear}</td>
         </tr>
@@ -569,9 +613,10 @@
       // Summary
       const totalFlags = filtered.reduce((s,r)=>s+(r.flags||0),0);
       const totalAppear = filtered.reduce((s,r)=>s+(r.appear||0),0);
+      const blocked = filtered.filter(r => r.blocked).length;
       const rated = filtered.filter(r => r.ratingCount>0);
       const avgOfAvg = rated.length ? (rated.reduce((s,r)=>s+r.avgRating,0)/rated.length) : 0;
-      summary.textContent = `${filtered.length} Wörter · Review-Kandidaten: ${reviewRows.length} · Flags: ${totalFlags} · Einblendungen: ${totalAppear} · Ø Rating (nur bewertete): ${fmt(avgOfAvg,2)}`;
+      summary.textContent = `${filtered.length} Wörter · Gesperrt: ${blocked} · Review-Kandidaten: ${reviewRows.length} · Flags: ${totalFlags} · Einblendungen: ${totalAppear} · Ø Rating (nur bewertete): ${fmt(avgOfAvg,2)}`;
     }
 
     function fillTable(id, rows, rowTmpl){
@@ -598,6 +643,7 @@
         const wordsOnly = baseList.map(w => w.word);
         const idsOnly   = baseList.map(w => w.id);
         metricsMap = await fetchMetricsChunked(puzzle, wordsOnly, idsOnly, 250);
+        moderationMap = await fetchModerationChunked(puzzle, wordsOnly, idsOnly, 250);
 
         // combine
         currentData = baseList.map(it => {
@@ -608,7 +654,8 @@
           const appear = Number(m.appear||0);
           const flags = Number(m.flags||0);
           const flagRate = appear>0 ? flags/appear : 0;
-          return {
+          const status = moderationMap.byId?.[it.id] || moderationMap.byWord?.[it.word] || {};
+          const row = {
             id: it.id,
             word: it.word,
             clue: it.clue,
@@ -619,7 +666,10 @@
             bayesAvg,
             appear,
             flags,
-            flagRate
+            flagRate,
+            blocked: !!status.blocked,
+            blockReason: status.reason || '',
+            blockedAt: status.at || null
           };
           row.reviewSignals = getReviewSignals(row);
           return row;
@@ -661,6 +711,13 @@
         document.getElementById('dScore').textContent = fmt(s.score, 3);
         document.getElementById('dFormula').textContent = `1 + 0.6*lenNorm(${fmt(s.breakdown.lenNorm,2)}) + 1.2*rating(${fmt(s.breakdown.ratingNorm,2)}) - 1.0*flags(${fmt(s.breakdown.flagPenalty,2)}) - 0.8*usage(${fmt(s.breakdown.usagePenalty,2)})`;
         document.getElementById('dReview').innerHTML = row.reviewSignals?.length ? reviewBadges(row) : 'Keine Auffälligkeiten';
+        document.getElementById('dModeration').innerHTML = moderationStatus(row) + (row.blockReason ? ` <span class="muted">${esc(row.blockReason)}</span>` : '');
+        const blockBtn = document.getElementById('blockWordBtn');
+        const unblockBtn = document.getElementById('unblockWordBtn');
+        blockBtn.hidden = !!row.blocked;
+        unblockBtn.hidden = !row.blocked;
+        blockBtn.onclick = () => setWordBlocked(row, true);
+        unblockBtn.onclick = () => setWordBlocked(row, false);
         // Open
         modal.hidden = false;
         // close handlers
@@ -671,6 +728,33 @@
         closeBtn.addEventListener('click', close, { once:true });
         document.addEventListener('keydown', onEsc, { once:true });
       });
+    }
+
+    async function setWordBlocked(row, blocked){
+      const action = blocked ? 'block' : 'unblock';
+      const btn = blocked ? document.getElementById('blockWordBtn') : document.getElementById('unblockWordBtn');
+      if (btn) btn.disabled = true;
+      try {
+        const reason = blocked ? `Admin-Sperre: ${row.reviewSignals?.map(s => s.label).join(', ') || 'manuell'}` : '';
+        const r = await fetch('/api/moderation', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ action, puzzle: sel.value, id: row.id, word: row.word, reason })
+        });
+        if (!r.ok) throw new Error(`Moderation fehlgeschlagen (${r.status})`);
+        row.blocked = blocked;
+        row.blockReason = reason;
+        row.blockedAt = blocked ? new Date().toISOString() : null;
+        row.reviewSignals = getReviewSignals(row);
+        render(currentData);
+        document.getElementById('dModeration').innerHTML = moderationStatus(row) + (row.blockReason ? ` <span class="muted">${esc(row.blockReason)}</span>` : '');
+        document.getElementById('blockWordBtn').hidden = !!row.blocked;
+        document.getElementById('unblockWordBtn').hidden = !row.blocked;
+      } catch (e) {
+        alert(e.message || 'Moderation fehlgeschlagen');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
     }
 
     // initial
@@ -697,6 +781,11 @@
         <div class="label">Live-Score</div><div class="value" id="dScore"></div>
         <div class="label">Formel</div><div class="value" id="dFormula"></div>
         <div class="label">Review</div><div class="value" id="dReview"></div>
+        <div class="label">Moderation</div><div class="value" id="dModeration"></div>
+      </div>
+      <div class="modal-actions">
+        <button id="blockWordBtn" class="danger" type="button">Wort sperren</button>
+        <button id="unblockWordBtn" class="secondary" type="button" hidden>Wort freigeben</button>
       </div>
     </div>
   </div>

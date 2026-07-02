@@ -437,6 +437,33 @@ async function handlePuzzleCompleted() {
       return shuffleArray([...wordList]).slice(0, count);
     }
 
+    async function fetchBlockedWords(puzzle, list, chunkSize = 300) {
+      const blockedIds = new Set();
+      const blockedWords = new Set();
+      for (let i = 0; i < list.length; i += chunkSize) {
+        const slice = list.slice(i, i + chunkSize);
+        const r = await fetch('/api/moderation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'status',
+            puzzle,
+            ids: slice.map(w => w.id),
+            words: slice.map(w => w.word)
+          })
+        });
+        if (!r.ok) throw new Error(`moderation status failed: ${r.status}`);
+        const data = await r.json();
+        for (const [id, status] of Object.entries(data.byId || {})) {
+          if (status && status.blocked) blockedIds.add(id);
+        }
+        for (const [word, status] of Object.entries(data.byWord || {})) {
+          if (status && status.blocked) blockedWords.add(word);
+        }
+      }
+      return { blockedIds, blockedWords };
+    }
+
     // Führt einen einzelnen Generierungsversuch aus
     function tryGenerateSinglePuzzle(preparedList) {
       let unplaced = preparedList.slice();
@@ -759,6 +786,15 @@ fetch(`/${BASE_WORDS_FILE}`)
             const t = normThemes(w);
             return !t.some(tag => excludeThemes.includes(tag));
           });
+        }
+        try {
+          const { blockedIds, blockedWords } = await fetchBlockedWords(puzzleType, wordList);
+          wordList = wordList.filter(w => !blockedIds.has(w.id) && !blockedWords.has(w.word));
+          if (wordList.length < 1) {
+            throw new Error('Keine freigegebenen Wörter verfügbar');
+          }
+        } catch (err) {
+          console.warn('moderation filter skipped', err);
         }
         try {
           const resMetrics = await fetch('/api/metrics', {
