@@ -8,9 +8,15 @@
   <style>
     .admin-controls { display:flex; gap:12px; align-items:center; flex-wrap: wrap; }
     .admin-controls select, .admin-controls button, .admin-controls input { padding:8px 12px; font-size:14px; border:1px solid #d1d5db; border-radius:8px; background:#fff; color:#111827; }
+    .admin-section { border:1px solid #e5e7eb; border-radius:12px; padding:14px; margin:0 0 18px; background:#fff; }
+    .section-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin:0 0 12px; }
+    .section-head h2 { margin:0; font-size:18px; }
+    .section-head p { margin:3px 0 0; }
     .tables { display:grid; grid-template-columns: 1fr; gap:18px; }
     @media(min-width: 900px){ .tables { grid-template-columns: 1fr 1fr; } }
     .table-wide { grid-column: 1 / -1; }
+    .table-card { border:1px solid #e5e7eb; border-radius:10px; overflow:hidden; background:#fff; }
+    .table-card h3 { margin:0; padding:10px 12px; border-bottom:1px solid #e5e7eb; background:#f9fafb; font-size:15px; }
     table { width:100%; border-collapse: collapse; font-size:14px; }
     th, td { padding:8px 10px; border-bottom:1px solid #e5e5e5; text-align:left; }
     th { background:#f7f7f7; position:sticky; top:0; z-index:1; }
@@ -37,7 +43,7 @@
     .modal-actions .secondary { background:#e5e7eb; color:#111827; }
     .modal-actions .primary { background:#0b74ff; color:#fff; }
     .modal-actions button:disabled { opacity:.6; cursor:not-allowed; }
-    .word-form { display:grid; gap:12px; border:1px solid #e5e7eb; border-radius:10px; padding:14px; margin:0 0 18px; background:#fff; }
+    .word-form { display:grid; gap:12px; }
     .word-form h2 { margin:0; font-size:18px; }
     .word-form .row { display:grid; grid-template-columns: 1fr 1.4fr; gap:10px; }
     .word-form label { display:grid; gap:5px; font-size:13px; color:#4b5563; }
@@ -69,9 +75,12 @@
     @media (prefers-color-scheme: dark){
       body { background:#0b1220; color:#e5e7eb; }
       .card { background:#0f1729 !important; color:#e5e7eb; border:1px solid #1f2937; }
+      .admin-section, .table-card { background:#111827; border-color:#334155; }
+      .section-head h2 { color:#e5e7eb; }
       .admin-controls select, .admin-controls button, .admin-controls input { background:#111827; color:#e5e7eb; border-color:#334155; }
       table { color:#e5e7eb; }
       th, td { border-bottom-color:#1f2937; }
+      .table-card h3 { background:#0f1729; border-bottom-color:#334155; }
       .mini-charts .cardish { background:#0f1729; border-color:#1f2937; }
       th { background:#111827; color:#e5e7eb; }
       td { background:transparent; }
@@ -90,7 +99,6 @@
       .status-pill.custom { background:#052e16; color:#bbf7d0; border-color:#166534; }
       .modal-actions .secondary { background:#1f2937; color:#e5e7eb; }
       .modal-actions .primary { background:#2563eb; color:#fff; }
-      .word-form { background:#111827; border-color:#334155; }
       .word-form label, .theme-checks label { color:#d1d5db; }
       .word-form input[type="text"], .word-form textarea, .word-form select { background:#0f1729; color:#e5e7eb; border-color:#334155; }
     }
@@ -134,43 +142,57 @@
 
     <p id="globalCounters" class="muted">Lade Zähler…</p>
 
-    <form id="wordForm" class="word-form">
-      <h2>Neues Wort hinzufügen</h2>
-      <div class="row">
-        <label>Wort
-          <input id="newWord" type="text" autocomplete="off" placeholder="z.B. PLANET" required>
-        </label>
-        <label>Hinweis
-          <textarea id="newClue" placeholder="Kurzer, eindeutiger Hinweis" required></textarea>
-        </label>
+    <section class="admin-section">
+      <div class="section-head">
+        <div>
+          <h2>Wortpflege</h2>
+          <p class="muted">Neue Wörter werden sofort als Admin-Wörter gespeichert und mit einer stabilen ID versehen.</p>
+        </div>
       </div>
-      <div class="theme-checks" aria-label="Rubriken">
-        <label><input type="checkbox" name="newTheme" value="history"> Geschichte</label>
-        <label><input type="checkbox" name="newTheme" value="records"> Rekorde</label>
-        <label><input type="checkbox" name="newTheme" value="reise"> Reise</label>
-        <label><input type="checkbox" name="newTheme" value="jura"> Jura</label>
-      </div>
-      <div class="row">
-        <label>Neue Rubriken
-          <input id="newExtraThemes" type="text" placeholder="kommagetrennt, z.B. musik, biologie">
-        </label>
-        <label>Schwierigkeit
-          <select id="newDifficulty">
-            <option value="0">Neutral</option>
-            <option value="1">Leicht</option>
-            <option value="2">Mittel</option>
-            <option value="3">Schwer</option>
-            <option value="4">Sehr schwer</option>
-            <option value="5">Experte</option>
-          </select>
-        </label>
-      </div>
-      <div class="form-actions">
-        <span id="wordFormStatus" class="muted form-note"></span>
-        <button id="addWordBtn" type="submit">Wort hinzufügen</button>
-      </div>
-    </form>
+      <form id="wordForm" class="word-form">
+        <div class="row">
+          <label>Wort
+            <input id="newWord" type="text" autocomplete="off" placeholder="z.B. PLANET" required>
+          </label>
+          <label>Hinweis
+            <textarea id="newClue" placeholder="Kurzer, eindeutiger Hinweis" required></textarea>
+          </label>
+        </div>
+        <div class="theme-checks" aria-label="Rubriken">
+          <label><input type="checkbox" name="newTheme" value="history"> Geschichte</label>
+          <label><input type="checkbox" name="newTheme" value="records"> Rekorde</label>
+          <label><input type="checkbox" name="newTheme" value="reise"> Reise</label>
+          <label><input type="checkbox" name="newTheme" value="jura"> Jura</label>
+        </div>
+        <div class="row">
+          <label>Neue Rubriken
+            <input id="newExtraThemes" type="text" placeholder="kommagetrennt, z.B. musik, biologie">
+          </label>
+          <label>Schwierigkeit
+            <select id="newDifficulty">
+              <option value="0">Neutral</option>
+              <option value="1">Leicht</option>
+              <option value="2">Mittel</option>
+              <option value="3">Schwer</option>
+              <option value="4">Sehr schwer</option>
+              <option value="5">Experte</option>
+            </select>
+          </label>
+        </div>
+        <div class="form-actions">
+          <span id="wordFormStatus" class="muted form-note"></span>
+          <button id="addWordBtn" type="submit">Wort hinzufügen</button>
+        </div>
+      </form>
+    </section>
 
+    <section class="admin-section">
+      <div class="section-head">
+        <div>
+          <h2>Aktivität</h2>
+          <p class="muted">Generierungen und Abschlüsse der letzten Tage.</p>
+        </div>
+      </div>
     <div class="mini-charts">
       <div class="row">
         <div class="cardish">
@@ -206,7 +228,15 @@
         </div>
       </div>
     </div>
+    </section>
 
+    <section class="admin-section">
+      <div class="section-head">
+        <div>
+          <h2>Review & Moderation</h2>
+          <p class="muted">Auffällige Wörter prüfen, sperren und Flag-Gründe auswerten.</p>
+        </div>
+      </div>
     <div class="admin-controls">
       <label for="puzzleSel">Modus:</label>
       <select id="puzzleSel">
@@ -230,7 +260,7 @@
     <p class="muted" id="summary">Lade…</p>
 
     <div class="tables">
-      <div class="table-wide">
+      <div class="table-wide table-card">
         <h3>Review-Kandidaten</h3>
         <table id="tblReview">
           <thead>
@@ -245,7 +275,7 @@
           <tbody></tbody>
         </table>
       </div>
-      <div>
+      <div class="table-card">
         <h3>⭐ Top-Ratings (Bayes)</h3>
         <table id="tblRatings">
           <thead>
@@ -259,7 +289,7 @@
           <tbody></tbody>
         </table>
       </div>
-      <div>
+      <div class="table-card">
         <h3>🚩 Top-Flags (nach Rate)</h3>
         <table id="tblFlags">
           <thead>
@@ -274,7 +304,7 @@
           <tbody></tbody>
         </table>
       </div>
-      <div>
+      <div class="table-card">
         <h3>🆕 Neu gemeldet (alle Flags)</h3>
         <table id="tblFlagsAll">
           <thead>
@@ -288,7 +318,7 @@
           <tbody></tbody>
         </table>
       </div>
-      <div>
+      <div class="table-card">
         <h3>👀 Meist angezeigt</h3>
         <table id="tblAppear">
           <thead>
@@ -302,6 +332,7 @@
         </table>
       </div>
     </div>
+    </section>
   </div>
 
   <script>
@@ -323,6 +354,16 @@
     const compCanvas = document.getElementById('compSpark');
     const genSumEl = document.getElementById('genSum');
     const compSumEl = document.getElementById('compSum');
+    const FLAG_REASON_LABELS = {
+      unclear_clue: 'Hinweis unklar',
+      wrong_answer: 'Antwort falsch',
+      spelling: 'Schreibweise',
+      too_hard: 'Zu schwer',
+      too_easy: 'Zu leicht',
+      abbreviation: 'Abkürzung/Initialen',
+      inappropriate: 'Unpassend',
+      other: 'Sonstiges'
+    };
 
     function drawSparkline(canvas, data){
       if (!canvas || !data) return;
@@ -629,6 +670,27 @@
       ).join('')}</div>`;
     }
 
+    async function fetchFlagReasons(row){
+      const r = await fetch('/api/flag', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ action:'reasons', puzzle: sel.value, id: row.id, word: row.word })
+      });
+      if (!r.ok) throw new Error('Flag-Gründe nicht verfügbar');
+      const data = await r.json();
+      return data.reasons || {};
+    }
+
+    function renderFlagReasons(reasons){
+      const entries = Object.entries(reasons || {})
+        .filter(([, count]) => Number(count || 0) > 0)
+        .sort((a,b) => Number(b[1] || 0) - Number(a[1] || 0));
+      if (!entries.length) return 'Keine Gründe erfasst';
+      return `<div class="review-badges">${entries.map(([key, count]) =>
+        `<span class="review-badge medium">${esc(FLAG_REASON_LABELS[key] || key)}: ${Number(count)}</span>`
+      ).join('')}</div>`;
+    }
+
     function textFilteredRows(data){
       const q = (search.value || '').trim().toLowerCase();
       if (!q) return data;
@@ -840,6 +902,7 @@
       document.getElementById('dAppear').textContent = Number(row.appear||0);
       document.getElementById('dFlags').textContent = Number(row.flags||0);
       document.getElementById('dFlagRate').textContent = fmt(Number(row.flagRate||0), 3);
+      document.getElementById('dFlagReasons').textContent = row.flags ? 'Lade...' : 'Keine Flags';
       document.getElementById('dCount').textContent = Number(row.ratingCount||0);
       document.getElementById('dBayes').textContent = fmt(Number(row.bayesAvg||0), 2);
       const s = computePlacementScore(row);
@@ -859,6 +922,20 @@
       nextBtn.disabled = !nextRow || nextRow === row;
       nextBtn.onclick = () => { if (nextRow) openWordDetail(nextRow); };
       modal.hidden = false;
+
+      if (row.flags) {
+        fetchFlagReasons(row)
+          .then(reasons => {
+            if (document.getElementById('dWord').textContent === row.word) {
+              document.getElementById('dFlagReasons').innerHTML = renderFlagReasons(reasons);
+            }
+          })
+          .catch(() => {
+            if (document.getElementById('dWord').textContent === row.word) {
+              document.getElementById('dFlagReasons').textContent = 'Nicht verfügbar';
+            }
+          });
+      }
     }
 
     async function setWordBlocked(row, blocked, options = {}){
@@ -910,6 +987,7 @@
         <div class="label">Einblendungen</div><div class="value" id="dAppear"></div>
         <div class="label">Flags</div><div class="value" id="dFlags"></div>
         <div class="label">Flag-Rate</div><div class="value" id="dFlagRate"></div>
+        <div class="label">Flag-Gründe</div><div class="value" id="dFlagReasons"></div>
         <div class="label">Bewertungen</div><div class="value" id="dCount"></div>
         <div class="label">Rating-Ø (Bayes)</div><div class="value" id="dBayes"></div>
         <div class="label">Live-Score</div><div class="value" id="dScore"></div>

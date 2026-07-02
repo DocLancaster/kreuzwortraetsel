@@ -1183,10 +1183,24 @@ fetch('/api/words')
         document.getElementById('flagBtn').addEventListener('click', () => {
           if (!currentWordIndex && currentWordIndex !== 0) return;
           const w = words[currentWordIndex];
+          const reasons = [
+            ['unclear_clue', 'Hinweis unklar'],
+            ['wrong_answer', 'Antwort falsch'],
+            ['spelling', 'Schreibweise problematisch'],
+            ['too_hard', 'Zu schwer'],
+            ['too_easy', 'Zu leicht/langweilig'],
+            ['abbreviation', 'Abkürzung/Initialen stören'],
+            ['inappropriate', 'Unpassendes Wort'],
+            ['other', 'Sonstiges']
+          ];
+          const choice = prompt(`Warum möchtest du "${w.word}" melden?\n\n${reasons.map((r, i) => `${i + 1}. ${r[1]}`).join('\n')}`);
+          if (choice === null) return;
+          const index = Math.max(0, Math.min(reasons.length - 1, Number(choice || reasons.length) - 1));
+          const reason = reasons[index]?.[0] || 'other';
           fetch('/api/flag', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ puzzle: puzzleType, word: w.word, id: w.id })
+            body: JSON.stringify({ puzzle: puzzleType, word: w.word, id: w.id, reason })
           })
           .then(() => alert('Dieses Wort wurde gemeldet.'))
           .catch(() => alert('Fehler beim Melden des Wortes.'));
