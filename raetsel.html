@@ -257,7 +257,8 @@ document.querySelector('.card > h1').textContent = puzzleTitle;
 // Eindeutiger Key pro Variante (inkl. Themes), damit LocalStorage nicht kollidiert
 const themeKey = includeThemes ? includeThemes.join('-') : 'all';
 const excludeKey = excludeThemes ? ('_x-' + excludeThemes.join('-')) : '';
-const RAEETSEL_STORAGE_KEY = `${location.pathname.split('/').pop()}_${puzzleType}_${themeKey}${excludeKey}`;
+const GENERATOR_VERSION = 'g2';
+const RAEETSEL_STORAGE_KEY = `${location.pathname.split('/').pop()}_${puzzleType}_${themeKey}${excludeKey}_${GENERATOR_VERSION}`;
 const RAEETSEL_PRELOAD_KEY = `${RAEETSEL_STORAGE_KEY}_preload_v1`;
 // Stable per-user id (stored locally), honors ?uid= and keeps both keys in sync
 function getUserId() {
@@ -718,7 +719,8 @@ async function handlePuzzleCompleted() {
           let localBestScore = -9999;
           let localBestPlacement = null;
 
-          for (const hor of [true, false]) {
+          const directionOrder = Math.random() < 0.5 ? [true, false] : [false, true];
+          for (const hor of directionOrder) {
             for (let row = 0; row < gridSize; row++) {
               for (let col = 0; col < gridSize; col++) {
                 const startX = col;
@@ -748,12 +750,16 @@ async function handlePuzzleCompleted() {
 
                 // OPTIMIERUNG 2: Directional Balancing Score berechnen
                 // Gibt einen massiven Bonus für die Richtung, die im Rätsel gerade unterrepräsentiert ist
-                let baseScore = overlapCount * 10;
-                if (hor && horizontalCount < verticalCount) {
-                  baseScore += 15; 
-                } else if (!hor && verticalCount < horizontalCount) {
-                  baseScore += 15;
+                const sameDirectionCount = hor ? horizontalCount : verticalCount;
+                const otherDirectionCount = hor ? verticalCount : horizontalCount;
+                const imbalance = otherDirectionCount - sameDirectionCount;
+                let baseScore = overlapCount * 12;
+                if (imbalance > 0) {
+                  baseScore += Math.min(36, imbalance * 18);
+                } else if (imbalance < -1) {
+                  baseScore -= Math.min(30, Math.abs(imbalance) * 10);
                 }
+                baseScore += Math.random() * 0.35;
 
                 if (baseScore > localBestScore) {
                   localBestScore = baseScore;
@@ -817,8 +823,10 @@ async function handlePuzzleCompleted() {
           const totalWords = result.placed.length;
           
           // Bestraft Abweichungen vom idealen 50:50 Verhältnis
-          const balancePenalty = Math.abs(hCount - vCount) * 2;
-          const evaluationScore = (totalWords * 10) - balancePenalty;
+          const balanceGap = Math.abs(hCount - vCount);
+          const balancedPairs = Math.min(hCount, vCount);
+          const balancePenalty = balanceGap * 12;
+          const evaluationScore = (totalWords * 10) + (balancedPairs * 4) - balancePenalty;
 
           if (evaluationScore > bestEvaluationScore) {
             bestEvaluationScore = evaluationScore;
