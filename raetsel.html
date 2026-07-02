@@ -437,6 +437,26 @@ async function handlePuzzleCompleted() {
       return shuffleArray([...wordList]).slice(0, count);
     }
 
+    function rankWordsForPool(list) {
+      return list
+        .map(word => {
+          const len = Math.min((word.word || '').length, gridSize);
+          return { word, score: len * 0.8 + Number(word.rank || 0) + Math.random() * 3.5 };
+        })
+        .sort((a, b) => b.score - a.score)
+        .map(item => item.word);
+    }
+
+    function buildGenerationPool() {
+      const fresh = wordList.filter(w => !w.isCooled);
+      const cooled = wordList.filter(w => w.isCooled);
+      const source = fresh.length >= 25 ? fresh : fresh.concat(cooled);
+      const eligible = source.filter(w => (w.word || '').length <= gridSize);
+      const ranked = rankWordsForPool(eligible.length ? eligible : source);
+      const poolSize = Math.min(Math.max(60, Math.ceil(ranked.length * 0.25)), ranked.length);
+      return ranked.slice(0, poolSize);
+    }
+
     async function fetchBlockedWords(puzzle, list, chunkSize = 300) {
       const blockedIds = new Set();
       const blockedWords = new Set();
@@ -595,19 +615,15 @@ async function handlePuzzleCompleted() {
     }
 
     function generateWords() {
-      const preparedList = [...wordList].sort((a, b) => {
-        if (b.word.length !== a.word.length) {
-          return b.word.length - a.word.length;
-        }
-        return (b.rank || 0) - (a.rank || 0);
-      });
+      const generationPool = buildGenerationPool();
 
       let bestResult = null;
       let bestEvaluationScore = -1000;
       const ATTEMPTS = 50;
 
       for (let i = 0; i < ATTEMPTS; i++) {
-        const shuffledCopy = shuffleArray([...preparedList].slice(0, 40)).concat(preparedList.slice(40));
+        const preparedList = rankWordsForPool(generationPool);
+        const shuffledCopy = shuffleArray([...preparedList].slice(0, 35)).concat(preparedList.slice(35));
         const result = tryGenerateSinglePuzzle(shuffledCopy);
         
         if (result) {
@@ -758,8 +774,13 @@ async function handlePuzzleCompleted() {
       return false;
     }
 
-fetch(`/${BASE_WORDS_FILE}`)
-      .then(res => res.json())
+fetch('/api/words')
+      .catch(() => fetch(`/${BASE_WORDS_FILE}`))
+      .then(res => {
+        if (!res.ok) throw new Error('words api failed');
+        return res.json();
+      })
+      .catch(() => fetch(`/${BASE_WORDS_FILE}`).then(res => res.json()))
       .then(async data => {
         wordList = ensureIds(data);
         const seenWords = new Set();
@@ -840,13 +861,16 @@ fetch(`/${BASE_WORDS_FILE}`)
                 const available = [];
                 const cooled = [];
                 for (const w of wordList) {
-                const hit = map ? (map[w.id] ?? map[w.word]) : undefined;
-                (hit ? cooled : available).push(w);
-              }
+                  const hit = map ? (map[w.id] ?? map[w.word]) : undefined;
+                  w.isCooled = !!hit;
+                  (hit ? cooled : available).push(w);
+                }
                 wordList = available.concat(cooled);
               }
             } catch(_) {}
-            wordList.sort((a, b) => (b.rank || 0) - (a.rank || 0));
+            const byRank = (a, b) => (b.rank || 0) - (a.rank || 0);
+            wordList = wordList.filter(w => !w.isCooled).sort(byRank)
+              .concat(wordList.filter(w => w.isCooled).sort(byRank));
           } else {
             console.warn('metrics endpoint failed', resMetrics.status);
           }
@@ -873,7 +897,7 @@ fetch(`/${BASE_WORDS_FILE}`)
             fetch('/api/cooldown-set', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ userId: USER_ID, puzzle: puzzleType, ids: uniqueIds, words: uniqueWords, ttlSeconds: 86400 })
+              body: JSON.stringify({ userId: USER_ID, puzzle: puzzleType, ids: uniqueIds, words: uniqueWords, ttlSeconds: 259200 })
             }).catch(() => {});
           } catch (e) {}
           saveState();

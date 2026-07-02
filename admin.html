@@ -30,12 +30,26 @@
     .word-main { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
     .status-pill { display:inline-flex; align-items:center; border-radius:999px; padding:2px 7px; font-size:11px; font-weight:700; line-height:1.3; background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
     .status-pill.blocked { background:#fee2e2; color:#991b1b; border-color:#fecaca; }
+    .status-pill.custom { background:#dcfce7; color:#166534; border-color:#bbf7d0; }
     .modal-actions { display:flex; flex-wrap:wrap; gap:10px; justify-content:flex-end; margin-top:16px; }
     .modal-actions button { border:none; border-radius:8px; padding:8px 12px; cursor:pointer; font-weight:600; }
     .modal-actions .danger { background:#ef4444; color:#fff; }
     .modal-actions .secondary { background:#e5e7eb; color:#111827; }
     .modal-actions .primary { background:#0b74ff; color:#fff; }
     .modal-actions button:disabled { opacity:.6; cursor:not-allowed; }
+    .word-form { display:grid; gap:12px; border:1px solid #e5e7eb; border-radius:10px; padding:14px; margin:0 0 18px; background:#fff; }
+    .word-form .row { display:grid; grid-template-columns: 1fr 1.4fr; gap:10px; }
+    .word-form label { display:grid; gap:5px; font-size:13px; color:#4b5563; }
+    .word-form input[type="text"], .word-form textarea, .word-form select {
+      width:100%; box-sizing:border-box; border:1px solid #d1d5db; border-radius:8px; padding:9px 10px; background:#fff; color:#111827; font:inherit;
+    }
+    .word-form textarea { min-height:70px; resize:vertical; }
+    .theme-checks { display:flex; flex-wrap:wrap; gap:10px; }
+    .theme-checks label { display:flex; grid-template-columns:none; align-items:center; gap:6px; color:#374151; }
+    .form-actions { display:flex; justify-content:flex-end; gap:10px; align-items:center; }
+    .form-actions button { border:none; border-radius:8px; padding:9px 13px; font-weight:700; cursor:pointer; background:#0b74ff; color:#fff; }
+    .form-actions button:disabled { opacity:.6; cursor:not-allowed; }
+    .form-note { min-height:1.2em; }
 
     .mini-charts { margin: 10px 0 18px; display:grid; grid-template-columns: 1fr; gap:12px; }
     .mini-charts .row { display:grid; grid-template-columns: 1fr 1fr; gap:12px; align-items:center; }
@@ -72,8 +86,12 @@
       .severity.low { background:#083344; color:#a5f3fc; }
       .status-pill { background:#1f2937; color:#e5e7eb; border-color:#334155; }
       .status-pill.blocked { background:#450a0a; color:#fecaca; border-color:#7f1d1d; }
+      .status-pill.custom { background:#052e16; color:#bbf7d0; border-color:#166534; }
       .modal-actions .secondary { background:#1f2937; color:#e5e7eb; }
       .modal-actions .primary { background:#2563eb; color:#fff; }
+      .word-form { background:#111827; border-color:#334155; }
+      .word-form label, .theme-checks label { color:#d1d5db; }
+      .word-form input[type="text"], .word-form textarea, .word-form select { background:#0f1729; color:#e5e7eb; border-color:#334155; }
     }
 
     /* Force scrolling on admin page */
@@ -114,6 +132,42 @@
     <h1>Admin – Rätsel-Statistiken</h1>
 
     <p id="globalCounters" class="muted">Lade Zähler…</p>
+
+    <form id="wordForm" class="word-form">
+      <div class="row">
+        <label>Wort
+          <input id="newWord" type="text" autocomplete="off" placeholder="z.B. PLANET" required>
+        </label>
+        <label>Hinweis
+          <textarea id="newClue" placeholder="Kurzer, eindeutiger Hinweis" required></textarea>
+        </label>
+      </div>
+      <div class="theme-checks" aria-label="Rubriken">
+        <label><input type="checkbox" name="newTheme" value="history"> Geschichte</label>
+        <label><input type="checkbox" name="newTheme" value="records"> Rekorde</label>
+        <label><input type="checkbox" name="newTheme" value="reise"> Reise</label>
+        <label><input type="checkbox" name="newTheme" value="jura"> Jura</label>
+      </div>
+      <div class="row">
+        <label>Neue Rubriken
+          <input id="newExtraThemes" type="text" placeholder="kommagetrennt, z.B. musik, biologie">
+        </label>
+        <label>Schwierigkeit
+          <select id="newDifficulty">
+            <option value="0">Neutral</option>
+            <option value="1">Leicht</option>
+            <option value="2">Mittel</option>
+            <option value="3">Schwer</option>
+            <option value="4">Sehr schwer</option>
+            <option value="5">Experte</option>
+          </select>
+        </label>
+      </div>
+      <div class="form-actions">
+        <span id="wordFormStatus" class="muted form-note"></span>
+        <button id="addWordBtn" type="submit">Wort hinzufügen</button>
+      </div>
+    </form>
 
     <div class="mini-charts">
       <div class="row">
@@ -259,6 +313,8 @@
     const btn = document.getElementById('reloadBtn');
     const search = document.getElementById('search');
     const summary = document.getElementById('summary');
+    const wordForm = document.getElementById('wordForm');
+    const wordFormStatus = document.getElementById('wordFormStatus');
 
     const tsDaysEl = document.getElementById('tsDays');
     const genCanvas = document.getElementById('genSpark');
@@ -340,6 +396,7 @@
     const initial = params.get('puzzle') || 'classic';
     sel.value = puzzleConfig[initial] ? initial : 'classic';
     btn.addEventListener('click', () => { loadGlobalCounters(); loadTimeseries(); load(sel.value); });
+    wordForm.addEventListener('submit', addCustomWord);
     async function loadGlobalCounters(){
       try{
         const r = await fetch('/api/user-score', {
@@ -412,6 +469,46 @@
       const r = await fetch(path);
       if (!r.ok) throw new Error('fetch failed: '+ path);
       return r.json();
+    }
+
+    async function fetchWords(){
+      try {
+        return await fetchJSON('/api/words');
+      } catch (_) {
+        return fetchJSON('/words.json');
+      }
+    }
+
+    async function addCustomWord(event){
+      event.preventDefault();
+      const btn = document.getElementById('addWordBtn');
+      const themes = Array.from(document.querySelectorAll('input[name="newTheme"]:checked')).map(el => el.value);
+      const payload = {
+        action: 'add',
+        word: document.getElementById('newWord').value,
+        clue: document.getElementById('newClue').value,
+        themes,
+        extraThemes: document.getElementById('newExtraThemes').value,
+        baseDifficulty: document.getElementById('newDifficulty').value
+      };
+      btn.disabled = true;
+      wordFormStatus.textContent = 'Speichere...';
+      try {
+        const r = await fetch('/api/word-admin', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(data.details || data.error || `Fehler ${r.status}`);
+        wordForm.reset();
+        wordFormStatus.textContent = `${data.word.word} gespeichert (${data.word.id}).`;
+        await load(sel.value);
+      } catch (e) {
+        wordFormStatus.textContent = e.message || 'Speichern fehlgeschlagen.';
+      } finally {
+        btn.disabled = false;
+      }
     }
 
     // Chunked metrics fetch to avoid URL length limits (ID-first)
@@ -510,7 +607,7 @@
     }
 
     function wordCell(row){
-      return `<span class="word-main"><span>${esc(row.word)}</span>${row.blocked ? '<span class="status-pill blocked">Gesperrt</span>' : ''}</span>`;
+      return `<span class="word-main"><span>${esc(row.word)}</span>${row.source === 'admin' ? '<span class="status-pill custom">Admin</span>' : ''}${row.blocked ? '<span class="status-pill blocked">Gesperrt</span>' : ''}</span>`;
     }
 
     function reviewPriority(row){
@@ -650,8 +747,7 @@
 
     async function load(puzzle){
       try {
-        const wordFile = puzzleConfig[puzzle]?.json || puzzleConfig.classic.json;
-        wordsData = ensureIds(await fetchJSON(`/${wordFile}`));
+        wordsData = ensureIds(await fetchWords());
         const unique = [];
         const seen = new Set();
         for (const it of wordsData){
@@ -693,7 +789,8 @@
             flagRate,
             blocked: !!status.blocked,
             blockReason: status.reason || '',
-            blockedAt: status.at || null
+            blockedAt: status.at || null,
+            source: it.source || ''
           };
           row.reviewSignals = getReviewSignals(row);
           return row;
