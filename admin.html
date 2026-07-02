@@ -7,13 +7,14 @@
   <link rel="stylesheet" href="style.css">
   <style>
     .admin-controls { display:flex; gap:12px; align-items:center; flex-wrap: wrap; }
-    .admin-controls select, .admin-controls button { padding:8px 12px; font-size:14px; }
+    .admin-controls select, .admin-controls button, .admin-controls input { padding:8px 12px; font-size:14px; border:1px solid #d1d5db; border-radius:8px; background:#fff; color:#111827; }
     .tables { display:grid; grid-template-columns: 1fr; gap:18px; }
     @media(min-width: 900px){ .tables { grid-template-columns: 1fr 1fr; } }
     .table-wide { grid-column: 1 / -1; }
     table { width:100%; border-collapse: collapse; font-size:14px; }
     th, td { padding:8px 10px; border-bottom:1px solid #e5e5e5; text-align:left; }
     th { background:#f7f7f7; position:sticky; top:0; z-index:1; }
+    tbody tr.row-word.blocked-row { opacity:.68; }
     .num { text-align:right; font-variant-numeric: tabular-nums; }
     .search { margin-left:auto; }
     .muted { color:#666; font-size:12px; }
@@ -33,6 +34,7 @@
     .modal-actions button { border:none; border-radius:8px; padding:8px 12px; cursor:pointer; font-weight:600; }
     .modal-actions .danger { background:#ef4444; color:#fff; }
     .modal-actions .secondary { background:#e5e7eb; color:#111827; }
+    .modal-actions .primary { background:#0b74ff; color:#fff; }
     .modal-actions button:disabled { opacity:.6; cursor:not-allowed; }
 
     .mini-charts { margin: 10px 0 18px; display:grid; grid-template-columns: 1fr; gap:12px; }
@@ -50,9 +52,16 @@
     .spark-meta { min-width: 160px; }
     .spark-meta .big { font-size:18px; font-variant-numeric: tabular-nums; }
     @media (prefers-color-scheme: dark){
+      body { background:#0b1220; color:#e5e7eb; }
+      .card { background:#0f1729 !important; color:#e5e7eb; border:1px solid #1f2937; }
+      .admin-controls select, .admin-controls button, .admin-controls input { background:#111827; color:#e5e7eb; border-color:#334155; }
+      table { color:#e5e7eb; }
+      th, td { border-bottom-color:#1f2937; }
       .mini-charts .cardish { background:#0f1729; border-color:#1f2937; }
-      th { background:#111827; }
+      th { background:#111827; color:#e5e7eb; }
+      td { background:transparent; }
       tbody tr.row-word:hover { background: #111827; }
+      .muted { color:#9ca3af; }
       .review-badge { background:#1e1b4b; color:#c7d2fe; border-color:#3730a3; }
       .review-badge.high { background:#450a0a; color:#fecaca; border-color:#7f1d1d; }
       .review-badge.medium { background:#431407; color:#fed7aa; border-color:#9a3412; }
@@ -64,6 +73,7 @@
       .status-pill { background:#1f2937; color:#e5e7eb; border-color:#334155; }
       .status-pill.blocked { background:#450a0a; color:#fecaca; border-color:#7f1d1d; }
       .modal-actions .secondary { background:#1f2937; color:#e5e7eb; }
+      .modal-actions .primary { background:#2563eb; color:#fff; }
     }
 
     /* Force scrolling on admin page */
@@ -92,6 +102,7 @@
     @media (prefers-color-scheme: dark){
       .modal-panel{ background:#0f1729; color:#e5e7eb; }
       .modal-close{ background:#111827; color:#e5e7eb; }
+      .detail-grid .label { color:#9ca3af; }
     }
   </style>
 </head>
@@ -519,32 +530,45 @@
       ).join('')}</div>`;
     }
 
-    function render(data){
+    function textFilteredRows(data){
       const q = (search.value || '').trim().toLowerCase();
-      let filtered = data;
-      if (q){
-        filtered = data.filter(row => row.word.toLowerCase().includes(q) || (row.clue || '').toLowerCase().includes(q));
-      }
+      if (!q) return data;
+      return data.filter(row => row.word.toLowerCase().includes(q) || (row.clue || '').toLowerCase().includes(q));
+    }
 
-      const reviewMode = reviewSel ? reviewSel.value : 'all';
-      const reviewRows = filtered
+    function reviewCandidates(rows, mode = (reviewSel ? reviewSel.value : 'all'), limit = 80){
+      return rows
         .filter(row => {
           const signals = row.reviewSignals || [];
-          if (reviewMode === 'blocked') return !!row.blocked;
+          if (mode === 'blocked') return !!row.blocked;
           if (!signals.length && !row.blocked) return false;
-          if (reviewMode === 'all') return true;
-          if (reviewMode === 'high') return reviewLevel(row) === 'high';
-          return signals.some(s => s.key === reviewMode);
+          if (mode === 'all') return true;
+          if (mode === 'high') return reviewLevel(row) === 'high';
+          return signals.some(s => s.key === mode);
         })
         .sort((a,b) => reviewPriority(b) - reviewPriority(a)
                         || Number(b.flags||0) - Number(a.flags||0)
                         || Number(b.appear||0) - Number(a.appear||0)
                         || a.word.localeCompare(b.word))
-        .slice(0, 80);
+        .slice(0, limit);
+    }
+
+    function nextActionableRow(afterRow){
+      const rows = reviewCandidates(textFilteredRows(currentData), 'all', Number.POSITIVE_INFINITY)
+        .filter(row => !row.blocked && (row.reviewSignals || []).length);
+      if (!rows.length) return null;
+      const idx = rows.findIndex(row => (afterRow?.id && row.id === afterRow.id) || row.word === afterRow?.word);
+      if (idx === -1) return rows[0];
+      return rows[(idx + 1) % rows.length] || null;
+    }
+
+    function render(data){
+      const filtered = textFilteredRows(data);
+      const reviewRows = reviewCandidates(filtered);
       fillTable('tblReview', reviewRows, row => {
         const level = reviewLevel(row);
         return `
-        <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
+        <tr class="row-word ${row.blocked ? 'blocked-row' : ''}" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
           <td>${wordCell(row)}</td>
           <td>${esc(row.clue || '')}</td>
           <td>${reviewBadges(row)}</td>
@@ -558,7 +582,7 @@
         .sort((a,b) => b.bayesAvg - a.bayesAvg)
         .slice(0, 50);
       fillTable('tblRatings', topRatings, row => `
-        <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
+        <tr class="row-word ${row.blocked ? 'blocked-row' : ''}" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
           <td>${wordCell(row)}</td>
           <td>${esc(row.clue || '')}</td>
           <td class="num">${fmt(row.bayesAvg,2)}</td>
@@ -573,7 +597,7 @@
         .sort((a,b) => b.flagRate - a.flagRate)
         .slice(0, 50);
       fillTable('tblFlags', topFlags, row => `
-        <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
+        <tr class="row-word ${row.blocked ? 'blocked-row' : ''}" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
           <td>${wordCell(row)}</td>
           <td>${esc(row.clue || '')}</td>
           <td class="num">${row.flags}</td>
@@ -588,7 +612,7 @@
         .sort((a,b) => b.flags - a.flags)
         .slice(0, 50);
       fillTable('tblFlagsAll', flaggedAll, row => `
-        <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
+        <tr class="row-word ${row.blocked ? 'blocked-row' : ''}" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
           <td>${wordCell(row)}</td>
           <td>${esc(row.clue || '')}</td>
           <td class="num">${row.flags}</td>
@@ -603,7 +627,7 @@
                         || a.word.localeCompare(b.word))
         .slice(0, 50);
       fillTable('tblAppear', topAppear, row => `
-        <tr class="row-word" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
+        <tr class="row-word ${row.blocked ? 'blocked-row' : ''}" data-id="${esc(row.id||'')}" data-word="${esc(row.word)}" title="Details anzeigen">
           <td>${wordCell(row)}</td>
           <td>${esc(row.clue || '')}</td>
           <td class="num">${row.appear}</td>
@@ -693,48 +717,57 @@
         const word = tr.getAttribute('data-word');
         const row = findRowBy(word, id);
         if (!row) return;
-        const modal = document.getElementById('detailModal');
-        const closeBtn = modal.querySelector('.modal-close');
-        // Fill fields
-        document.getElementById('detailTitle').textContent = row.word;
-        document.getElementById('dWord').textContent = row.word;
-        document.getElementById('dClue').textContent = row.clue || '';
-        document.getElementById('dId').textContent = row.id || '—';
-        document.getElementById('dThemes').textContent = (row.themes||[]).join(', ') || '—';
-        document.getElementById('dLen').textContent = (row.word||'').length;
-        document.getElementById('dAppear').textContent = Number(row.appear||0);
-        document.getElementById('dFlags').textContent = Number(row.flags||0);
-        document.getElementById('dFlagRate').textContent = fmt(Number(row.flagRate||0), 3);
-        document.getElementById('dCount').textContent = Number(row.ratingCount||0);
-        document.getElementById('dBayes').textContent = fmt(Number(row.bayesAvg||0), 2);
-        const s = computePlacementScore(row);
-        document.getElementById('dScore').textContent = fmt(s.score, 3);
-        document.getElementById('dFormula').textContent = `1 + 0.6*lenNorm(${fmt(s.breakdown.lenNorm,2)}) + 1.2*rating(${fmt(s.breakdown.ratingNorm,2)}) - 1.0*flags(${fmt(s.breakdown.flagPenalty,2)}) - 0.8*usage(${fmt(s.breakdown.usagePenalty,2)})`;
-        document.getElementById('dReview').innerHTML = row.reviewSignals?.length ? reviewBadges(row) : 'Keine Auffälligkeiten';
-        document.getElementById('dModeration').innerHTML = moderationStatus(row) + (row.blockReason ? ` <span class="muted">${esc(row.blockReason)}</span>` : '');
-        const blockBtn = document.getElementById('blockWordBtn');
-        const unblockBtn = document.getElementById('unblockWordBtn');
-        blockBtn.hidden = !!row.blocked;
-        unblockBtn.hidden = !row.blocked;
-        blockBtn.onclick = () => setWordBlocked(row, true);
-        unblockBtn.onclick = () => setWordBlocked(row, false);
-        // Open
-        modal.hidden = false;
-        // close handlers
-        const backdrop = modal.querySelector('.modal-backdrop');
-        function close(){ modal.hidden = true; document.removeEventListener('keydown', onEsc); }
-        function onEsc(e){ if (e.key === 'Escape') close(); }
-        backdrop.addEventListener('click', close, { once:true });
-        closeBtn.addEventListener('click', close, { once:true });
-        document.addEventListener('keydown', onEsc, { once:true });
+        openWordDetail(row);
       });
+
+      const modal = document.getElementById('detailModal');
+      const closeBtn = modal.querySelector('.modal-close');
+      const backdrop = modal.querySelector('.modal-backdrop');
+      const close = () => { modal.hidden = true; };
+      const onEsc = (e) => { if (e.key === 'Escape' && !modal.hidden) close(); };
+      backdrop.addEventListener('click', close);
+      closeBtn.addEventListener('click', close);
+      document.addEventListener('keydown', onEsc);
     }
 
-    async function setWordBlocked(row, blocked){
+    function openWordDetail(row){
+      const modal = document.getElementById('detailModal');
+      document.getElementById('detailTitle').textContent = row.word;
+      document.getElementById('dWord').textContent = row.word;
+      document.getElementById('dClue').textContent = row.clue || '';
+      document.getElementById('dId').textContent = row.id || '—';
+      document.getElementById('dThemes').textContent = (row.themes||[]).join(', ') || '—';
+      document.getElementById('dLen').textContent = (row.word||'').length;
+      document.getElementById('dAppear').textContent = Number(row.appear||0);
+      document.getElementById('dFlags').textContent = Number(row.flags||0);
+      document.getElementById('dFlagRate').textContent = fmt(Number(row.flagRate||0), 3);
+      document.getElementById('dCount').textContent = Number(row.ratingCount||0);
+      document.getElementById('dBayes').textContent = fmt(Number(row.bayesAvg||0), 2);
+      const s = computePlacementScore(row);
+      document.getElementById('dScore').textContent = fmt(s.score, 3);
+      document.getElementById('dFormula').textContent = `1 + 0.6*lenNorm(${fmt(s.breakdown.lenNorm,2)}) + 1.2*rating(${fmt(s.breakdown.ratingNorm,2)}) - 1.0*flags(${fmt(s.breakdown.flagPenalty,2)}) - 0.8*usage(${fmt(s.breakdown.usagePenalty,2)})`;
+      document.getElementById('dReview').innerHTML = row.reviewSignals?.length ? reviewBadges(row) : 'Keine Auffälligkeiten';
+      document.getElementById('dModeration').innerHTML = moderationStatus(row) + (row.blockReason ? ` <span class="muted">${esc(row.blockReason)}</span>` : '');
+
+      const blockBtn = document.getElementById('blockWordBtn');
+      const unblockBtn = document.getElementById('unblockWordBtn');
+      const nextBtn = document.getElementById('nextReviewBtn');
+      const nextRow = nextActionableRow(row);
+      blockBtn.hidden = !!row.blocked;
+      unblockBtn.hidden = !row.blocked;
+      blockBtn.onclick = () => setWordBlocked(row, true, { advance: true });
+      unblockBtn.onclick = () => setWordBlocked(row, false);
+      nextBtn.disabled = !nextRow || nextRow === row;
+      nextBtn.onclick = () => { if (nextRow) openWordDetail(nextRow); };
+      modal.hidden = false;
+    }
+
+    async function setWordBlocked(row, blocked, options = {}){
       const action = blocked ? 'block' : 'unblock';
       const btn = blocked ? document.getElementById('blockWordBtn') : document.getElementById('unblockWordBtn');
       if (btn) btn.disabled = true;
       try {
+        const nextRow = options.advance ? nextActionableRow(row) : null;
         const reason = blocked ? `Admin-Sperre: ${row.reviewSignals?.map(s => s.label).join(', ') || 'manuell'}` : '';
         const r = await fetch('/api/moderation', {
           method:'POST',
@@ -747,9 +780,11 @@
         row.blockedAt = blocked ? new Date().toISOString() : null;
         row.reviewSignals = getReviewSignals(row);
         render(currentData);
-        document.getElementById('dModeration').innerHTML = moderationStatus(row) + (row.blockReason ? ` <span class="muted">${esc(row.blockReason)}</span>` : '');
-        document.getElementById('blockWordBtn').hidden = !!row.blocked;
-        document.getElementById('unblockWordBtn').hidden = !row.blocked;
+        if (options.advance && nextRow && nextRow !== row) {
+          openWordDetail(nextRow);
+        } else {
+          openWordDetail(row);
+        }
       } catch (e) {
         alert(e.message || 'Moderation fehlgeschlagen');
       } finally {
@@ -784,7 +819,8 @@
         <div class="label">Moderation</div><div class="value" id="dModeration"></div>
       </div>
       <div class="modal-actions">
-        <button id="blockWordBtn" class="danger" type="button">Wort sperren</button>
+        <button id="nextReviewBtn" class="primary" type="button">Nächstes auffälliges Wort</button>
+        <button id="blockWordBtn" class="danger" type="button">Sperren & weiter</button>
         <button id="unblockWordBtn" class="secondary" type="button" hidden>Wort freigeben</button>
       </div>
     </div>
