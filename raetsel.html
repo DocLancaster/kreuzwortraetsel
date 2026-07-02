@@ -149,7 +149,7 @@
     <button class="control check" onclick="checkSolution()">Lösung prüfen</button>
     <button class="control hint" id="revealBtn">Hinweis (3)</button>
     <button class="control reset" id="resetBtn">Neu starten</button>
-    <button class="control new" onclick="window.removeEventListener('beforeunload', saveState); localStorage.removeItem(RAEETSEL_STORAGE_KEY); window.location.reload();">Neues Rätsel generieren</button>
+    <button class="control new" onclick="startNewPuzzle()">Neues Rätsel generieren</button>
     <button id="flagBtn" class="control flag">🚩 Wort melden</button>
   </div>
 
@@ -258,6 +258,7 @@ document.querySelector('.card > h1').textContent = puzzleTitle;
 const themeKey = includeThemes ? includeThemes.join('-') : 'all';
 const excludeKey = excludeThemes ? ('_x-' + excludeThemes.join('-')) : '';
 const RAEETSEL_STORAGE_KEY = `${location.pathname.split('/').pop()}_${puzzleType}_${themeKey}${excludeKey}`;
+const RAEETSEL_PRELOAD_KEY = `${RAEETSEL_STORAGE_KEY}_preload_v1`;
 // Stable per-user id (stored locally), honors ?uid= and keeps both keys in sync
 function getUserId() {
   const KEY_NEW = 'USER_ID';
@@ -381,9 +382,7 @@ function showResultModal(){
       document.body.style.overflow = '';
       popCoinGain(coinsEarned);
       setTimeout(() => {
-        window.removeEventListener('beforeunload', saveState);
-        localStorage.removeItem(RAEETSEL_STORAGE_KEY);
-        window.location.reload();
+        startNewPuzzle();
       }, 650);
     };
   }catch(_){ }
@@ -425,6 +424,113 @@ async function handlePuzzleCompleted() {
     return s ? JSON.parse(s) : null;
     }
 
+    function savePreloadedPuzzle(preloaded) {
+      try {
+        localStorage.setItem(RAEETSEL_PRELOAD_KEY, JSON.stringify({
+          ...preloaded,
+          createdAt: Date.now()
+        }));
+      } catch (_) {}
+    }
+
+    function loadPreloadedPuzzle() {
+      try {
+        const raw = localStorage.getItem(RAEETSEL_PRELOAD_KEY);
+        if (!raw) return null;
+        const data = JSON.parse(raw);
+        if (!data || !Array.isArray(data.grid) || !Array.isArray(data.words)) return null;
+        if (Date.now() - Number(data.createdAt || 0) > 30 * 60 * 1000) {
+          localStorage.removeItem(RAEETSEL_PRELOAD_KEY);
+          return null;
+        }
+        return data;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function applyPuzzleState(state) {
+      state.grid.forEach((row, i) => { grid[i] = row; });
+      words = state.words;
+      revealsLeft = typeof state.revealsLeft === 'number' ? state.revealsLeft : 3;
+      currentWordIndex = state.currentWordIndex || 0;
+      currentDirection = state.currentDirection || 'horizontal';
+    }
+
+    function markPuzzleStarted() {
+      try {
+        const uniqueIds = [...new Set(words.map(w => w.id))];
+        const uniqueWords = [...new Set(words.map(w => w.word))];
+        fetch('/api/appearance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ puzzle: puzzleType, ids: uniqueIds, words: uniqueWords, gameStart: true })
+        }).catch(() => {});
+        fetch('/api/cooldown-set', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: USER_ID, puzzle: puzzleType, ids: uniqueIds, words: uniqueWords, ttlSeconds: 259200 })
+        }).catch(() => {});
+      } catch (_) {}
+    }
+
+    function generatePuzzleState() {
+      const previous = {
+        grid,
+        words,
+        wordList,
+        wordsCount,
+        lettersCount,
+        currentWordIndex,
+        currentDirection,
+        revealsLeft
+      };
+      const currentIds = new Set(words.map(w => w.id).filter(Boolean));
+      const currentWords = new Set(words.map(w => w.word).filter(Boolean));
+      const nextPool = wordList.filter(w => !currentIds.has(w.id) && !currentWords.has(w.word));
+      if (nextPool.length >= 10) wordList = nextPool;
+      generateWords();
+      const generated = {
+        grid: grid.map(row => row.slice()),
+        words: words.map(word => ({ ...word })),
+        revealsLeft: 3,
+        currentWordIndex: 0,
+        currentDirection: 'horizontal',
+        userInputs: {}
+      };
+      grid = previous.grid;
+      words = previous.words;
+      wordList = previous.wordList;
+      wordsCount = previous.wordsCount;
+      lettersCount = previous.lettersCount;
+      currentWordIndex = previous.currentWordIndex;
+      currentDirection = previous.currentDirection;
+      revealsLeft = previous.revealsLeft;
+      return generated;
+    }
+
+    function preloadNextPuzzle() {
+      if (!Array.isArray(wordList) || !wordList.length) return;
+      if (window.requestIdleCallback) {
+        requestIdleCallback(() => savePreloadedPuzzle(generatePuzzleState()), { timeout: 2500 });
+      } else {
+        setTimeout(() => savePreloadedPuzzle(generatePuzzleState()), 800);
+      }
+    }
+
+    function startNewPuzzle() {
+      window.removeEventListener('beforeunload', saveState);
+      const preloaded = loadPreloadedPuzzle();
+      if (preloaded) {
+        preloaded.needsStartTracking = true;
+        localStorage.setItem(RAEETSEL_STORAGE_KEY, JSON.stringify(preloaded));
+        localStorage.removeItem(RAEETSEL_PRELOAD_KEY);
+      } else {
+        localStorage.removeItem(RAEETSEL_STORAGE_KEY);
+      }
+      window.location.reload();
+    }
+
     function shuffleArray(arr) {
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -453,11 +559,17 @@ async function handlePuzzleCompleted() {
       const source = fresh.length >= 25 ? fresh : fresh.concat(cooled);
       const eligible = source.filter(w => (w.word || '').length <= gridSize);
       const ranked = rankWordsForPool(eligible.length ? eligible : source);
-      const poolSize = Math.min(Math.max(60, Math.ceil(ranked.length * 0.25)), ranked.length);
+      const poolSize = Math.min(Math.max(900, Math.ceil(ranked.length * 0.45)), ranked.length);
       return ranked.slice(0, poolSize);
     }
 
-    function preselectCandidateWords(list, maxCount = 700) {
+    function crossingPotential(word) {
+      const letters = new Set((word.word || '').split(''));
+      const common = (word.word || '').split('').filter(ch => 'ENISRTAUDH'.includes(ch)).length;
+      return letters.size * 0.55 + common * 0.25;
+    }
+
+    function preselectCandidateWords(list, maxCount = 1800) {
       const eligible = list.filter(w => (w.word || '').length <= gridSize);
       const source = eligible.length >= 25 ? eligible : list;
       if (source.length <= maxCount) return source;
@@ -467,7 +579,7 @@ async function handlePuzzleCompleted() {
           const len = Math.min((word.word || '').length, gridSize);
           const difficulty = Number(word.baseDifficulty || 0);
           const adminBonus = word.source === 'admin' ? 1.5 : 0;
-          const score = len * 0.45 + difficulty * 0.15 + adminBonus + Math.random() * 5;
+          const score = len * 0.35 + crossingPotential(word) + difficulty * 0.12 + adminBonus + Math.random() * 6;
           return { word, score };
         })
         .sort((a, b) => b.score - a.score)
@@ -476,10 +588,11 @@ async function handlePuzzleCompleted() {
     }
 
     async function fetchBlockedWords(puzzle, list, chunkSize = 300) {
-      const blockedIds = new Set();
-      const blockedWords = new Set();
+      const chunks = [];
       for (let i = 0; i < list.length; i += chunkSize) {
-        const slice = list.slice(i, i + chunkSize);
+        chunks.push(list.slice(i, i + chunkSize));
+      }
+      const parts = await Promise.all(chunks.map(async slice => {
         const r = await fetch('/api/moderation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -491,7 +604,11 @@ async function handlePuzzleCompleted() {
           })
         });
         if (!r.ok) throw new Error(`moderation status failed: ${r.status}`);
-        const data = await r.json();
+        return r.json();
+      }));
+      const blockedIds = new Set();
+      const blockedWords = new Set();
+      for (const data of parts) {
         for (const [id, status] of Object.entries(data.byId || {})) {
           if (status && status.blocked) blockedIds.add(id);
         }
@@ -500,6 +617,55 @@ async function handlePuzzleCompleted() {
         }
       }
       return { blockedIds, blockedWords };
+    }
+
+    async function fetchMetricsChunked(puzzle, list, chunkSize = 250) {
+      const chunks = [];
+      for (let i = 0; i < list.length; i += chunkSize) {
+        const slice = list.slice(i, i + chunkSize);
+        chunks.push(slice);
+      }
+      const parts = await Promise.all(chunks.map(async slice => {
+        const r = await fetch('/api/metrics', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            puzzle,
+            words: slice.map(w => w.word),
+            ids: slice.map(w => w.id)
+          })
+        });
+        return r.ok ? r.json() : {};
+      }));
+      const out = {};
+      parts.forEach(part => Object.assign(out, part));
+      return out;
+    }
+
+    async function fetchCooldownMapChunked(puzzle, list, chunkSize = 250) {
+      const chunks = [];
+      for (let i = 0; i < list.length; i += chunkSize) {
+        const slice = list.slice(i, i + chunkSize);
+        chunks.push(slice);
+      }
+      const parts = await Promise.all(chunks.map(async slice => {
+        const r = await fetch('/api/cooldown-get', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: USER_ID,
+            puzzle,
+            words: slice.map(w => w.word),
+            ids: slice.map(w => w.id)
+          })
+        });
+        if (!r.ok) return {};
+        const data = await r.json();
+        return data.map || {};
+      }));
+      const map = {};
+      parts.forEach(part => Object.assign(map, part));
+      return map;
     }
 
     // Führt einen einzelnen Generierungsversuch aus
@@ -837,17 +1003,8 @@ fetch('/api/words')
           console.warn('moderation filter skipped', err);
         }
         try {
-          const resMetrics = await fetch('/api/metrics', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              puzzle: puzzleType,
-              words: wordList.map(w => w.word),
-              ids:   wordList.map(w => w.id)
-            })
-          });
-          if (resMetrics.ok) {
-            const metrics = await resMetrics.json();
+          const metrics = await fetchMetricsChunked(puzzleType, wordList);
+          if (metrics && Object.keys(metrics).length) {
             const prior = 4.0;
             const weight = 10;
             wordList.forEach(w => {
@@ -865,61 +1022,39 @@ fetch('/api/words')
               w.rank = (w.score || 0) + explore * Math.random();
             });
             try {
-              const resCd = await fetch('/api/cooldown-get', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  userId: USER_ID,
-                  puzzle: puzzleType,
-                  words: wordList.map(w => w.word),
-                  ids:   wordList.map(w => w.id)
-                })
-              });
-              if (resCd.ok) {
-                const { map } = await resCd.json();
-                const available = [];
-                const cooled = [];
-                for (const w of wordList) {
-                  const hit = map ? (map[w.id] ?? map[w.word]) : undefined;
-                  w.isCooled = !!hit;
-                  (hit ? cooled : available).push(w);
-                }
-                wordList = available.concat(cooled);
+              const map = await fetchCooldownMapChunked(puzzleType, wordList);
+              const available = [];
+              const cooled = [];
+              for (const w of wordList) {
+                const hit = map ? (map[w.id] ?? map[w.word]) : undefined;
+                w.isCooled = !!hit;
+                (hit ? cooled : available).push(w);
               }
+              wordList = available.concat(cooled);
             } catch(_) {}
             const byRank = (a, b) => (b.rank || 0) - (a.rank || 0);
             wordList = wordList.filter(w => !w.isCooled).sort(byRank)
               .concat(wordList.filter(w => w.isCooled).sort(byRank));
           } else {
-            console.warn('metrics endpoint failed', resMetrics.status);
+            console.warn('metrics endpoint returned no data');
           }
         } catch (err) {
           console.warn('metrics fetch error', err);
         }
         const saved = loadState();
         if (saved) {
-          saved.grid.forEach((row, i) => { grid[i] = saved.grid[i]; });
-          words = saved.words;
-          revealsLeft = saved.revealsLeft;
-          currentWordIndex = saved.currentWordIndex;
-          currentDirection = saved.currentDirection;
+          applyPuzzleState(saved);
+          if (saved.needsStartTracking) {
+            delete saved.needsStartTracking;
+            localStorage.setItem(RAEETSEL_STORAGE_KEY, JSON.stringify(saved));
+            markPuzzleStarted();
+            preloadNextPuzzle();
+          }
         } else {
           generateWords();
-          try {
-            const uniqueIds   = [...new Set(words.map(w => w.id))];
-            const uniqueWords = [...new Set(words.map(w => w.word))];
-            fetch('/api/appearance', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ puzzle: puzzleType, ids: uniqueIds, words: uniqueWords, gameStart: true })
-            }).catch(() => {});
-            fetch('/api/cooldown-set', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ userId: USER_ID, puzzle: puzzleType, ids: uniqueIds, words: uniqueWords, ttlSeconds: 259200 })
-            }).catch(() => {});
-          } catch (e) {}
+          markPuzzleStarted();
           saveState();
+          preloadNextPuzzle();
         }
 
         const gridContainer = document.getElementById("grid");
